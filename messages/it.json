@@ -1,0 +1,110 @@
+{
+  "nav": {
+    "collections": "Collezioni",
+    "story": "La Nostra Storia",
+    "cart": "Carrello",
+    "categories": {
+      "twilli": "Twilli",
+      "blazer": "Blazer",
+      "pochette": "Pochette",
+      "tshirt": "T-Shirt",
+      "camicie": "Camicie",
+      "pantaloni": "Pantaloni",
+      "bestseller": "Best Sellers"
+    }
+  },
+  "hero": {
+    "line1": "Non vestiamo solo le donne,",
+    "line2": "vestiamo il loro scopo.",
+    "cta": "Scopri la Collezione"
+  },
+  "categories": {
+    "label": "Collezioni"
+  },
+  "story": {
+    "label": "La Nostra Storia",
+    "headline": "Anointed non è solo un brand.",
+    "subheadline": "È un promemoria.",
+    "body": "Ispirato al significato biblico dell'essere unti — scelti e messi da parte — il brand celebra il potere interiore delle donne di oggi.",
+    "cta": "Leggi la nostra storia",
+    "webelieve": "In cosa crediamo",
+    "pillars": {
+      "purpose": "Scopo",
+      "strength": "Forza",
+      "meaning": "Significato"
+    }
+  },
+  "bestsellers": {
+    "label": "Shop",
+    "title": "Best Sellers",
+    "viewAll": "Vedi Tutti",
+    "shopNow": "Acquista"
+  },
+  "banner": {
+    "eyebrow": "Tu sei",
+    "quote": "Non sei ordinaria.",
+    "quote2": "Sei nominata."
+  },
+  "testimonials": {
+    "title": "Cosa dicono"
+  },
+  "newsletter": {
+    "eyebrow": "Resta nel cerchio",
+    "title": "Unisciti alle donne che camminano con scopo.",
+    "sub": "Nuovi arrivi, storie e accesso esclusivo.",
+    "placeholder": "La tua email",
+    "cta": "Iscriviti",
+    "thanks": "Benvenuta nel cerchio."
+  },
+  "footer": {
+    "tagline": "Scelta. Messa da parte. Nominata.",
+    "collections": "Collezioni",
+    "info": "Info",
+    "links": {
+      "story": "La Nostra Storia",
+      "privacy": "Privacy Policy",
+      "returns": "Resi",
+      "contact": "Contatti"
+    },
+    "copy": "© 2026 Anointed. Tutti i diritti riservati."
+  },
+  "product": {
+    "addToCart": "Aggiungi al Carrello",
+    "size": "Taglia",
+    "color": "Colore",
+    "outOfStock": "Esaurito",
+    "sizeGuide": "Guida alle Taglie",
+    "selectSize": "Seleziona una taglia",
+    "added": "Aggiunto al carrello ✓"
+  },
+  "cart": {
+    "title": "Il Tuo Carrello",
+    "empty": "Il carrello è vuoto",
+    "total": "Totale",
+    "checkout": "Procedi al Checkout",
+    "continueShopping": "Continua gli Acquisti",
+    "shipping": "Spedizione calcolata al checkout"
+  },
+  "checkout": {
+    "title": "Completa il tuo ordine",
+    "shipping": "Informazioni di Spedizione",
+    "firstName": "Nome",
+    "lastName": "Cognome",
+    "email": "Email",
+    "address": "Indirizzo",
+    "city": "Città",
+    "zip": "CAP",
+    "country": "Paese",
+    "cta": "Procedi al Pagamento",
+    "secure": "Pagamento sicuro via Stripe · Crittografia SSL",
+    "summary": "Riepilogo Ordine",
+    "subtotal": "Subtotale",
+    "shippingCalc": "Calcolato al prossimo step"
+  },
+  "success": {
+    "eyebrow": "Grazie",
+    "title": "Il tuo ordine è confermato.",
+    "body": "Riceverai a breve un'email di conferma. Grazie per aver scelto Anointed.",
+    "cta": "Continua gli Acquisti"
+  }
+}

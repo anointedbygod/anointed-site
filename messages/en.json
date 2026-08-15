@@ -1,0 +1,110 @@
+{
+  "nav": {
+    "collections": "Collections",
+    "story": "Our Story",
+    "cart": "Cart",
+    "categories": {
+      "twilli": "Twilli",
+      "blazer": "Blazer",
+      "pochette": "Pochette",
+      "tshirt": "T-Shirt",
+      "camicie": "Shirts",
+      "pantaloni": "Trousers",
+      "bestseller": "Best Sellers"
+    }
+  },
+  "hero": {
+    "line1": "We don't just dress women,",
+    "line2": "we clothe their purpose.",
+    "cta": "Discover the Collection"
+  },
+  "categories": {
+    "label": "Collections"
+  },
+  "story": {
+    "label": "Our Story",
+    "headline": "Anointed is not just a brand.",
+    "subheadline": "It is a reminder.",
+    "body": "Inspired by the biblical meaning of being anointed — chosen and set apart — the brand celebrates the inner power of women today.",
+    "cta": "Read our story",
+    "webelieve": "We believe in",
+    "pillars": {
+      "purpose": "Purpose",
+      "strength": "Strength",
+      "meaning": "Meaning"
+    }
+  },
+  "bestsellers": {
+    "label": "Shop",
+    "title": "Best Sellers",
+    "viewAll": "View All",
+    "shopNow": "Shop Now"
+  },
+  "banner": {
+    "eyebrow": "You are",
+    "quote": "You are not ordinary.",
+    "quote2": "You are appointed."
+  },
+  "testimonials": {
+    "title": "What they say"
+  },
+  "newsletter": {
+    "eyebrow": "Stay in the circle",
+    "title": "Join the women who walk with purpose.",
+    "sub": "New arrivals, stories and exclusive access.",
+    "placeholder": "your@email.com",
+    "cta": "Subscribe",
+    "thanks": "Welcome to the circle."
+  },
+  "footer": {
+    "tagline": "Chosen. Set apart. Appointed.",
+    "collections": "Collections",
+    "info": "Info",
+    "links": {
+      "story": "Our Story",
+      "privacy": "Privacy Policy",
+      "returns": "Returns",
+      "contact": "Contact"
+    },
+    "copy": "© 2026 Anointed. All rights reserved."
+  },
+  "product": {
+    "addToCart": "Add to Cart",
+    "size": "Size",
+    "color": "Color",
+    "outOfStock": "Out of Stock",
+    "sizeGuide": "Size Guide",
+    "selectSize": "Select a size",
+    "added": "Added to cart ✓"
+  },
+  "cart": {
+    "title": "Your Cart",
+    "empty": "Your cart is empty",
+    "total": "Total",
+    "checkout": "Proceed to Checkout",
+    "continueShopping": "Continue Shopping",
+    "shipping": "Shipping calculated at checkout"
+  },
+  "checkout": {
+    "title": "Complete your order",
+    "shipping": "Shipping Information",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "address": "Address",
+    "city": "City",
+    "zip": "ZIP",
+    "country": "Country",
+    "cta": "Proceed to Payment",
+    "secure": "Secure payment via Stripe · SSL encrypted",
+    "summary": "Order Summary",
+    "subtotal": "Subtotal",
+    "shippingCalc": "Calculated at next step"
+  },
+  "success": {
+    "eyebrow": "Thank you",
+    "title": "Your order is confirmed.",
+    "body": "You will receive a confirmation email shortly. Thank you for choosing Anointed.",
+    "cta": "Continue Shopping"
+  }
+}
