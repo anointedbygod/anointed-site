@@ -15,7 +15,7 @@ export async function generateMetadata({
     .eq('slug', slug)
     .single()
 
-  if (!prodotto) return { title: 'Prodotto' }
+  if (!prodotto) return { title: 'Prodotto — ANOINTED' }
 
   return {
     title: prodotto.nome,
@@ -25,14 +25,9 @@ export async function generateMetadata({
       description: prodotto.descrizione || '',
       images: prodotto.immagini?.[0] ? [{ url: prodotto.immagini[0], width: 800, height: 1000, alt: prodotto.nome }] : [],
     },
-    twitter: {
-      card: 'summary_large_image',
-      title: `${prodotto.nome} — ANOINTED`,
-      images: prodotto.immagini?.[0] ? [prodotto.immagini[0]] : [],
-    },
   }
 }
 
-export default function ProdottoLayout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return <>{children}</>
 }
