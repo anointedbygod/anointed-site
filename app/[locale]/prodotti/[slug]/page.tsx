@@ -90,8 +90,8 @@ export default function ProdottoPage() {
   function handleAggiungi() {
     if (!selectedTaglia) return
     aggiungi({
-      varianteId: varianteSel?.id || `${prodotto.id}-${selectedColore?.nome}-${selectedTaglia}`,
-      prodottoNome: prodotto.nome,
+      varianteId: varianteSel?.id || `${prodotto!.id}-${selectedColore?.nome}-${selectedTaglia}`,
+      prodottoNome: prodotto!.nome,
       taglia: selectedTaglia,
       colore: selectedColore?.nome || '',
       prezzo,
