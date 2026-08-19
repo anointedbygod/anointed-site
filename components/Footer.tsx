@@ -4,8 +4,8 @@ import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 
 const TR = {
-  en: { collections: 'Collections', info: 'Info', tagline: 'Chosen. Set apart. Appointed.', copy: '© 2026 Anointed. All rights reserved.', cats: { twilli: 'Twilli', blazer: 'Blazer', pochette: 'Pochette', tshirt: 'T-Shirt', camicie: 'Shirts', pantaloni: 'Trousers' }, links: { story: 'Our Story', privacy: 'Privacy Policy', returns: 'Returns', contact: 'Contact' } },
-  it: { collections: 'Collezioni', info: 'Info', tagline: 'Scelta. Messa da parte. Nominata.', copy: '© 2026 Anointed. Tutti i diritti riservati.', cats: { twilli: 'Twilli', blazer: 'Blazer', pochette: 'Pochette', tshirt: 'T-Shirt', camicie: 'Camicie', pantaloni: 'Pantaloni' }, links: { story: 'La Nostra Storia', privacy: 'Privacy Policy', returns: 'Resi', contact: 'Contatti' } },
+  en: { collections: 'Collections', info: 'Info', tagline: 'Chosen. Set apart. Appointed.', copy: '© 2026 Anointed. All rights reserved.', funded: 'PROJECT FUNDED BY', cats: { twilli: 'Twilli', blazer: 'Blazer', pochette: 'Pochette', tshirt: 'T-Shirt', camicie: 'Shirts', pantaloni: 'Trousers' }, links: { story: 'Our Story', privacy: 'Privacy Policy', returns: 'Returns', contact: 'Contact' } },
+  it: { collections: 'Collezioni', info: 'Info', tagline: 'Scelta. Messa da parte. Nominata.', copy: '© 2026 Anointed. Tutti i diritti riservati.', funded: 'PROGETTO FINANZIATO DA', cats: { twilli: 'Twilli', blazer: 'Blazer', pochette: 'Pochette', tshirt: 'T-Shirt', camicie: 'Camicie', pantaloni: 'Pantaloni' }, links: { story: 'La Nostra Storia', privacy: 'Privacy Policy', returns: 'Resi', contact: 'Contatti' } },
 }
 
 export default function Footer() {
@@ -15,7 +15,7 @@ export default function Footer() {
 
   return (
     <footer style={{ background: '#3a2e2b' }}>
-      <div style={{ padding: '3.5rem 1.5rem', maxWidth: '1200px', margin: '0 auto' }}>
+      <div style={{ padding: '3.5rem 1.5rem 0', maxWidth: '1200px', margin: '0 auto' }}>
         <div className="footer-grid" style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'start', gap: '2rem' }}>
 
           <div>
@@ -29,7 +29,6 @@ export default function Footer() {
             ))}
           </div>
 
-          {/* Logo SVG centrato */}
           <div style={{ textAlign: 'center' }}>
             <Link href={`/${locale}`} style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}>
               <Image src="/logo-beige.svg" alt="ANOINTED" width={140} height={32} style={{ height: '28px', width: 'auto' }} />
@@ -54,11 +53,33 @@ export default function Footer() {
           </div>
         </div>
 
-        <div style={{ borderTop: '1px solid rgba(241,234,228,0.08)', marginTop: '3rem', paddingTop: '1.5rem', textAlign: 'center' }}>
-          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.12em', color: 'rgba(241,234,228,0.2)', margin: 0 }}>{t.copy}</p>
+        {/* Copyright + credits */}
+        <div style={{ borderTop: '1px solid rgba(241,234,228,0.08)', marginTop: '3rem', padding: '1.25rem 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
+          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.12em', color: 'rgba(241,234,228,0.2)', margin: 0 }}>
+            {t.copy}
+          </p>
+          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '9px', letterSpacing: '0.1em', color: 'rgba(241,234,228,0.2)', margin: 0 }}>
+            Built by <span style={{ color: 'rgba(193,169,154,0.5)' }}>Nicandro Grande</span> · <em style={{ fontStyle: 'italic', color: 'rgba(241,234,228,0.15)' }}>Inspired by Heaven</em>
+          </p>
+        </div>
+
+        {/* Invitalia */}
+        <div style={{ borderTop: '1px solid rgba(241,234,228,0.06)', padding: '1.25rem 0 1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
+          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '9px', letterSpacing: '0.14em', color: 'rgba(241,234,228,0.2)', margin: 0 }}>
+            {t.funded}
+          </p>
+          <div style={{ background: 'white', borderRadius: '3px', padding: "6px 14px", display: 'flex', alignItems: 'center' }}>
+            <Image src="/invitalia.png" alt="Invitalia" width={100} height={28} style={{ height: "28px", width: "auto", objectFit: "contain" }} />
+          </div>
         </div>
       </div>
-      <style>{`@media(max-width:767px){.footer-grid{grid-template-columns:1fr!important;text-align:center!important}.footer-grid>div:last-child{text-align:center!important}}`}</style>
+
+      <style>{`
+        @media (max-width: 767px) {
+          .footer-grid { grid-template-columns: 1fr !important; text-align: center !important; }
+          .footer-grid > div:last-child { text-align: center !important; }
+        }
+      `}</style>
     </footer>
   )
 }

@@ -5,19 +5,17 @@ import { useState } from 'react'
 
 interface Props {
   textColor?: string
+  openUp?: boolean
 }
 
-export default function LanguageSwitcher({ textColor = '#3a2e2b' }: Props) {
+export default function LanguageSwitcher({ textColor = '#3a2e2b', openUp = false }: Props) {
   const pathname = usePathname()
   const router = useRouter()
   const [open, setOpen] = useState(false)
-
-  // Con localePrefix: 'always' il path è sempre /en/... o /it/...
   const locale = pathname.startsWith('/it') ? 'it' : 'en'
 
   function switchTo(lang: string) {
     if (lang === locale) { setOpen(false); return }
-    // Sostituisci solo il prefisso lingua
     const withoutLocale = pathname.replace(/^\/(en|it)/, '') || '/'
     router.push(`/${lang}${withoutLocale}`)
     setOpen(false)
@@ -42,7 +40,11 @@ export default function LanguageSwitcher({ textColor = '#3a2e2b' }: Props) {
         <>
           <div style={{ position: 'fixed', inset: 0, zIndex: 49 }} onClick={() => setOpen(false)} />
           <div style={{
-            position: 'absolute', top: 'calc(100% + 0.75rem)', right: 0,
+            position: 'absolute',
+            ...(openUp
+              ? { bottom: 'calc(100% + 0.75rem)', top: 'auto' }
+              : { top: 'calc(100% + 0.75rem)' }),
+            left: 0,
             background: '#f1eae4', border: '1px solid rgba(193,169,154,0.4)',
             borderRadius: '2px', overflow: 'hidden',
             boxShadow: '0 8px 24px rgba(58,46,43,0.08)',
@@ -58,7 +60,7 @@ export default function LanguageSwitcher({ textColor = '#3a2e2b' }: Props) {
                 border: 'none', cursor: 'pointer', textAlign: 'left',
                 fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.12em',
                 color: lang.code === locale ? '#c1a99a' : '#3a2e2b',
-fontWeight: lang.code === locale ? 400 : 500,
+                fontWeight: lang.code === locale ? 400 : 500,
               }}>
                 {lang.label}
               </button>
