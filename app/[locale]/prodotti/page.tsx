@@ -37,9 +37,9 @@ const SLUG_TO_CAT: Record<string, string[]> = {
   bestseller: [],
 }
 
-function matchCategoria(categoriaDB: string, slug: string): boolean {
+function matchCategoria(categoriaDB: string, slug: string, prodotto?: any): boolean {
   if (!categoriaDB) return false
-  if (slug === 'bestseller') return true
+  if (slug === "bestseller") return prodotto?.bestseller === true
   const valori = SLUG_TO_CAT[slug] || [slug]
   return valori.some(v => categoriaDB.toLowerCase() === v.toLowerCase())
 }
@@ -98,7 +98,7 @@ export default function ProdottiPage() {
       const ids = (activeTab as SezioneTab).prodottiIds
       return prodotti.filter(p => ids.includes(p.id))
     }
-    return prodotti.filter(p => matchCategoria(p.categoria, activeCat))
+    return prodotti.filter(p => matchCategoria(p.categoria, activeCat, p))
   })()
 
   const activeLabel = activeTab?.label || allLabel

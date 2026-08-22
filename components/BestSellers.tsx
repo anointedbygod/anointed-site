@@ -16,7 +16,7 @@ export default function BestSellers() {
   const shopNow = locale === 'it' ? 'ACQUISTA' : 'SHOP NOW'
 
   useEffect(() => {
-    fetch('/api/prodotti').then(r => r.json()).then(data => setProdotti(data.slice(0, 4))).catch(() => {})
+    fetch('/api/prodotti').then(r => r.json()).then(data => setProdotti(data.filter((p: any) => p.bestseller === true).slice(0, 4))).catch(() => {})
   }, [])
 
   useEffect(() => {

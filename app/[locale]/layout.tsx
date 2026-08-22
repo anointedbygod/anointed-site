@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       images: ['https://anointed.it/og-image.jpg'],
     },
     robots: { index: true, follow: true },
-    icons: { icon: '/monogram-brown.svg', apple: '/monogram-brown.svg' },
+    icons: { icon: '/monogram-light-brown.svg', apple: '/monogram-light-brown.svg' },
   }
 }
 
