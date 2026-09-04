@@ -6,7 +6,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
 
 export async function POST(req: Request) {
   try {
-    const { articoli, cliente, sconto, spedizione, totaleFinale } = await req.json()
+    const { articoli, cliente, sconto, spedizione, totaleFinale, userId } = await req.json()
 
     const subtotale = articoli.reduce((sum: number, a: any) => sum + a.prezzo * a.quantita, 0)
     const costoSpedizione = spedizione?.costo || 0

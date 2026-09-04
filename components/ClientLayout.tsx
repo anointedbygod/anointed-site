@@ -13,7 +13,6 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   const [cartOpen, setCartOpen] = useState(false)
   const pathname = usePathname()
   const forceOpaque = OPAQUE_PATHS.some(p => pathname.includes(p))
-
   return (
     <>
       <Navbar onCartClick={() => setCartOpen(true)} forceOpaque={forceOpaque} />

@@ -23,10 +23,24 @@ export async function POST(req: Request) {
 
     if (!ordineId) return NextResponse.json({ received: true })
 
-    // Aggiorna stato ordine
+    // Prova a collegare l'ordine a un account esistente tramite email
+    let userId: string | null = null
+    if (emailCliente) {
+      const { data: users } = await supabaseAdmin.auth.admin.listUsers()
+      const matchedUser = users?.users?.find((u: any) => u.email?.toLowerCase() === emailCliente.toLowerCase())
+      if (matchedUser) userId = matchedUser.id
+    }
+
+    // Aggiorna stato ordine (e collega a user_id se trovato, solo se non già impostato)
+    const updateData: any = { stato: 'ricevuto', email_cliente: emailCliente }
+    if (userId) {
+      const { data: ordineAttuale } = await supabaseAdmin.from('ordini').select('user_id').eq('id', ordineId).single()
+      if (!ordineAttuale?.user_id) updateData.user_id = userId
+    }
+
     await supabaseAdmin
       .from('ordini')
-      .update({ stato: 'ricevuto', email_cliente: emailCliente })
+      .update(updateData)
       .eq('id', ordineId)
 
     // Registra utilizzo sconto

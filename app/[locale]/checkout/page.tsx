@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useCarrello } from '@/lib/carrello'
+import { createBrowserClient } from '@supabase/ssr'
 import { useRouter, usePathname } from 'next/navigation'
 
 interface Zona { id: string; nome: string; paesi: string[]; costo: number; soglia_gratuita: number | null }
@@ -20,6 +21,13 @@ export default function CheckoutPage() {
   const [scontoApplicato, setScontoApplicato] = useState<ScontoApplicato | null>(null)
   const [scontoError, setScontoError] = useState('')
   const [validandoSconto, setValidandoSconto] = useState(false)
+
+  const [userId, setUserId] = useState<string | null>(null)
+
+  useEffect(() => {
+    const supabase = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
+    supabase.auth.getUser().then(({ data }) => setUserId(data.user?.id || null))
+  }, [])
 
   const [form, setForm] = useState({
     nome: '', cognome: '', email: '',
@@ -83,6 +91,7 @@ export default function CheckoutPage() {
         body: JSON.stringify({
           articoli,
           cliente: { indirizzo: form.indirizzo, citta: form.citta, cap: form.cap, paese: form.paese, email: form.email, nome: `${form.nome} ${form.cognome}`.trim() },
+          userId,
           sconto: scontoApplicato,
           spedizione: zonaSelezionata ? { zona: zonaSelezionata.nome, costo: costoSpedizione } : null,
           totaleFinale,

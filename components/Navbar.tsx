@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useCarrello } from '@/lib/carrello'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
+import AccountMenu from '@/components/AccountMenu'
 import { usePathname } from 'next/navigation'
 
 const CATS_FIXED = [
@@ -110,6 +111,7 @@ export default function Navbar({ forceOpaque = false, onCartClick = () => {} }: 
             </button>
             <Link href={`/${locale}/storia`} style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.14em', color: textColor, textDecoration: 'none', transition: 'color 0.3s' }}>{storyLabel}</Link>
 
+
             {/* Dropdown desktop */}
             <div style={{ position: 'absolute', top: 'calc(100% + 1rem)', left: 0, background: '#f1eae4', border: '1px solid rgba(193,169,154,0.4)', borderRadius: '2px', padding: '0.5rem 0', minWidth: '200px', opacity: collectionsOpen ? 1 : 0, pointerEvents: collectionsOpen ? 'all' : 'none', transform: collectionsOpen ? 'translateY(0)' : 'translateY(-8px)', transition: 'opacity 0.2s, transform 0.2s', boxShadow: '0 12px 32px rgba(58,46,43,0.08)' }}>
               {CATS_FIXED.map((cat, i) => (
@@ -139,6 +141,7 @@ export default function Navbar({ forceOpaque = false, onCartClick = () => {} }: 
           {/* RIGHT desktop */}
           <div className="nav-desk" style={{ alignItems: 'center', gap: '1.75rem' }}>
             <LanguageSwitcher textColor={textColor} />
+            <AccountMenu textColor={textColor} />
             <button onClick={onCartClick} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', color: textColor, transition: 'color 0.3s' }}>
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M1 1h2.5l1.6 8h7.4l1.5-5.5H4.5" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round"/><circle cx="7" cy="13.5" r="0.8" fill="currentColor"/><circle cx="11" cy="13.5" r="0.8" fill="currentColor"/></svg>
               <span style={{ background: textColor, color: isOpaque ? '#f1eae4' : '#3a2e2b', borderRadius: '50%', width: '16px', height: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '9px', fontWeight: 600 }}>{count}</span>
@@ -158,10 +161,13 @@ export default function Navbar({ forceOpaque = false, onCartClick = () => {} }: 
               <Image src={logoSrc} alt="ANOINTED" width={120} height={28} style={{ height: '22px', width: 'auto' }} priority />
             </Link>
 
-            <button onClick={onCartClick} style={{ background: 'none', border: 'none', cursor: 'pointer', color: textColor, position: 'relative', flexShrink: 0 }}>
-              <svg width="22" height="22" viewBox="0 0 16 16" fill="none"><path d="M1 1h2.5l1.6 8h7.4l1.5-5.5H4.5" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round"/><circle cx="7" cy="13.5" r="0.8" fill="currentColor"/><circle cx="11" cy="13.5" r="0.8" fill="currentColor"/></svg>
-              {count > 0 && <span style={{ position: 'absolute', top: '-4px', right: '-4px', background: '#c1a99a', color: '#f1eae4', borderRadius: '50%', width: '14px', height: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '8px', fontWeight: 600 }}>{count}</span>}
-            </button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexShrink: 0 }}>
+              <AccountMenu textColor={textColor} />
+              <button onClick={onCartClick} style={{ background: 'none', border: 'none', cursor: 'pointer', color: textColor, position: 'relative' }}>
+                <svg width="22" height="22" viewBox="0 0 16 16" fill="none"><path d="M1 1h2.5l1.6 8h7.4l1.5-5.5H4.5" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round"/><circle cx="7" cy="13.5" r="0.8" fill="currentColor"/><circle cx="11" cy="13.5" r="0.8" fill="currentColor"/></svg>
+                {count > 0 && <span style={{ position: 'absolute', top: '-4px', right: '-4px', background: '#c1a99a', color: '#f1eae4', borderRadius: '50%', width: '14px', height: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '8px', fontWeight: 600 }}>{count}</span>}
+              </button>
+            </div>
           </div>
         </div>
 
@@ -187,6 +193,7 @@ export default function Navbar({ forceOpaque = false, onCartClick = () => {} }: 
               style={{ display: 'block', padding: '0.875rem 0', borderBottom: '1px solid rgba(193,169,154,0.2)', fontFamily: 'Inter, sans-serif', fontSize: '13px', letterSpacing: '0.16em', color: '#3a2e2b', textDecoration: 'none' }}>
               {storyLabel}
             </Link>
+
             {/* Language switcher — senza linea sopra, solo padding */}
             <div style={{ paddingTop: '1.25rem' }}>
               <LanguageSwitcher textColor="#3a2e2b" openUp={true} />
