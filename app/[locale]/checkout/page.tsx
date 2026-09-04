@@ -53,7 +53,7 @@ export default function CheckoutPage() {
     const res = await fetch('/api/valida-sconto', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ codice: codiceSconto, totale: totale() }),
+      body: JSON.stringify({ codice: codiceSconto, totale: totale(), email: form.email }),
     })
     const data = await res.json()
     if (data.valido) {

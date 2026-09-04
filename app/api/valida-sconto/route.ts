@@ -2,7 +2,7 @@ import { supabaseAdmin } from '@/lib/supabase-admin'
 import { NextResponse } from 'next/server'
 
 export async function POST(req: Request) {
-  const { codice, totale } = await req.json()
+  const { codice, totale, email } = await req.json()
   if (!codice) return NextResponse.json({ error: 'Codice mancante' }, { status: 400 })
 
   const { data: sconto, error } = await supabaseAdmin
@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Codice scaduto' }, { status: 400 })
   }
 
-  // Controlla utilizzi
+  // Controlla utilizzi totali
   if (sconto.utilizzi_max && sconto.utilizzi_attuali >= sconto.utilizzi_max) {
     return NextResponse.json({ error: 'Codice esaurito' }, { status: 400 })
   }
@@ -29,6 +29,20 @@ export async function POST(req: Request) {
     return NextResponse.json({ 
       error: `Spesa minima €${sconto.spesa_minima.toFixed(2)} richiesta` 
     }, { status: 400 })
+  }
+
+  // Controlla utilizzo per email (se email fornita)
+  if (email) {
+    const { data: utilizzoEsistente } = await supabaseAdmin
+      .from('utilizzi_sconti')
+      .select('id')
+      .eq('codice_id', sconto.id)
+      .eq('email', email.toLowerCase())
+      .single()
+
+    if (utilizzoEsistente) {
+      return NextResponse.json({ error: 'Hai già utilizzato questo codice' }, { status: 400 })
+    }
   }
 
   // Calcola sconto
