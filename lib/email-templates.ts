@@ -41,20 +41,20 @@ export function emailConfermaOrdine({
   <!-- Body -->
   <tr>
     <td style="padding:48px 40px;">
-      <p style="font-family:Georgia,serif;font-size:10px;letter-spacing:0.2em;color:#c1a99a;margin:0 0 16px;">— ORDINE CONFERMATO —</p>
-      <h1 style="font-family:Georgia,serif;font-size:28px;font-weight:400;color:#3a2e2b;margin:0 0 16px;line-height:1.3;">Grazie, ${nome}.</h1>
+      <p style="font-family:Georgia,serif;font-size:10px;letter-spacing:0.2em;color:#c1a99a;margin:0 0 16px;">— ORDER CONFIRMED —</p>
+      <h1 style="font-family:Georgia,serif;font-size:28px;font-weight:400;color:#3a2e2b;margin:0 0 16px;line-height:1.3;">Thank you, ${nome}.</h1>
       <p style="font-family:Georgia,serif;font-size:14px;line-height:1.8;color:#5d4d42;margin:0 0 32px;">
-        Il tuo ordine è stato ricevuto. Ti invieremo una notifica quando verrà spedito.
+        Your order has been received. We will notify you when it ships.
       </p>
 
       <!-- Ordine ID -->
       <div style="background:#e8d2c3;border-radius:4px;padding:16px 20px;margin-bottom:32px;">
-        <p style="font-family:Georgia,serif;font-size:11px;letter-spacing:0.14em;color:#c1a99a;margin:0 0 4px;">NUMERO ORDINE</p>
+        <p style="font-family:Georgia,serif;font-size:11px;letter-spacing:0.14em;color:#c1a99a;margin:0 0 4px;">ORDER NUMBER</p>
         <p style="font-family:monospace;font-size:14px;color:#3a2e2b;margin:0;">#${ordineId.slice(0, 8).toUpperCase()}</p>
       </div>
 
       <!-- Prodotti -->
-      <p style="font-family:Georgia,serif;font-size:11px;letter-spacing:0.14em;color:#c1a99a;margin:0 0 16px;">I TUOI ARTICOLI</p>
+      <p style="font-family:Georgia,serif;font-size:11px;letter-spacing:0.14em;color:#c1a99a;margin:0 0 16px;">YOUR ITEMS</p>
       ${prodotti.map(p => `
       <div style="border-top:1px solid rgba(193,169,154,0.3);padding:16px 0;display:flex;justify-content:space-between;">
         <div>
@@ -69,7 +69,7 @@ export function emailConfermaOrdine({
       </div>
 
       <!-- Indirizzo -->
-      <p style="font-family:Georgia,serif;font-size:11px;letter-spacing:0.14em;color:#c1a99a;margin:0 0 12px;">INDIRIZZO DI SPEDIZIONE</p>
+      <p style="font-family:Georgia,serif;font-size:11px;letter-spacing:0.14em;color:#c1a99a;margin:0 0 12px;">SHIPPING ADDRESS</p>
       <p style="font-family:Georgia,serif;font-size:14px;line-height:1.8;color:#5d4d42;margin:0 0 40px;">
         ${indirizzo.indirizzo}<br>
         ${indirizzo.cap} ${indirizzo.citta}<br>
@@ -86,7 +86,7 @@ export function emailConfermaOrdine({
   <tr>
     <td style="background:#3a2e2b;padding:32px 40px;text-align:center;">
       <p style="font-family:Georgia,serif;font-size:11px;letter-spacing:0.14em;color:#c1a99a;margin:0 0 8px;">ANOINTED</p>
-      <p style="font-family:Georgia,serif;font-size:10px;color:rgba(241,234,228,0.4);margin:0;">© 2026 Anointed. Tutti i diritti riservati.</p>
+      <p style="font-family:Georgia,serif;font-size:10px;color:rgba(241,234,228,0.4);margin:0;">© 2026 Anointed. All rights reserved.</p>
     </td>
   </tr>
 
@@ -117,24 +117,24 @@ export function emailBenvenutoNewsletter({ email }: { email: string }) {
 
   <tr>
     <td style="padding:48px 40px;text-align:center;">
-      <p style="font-family:Georgia,serif;font-size:10px;letter-spacing:0.2em;color:#c1a99a;margin:0 0 16px;">— BENVENUTA —</p>
-      <h1 style="font-family:Georgia,serif;font-size:28px;font-weight:400;color:#3a2e2b;margin:0 0 16px;line-height:1.3;">Sei nel cerchio.</h1>
+      <p style="font-family:Georgia,serif;font-size:10px;letter-spacing:0.2em;color:#c1a99a;margin:0 0 16px;">— WELCOME —</p>
+      <h1 style="font-family:Georgia,serif;font-size:28px;font-weight:400;color:#3a2e2b;margin:0 0 16px;line-height:1.3;">You are in the circle.</h1>
       <p style="font-family:Georgia,serif;font-size:14px;line-height:1.8;color:#5d4d42;margin:0 0 40px;">
-        Grazie per esserti iscritta. Come promesso, ecco il tuo codice sconto del 10% sul primo ordine.
+        Thank you for subscribing. Here is your 10% discount code for your first order.
       </p>
 
       <!-- Codice sconto -->
       <div style="background:#3a2e2b;border-radius:4px;padding:24px 32px;margin-bottom:40px;display:inline-block;">
-        <p style="font-family:Georgia,serif;font-size:11px;letter-spacing:0.14em;color:#c1a99a;margin:0 0 8px;">IL TUO CODICE</p>
+        <p style="font-family:Georgia,serif;font-size:11px;letter-spacing:0.14em;color:#c1a99a;margin:0 0 8px;">YOUR CODE</p>
         <p style="font-family:monospace;font-size:24px;font-weight:700;color:#f1eae4;margin:0;letter-spacing:0.1em;">WELCOME10</p>
       </div>
 
       <p style="font-family:Georgia,serif;font-size:13px;line-height:1.8;color:#5d4d42;margin:0 0 32px;">
-        Inserisci il codice al checkout per ottenere il 10% di sconto sul tuo primo ordine.
+        Enter the code at checkout to get 10% off your first order.
       </p>
 
       <a href="https://anointed.it" style="display:inline-block;background:#3a2e2b;color:#f1eae4;font-family:Georgia,serif;font-size:11px;letter-spacing:0.16em;text-decoration:none;padding:14px 32px;border-radius:2px;">
-        SCOPRI LA COLLEZIONE
+        DISCOVER THE COLLECTION
       </a>
     </td>
   </tr>
@@ -142,7 +142,7 @@ export function emailBenvenutoNewsletter({ email }: { email: string }) {
   <tr>
     <td style="background:#3a2e2b;padding:32px 40px;text-align:center;">
       <p style="font-family:Georgia,serif;font-size:11px;letter-spacing:0.14em;color:#c1a99a;margin:0 0 8px;">ANOINTED</p>
-      <p style="font-family:Georgia,serif;font-size:10px;color:rgba(241,234,228,0.4);margin:0;">© 2026 Anointed. Tutti i diritti riservati.</p>
+      <p style="font-family:Georgia,serif;font-size:10px;color:rgba(241,234,228,0.4);margin:0;">© 2026 Anointed. All rights reserved.</p>
     </td>
   </tr>
 
@@ -181,10 +181,10 @@ export function emailCarrelloAbbandonato({
 
   <tr>
     <td style="padding:48px 40px;">
-      <p style="font-family:Georgia,serif;font-size:10px;letter-spacing:0.2em;color:#c1a99a;margin:0 0 16px;">— HAI DIMENTICATO QUALCOSA —</p>
-      <h1 style="font-family:Georgia,serif;font-size:28px;font-weight:400;color:#3a2e2b;margin:0 0 16px;line-height:1.3;">${nome}, il tuo carrello ti aspetta.</h1>
+      <p style="font-family:Georgia,serif;font-size:10px;letter-spacing:0.2em;color:#c1a99a;margin:0 0 16px;">— YOU FORGOT SOMETHING —</p>
+      <h1 style="font-family:Georgia,serif;font-size:28px;font-weight:400;color:#3a2e2b;margin:0 0 16px;line-height:1.3;">${nome}, your cart is waiting.</h1>
       <p style="font-family:Georgia,serif;font-size:14px;line-height:1.8;color:#5d4d42;margin:0 0 32px;">
-        Hai lasciato degli articoli nel carrello. Completa il tuo ordine prima che vadano esauriti.
+        You left some items in your cart. Complete your order before they sell out.
       </p>
 
       ${prodotti.map(p => `
@@ -209,7 +209,7 @@ export function emailCarrelloAbbandonato({
   <tr>
     <td style="background:#3a2e2b;padding:32px 40px;text-align:center;">
       <p style="font-family:Georgia,serif;font-size:11px;letter-spacing:0.14em;color:#c1a99a;margin:0 0 8px;">ANOINTED</p>
-      <p style="font-family:Georgia,serif;font-size:10px;color:rgba(241,234,228,0.4);margin:0;">© 2026 Anointed. Tutti i diritti riservati.</p>
+      <p style="font-family:Georgia,serif;font-size:10px;color:rgba(241,234,228,0.4);margin:0;">© 2026 Anointed. All rights reserved.</p>
     </td>
   </tr>
 
@@ -222,5 +222,5 @@ export function emailCarrelloAbbandonato({
 }
 
 export function emailOrdineSpedito({ nome, ordineId, trackingUrl }: { nome: string; ordineId: string; trackingUrl: string }) {
-  return `<!DOCTYPE html><html><head><meta charset="utf-8"></head><body style="margin:0;padding:0;background:#e8d2c3;"><table width="100%" cellpadding="0" cellspacing="0" style="background:#e8d2c3;padding:40px 20px;"><tr><td><table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;margin:0 auto;background:#f1eae4;border-radius:4px;overflow:hidden;"><tr><td style="background:#3a2e2b;padding:40px;text-align:center;"><p style="font-family:Georgia,serif;font-size:22px;letter-spacing:0.28em;color:#f1eae4;margin:0;">ANOINTED</p><p style="font-family:Georgia,serif;font-size:10px;letter-spacing:0.18em;color:#c1a99a;margin:8px 0 0;">CHOSEN. SET APART. APPOINTED.</p></td></tr><tr><td style="padding:48px 40px;text-align:center;"><p style="font-family:Georgia,serif;font-size:10px;letter-spacing:0.2em;color:#c1a99a;margin:0 0 16px;">— ORDER SHIPPED —</p><h1 style="font-family:Georgia,serif;font-size:28px;font-weight:400;color:#3a2e2b;margin:0 0 16px;">On its way to you, ${nome}.</h1><p style="font-family:Georgia,serif;font-size:14px;line-height:1.8;color:#5d4d42;margin:0 0 8px;">Il tuo ordine <strong>#${ordineId.slice(0,8).toUpperCase()}</strong> has been shipped.</p><p style="font-family:Georgia,serif;font-size:14px;line-height:1.8;color:#5d4d42;margin:0 0 40px;">You can track your package in real time by clicking the button below.</p><a href="${trackingUrl}" style="display:inline-block;background:#3a2e2b;color:#f1eae4;font-family:Georgia,serif;font-size:11px;letter-spacing:0.16em;text-decoration:none;padding:16px 40px;border-radius:2px;">TRACK YOUR ORDER →</a><p style="font-family:Georgia,serif;font-size:12px;color:#c1a99a;margin:40px 0 0;">For any questions, contact us at <a href="mailto:info@anointed.it" style="color:#3a2e2b;">info@anointed.it</a></p></td></tr><tr><td style="background:#3a2e2b;padding:32px 40px;text-align:center;"><p style="font-family:Georgia,serif;font-size:11px;letter-spacing:0.14em;color:#c1a99a;margin:0 0 8px;">ANOINTED</p><p style="font-family:Georgia,serif;font-size:10px;color:rgba(241,234,228,0.4);margin:0;">© 2026 Anointed. Tutti i diritti riservati.</p></td></tr></table></td></tr></table></body></html>`
+  return `<!DOCTYPE html><html><head><meta charset="utf-8"></head><body style="margin:0;padding:0;background:#e8d2c3;"><table width="100%" cellpadding="0" cellspacing="0" style="background:#e8d2c3;padding:40px 20px;"><tr><td><table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;margin:0 auto;background:#f1eae4;border-radius:4px;overflow:hidden;"><tr><td style="background:#3a2e2b;padding:40px;text-align:center;"><p style="font-family:Georgia,serif;font-size:22px;letter-spacing:0.28em;color:#f1eae4;margin:0;">ANOINTED</p><p style="font-family:Georgia,serif;font-size:10px;letter-spacing:0.18em;color:#c1a99a;margin:8px 0 0;">CHOSEN. SET APART. APPOINTED.</p></td></tr><tr><td style="padding:48px 40px;text-align:center;"><p style="font-family:Georgia,serif;font-size:10px;letter-spacing:0.2em;color:#c1a99a;margin:0 0 16px;">— ORDER SHIPPED —</p><h1 style="font-family:Georgia,serif;font-size:28px;font-weight:400;color:#3a2e2b;margin:0 0 16px;">On its way to you, ${nome}.</h1><p style="font-family:Georgia,serif;font-size:14px;line-height:1.8;color:#5d4d42;margin:0 0 8px;">Il tuo ordine <strong>#${ordineId.slice(0,8).toUpperCase()}</strong> has been shipped.</p><p style="font-family:Georgia,serif;font-size:14px;line-height:1.8;color:#5d4d42;margin:0 0 40px;">You can track your package in real time by clicking the button below.</p><a href="${trackingUrl}" style="display:inline-block;background:#3a2e2b;color:#f1eae4;font-family:Georgia,serif;font-size:11px;letter-spacing:0.16em;text-decoration:none;padding:16px 40px;border-radius:2px;">TRACK YOUR ORDER →</a><p style="font-family:Georgia,serif;font-size:12px;color:#c1a99a;margin:40px 0 0;">For any questions, contact us at <a href="mailto:info@anointed.it" style="color:#3a2e2b;">info@anointed.it</a></p></td></tr><tr><td style="background:#3a2e2b;padding:32px 40px;text-align:center;"><p style="font-family:Georgia,serif;font-size:11px;letter-spacing:0.14em;color:#c1a99a;margin:0 0 8px;">ANOINTED</p><p style="font-family:Georgia,serif;font-size:10px;color:rgba(241,234,228,0.4);margin:0;">© 2026 Anointed. All rights reserved.</p></td></tr></table></td></tr></table></body></html>`
 }
