@@ -25,15 +25,29 @@ export default function CheckoutPage() {
   const [validandoSconto, setValidandoSconto] = useState(false)
 
   const [userId, setUserId] = useState<string | null>(null)
+  const [indirizziSalvati, setIndirizziSalvati] = useState<any[]>([])
+  const [indirizzoSelezionato, setIndirizzoSelezionato] = useState<string>('')
 
   useEffect(() => {
     const supabase = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
     supabase.auth.getUser().then(({ data }) => {
       setUserId(data.user?.id || null)
-      if (data.user?.email) {
-        update('email', data.user.email)
+      if (data.user?.email) update('email', data.user.email)
+    })
+
+    // Ascolta i cambi di sessione (login/logout in tempo reale)
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUserId(session?.user?.id || null)
+      if (session?.user?.email) {
+        update('email', session.user.email)
+        // Carica indirizzi salvati
+        fetch(`/api/account/indirizzi?user_id=${session.user.id}`)
+          .then(r => r.json())
+          .then(data => { if (Array.isArray(data)) setIndirizziSalvati(data) })
       }
     })
+
+    return () => listener.subscription.unsubscribe()
   }, [])
 
   const [form, setForm] = useState({
@@ -230,6 +244,29 @@ export default function CheckoutPage() {
               <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.18em', color: '#c1a99a', margin: '0 0 1.25rem' }}>
                 {locale === 'it' ? 'INDIRIZZO DI SPEDIZIONE' : 'SHIPPING ADDRESS'}
               </p>
+
+              {indirizziSalvati.length > 0 && (
+                <div style={{ marginBottom: '1.25rem' }}>
+                  <label style={labelStyle}>{locale === 'it' ? 'INDIRIZZI SALVATI' : 'SAVED ADDRESSES'}</label>
+                  <select value={indirizzoSelezionato} onChange={e => {
+                    const id = e.target.value
+                    setIndirizzoSelezionato(id)
+                    const ind = indirizziSalvati.find(i => i.id === id)
+                    if (ind) {
+                      update('indirizzo', ind.indirizzo)
+                      update('citta', ind.citta)
+                      update('cap', ind.cap)
+                      update('paese', ind.paese)
+                    }
+                  }} style={inputStyle}>
+                    <option value="">{locale === 'it' ? '— Scegli o inserisci nuovo —' : '— Choose or enter new —'}</option>
+                    {indirizziSalvati.map(ind => (
+                      <option key={ind.id} value={ind.id}>{ind.nome} — {ind.indirizzo}, {ind.citta}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
               <div style={{ marginBottom: '0.75rem' }}>
                 <label style={labelStyle}>{locale === 'it' ? 'INDIRIZZO *' : 'ADDRESS *'}</label>
                 <input required value={form.indirizzo} onChange={e => update('indirizzo', e.target.value)} style={inputStyle} onFocus={e => e.target.style.borderColor='#3a2e2b'} onBlur={e => e.target.style.borderColor='rgba(58,46,43,0.2)'} />

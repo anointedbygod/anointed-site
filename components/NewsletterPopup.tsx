@@ -10,8 +10,21 @@ export default function NewsletterPopup() {
   const [email, setEmail] = useState('')
   const [privacy, setPrivacy] = useState(false)
   const [sent, setSent] = useState(false)
+  const [codicePromo, setCodicePromo] = useState({ codice: 'WELCOME10', valore: 10 })
   const pathname = usePathname()
   const locale = pathname.startsWith('/it') ? 'it' : 'en'
+
+  useEffect(() => {
+    fetch('/api/sconti')
+      .then(r => r.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          const promo = data.find((s: any) => s.mostra_in_popup && s.attivo)
+          if (promo) setCodicePromo({ codice: promo.codice, valore: promo.valore })
+        }
+      })
+      .catch(() => {})
+  }, [])
 
   useEffect(() => {
     const seen = localStorage.getItem('anointed_popup_seen')
@@ -122,7 +135,7 @@ export default function NewsletterPopup() {
                 {/* Codice grande */}
                 <div style={{ background: '#3a2e2b', padding: '1.25rem 2rem', marginBottom: '1.75rem', display: 'inline-block' }}>
                   <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.2em', color: '#c1a99a', margin: '0 0 0.4rem' }}>IL TUO CODICE</p>
-                  <p style={{ fontFamily: 'monospace', fontSize: '28px', fontWeight: 700, color: '#f1eae4', margin: 0, letterSpacing: '0.1em' }}>WELCOME10</p>
+                  <p style={{ fontFamily: 'monospace', fontSize: '28px', fontWeight: 700, color: '#f1eae4', margin: 0, letterSpacing: '0.1em' }}>{codicePromo.codice}</p>
                 </div>
                 <Link href={`/${locale}/prodotti`} onClick={close} style={{ display: 'block', width: '100%', background: '#3a2e2b', color: '#f1eae4', fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.18em', fontWeight: 500, padding: '16px', textAlign: 'center', textDecoration: 'none', transition: 'background 0.25s' }}
                   onMouseEnter={e => e.currentTarget.style.background = '#5d4d42'}

@@ -6,17 +6,23 @@ export async function POST(req: Request) {
   if (!email) return NextResponse.json({ error: 'Email mancante' }, { status: 400 })
 
   try {
-    // Salva iscritto in Supabase
     await supabaseAdmin
       .from('newsletter_iscritti')
-      .upsert({ email, tipo: tipo || 'newsletter', created_at: new Date().toISOString() }, { onConflict: 'email' })
+      .upsert({ email: email.toLowerCase(), tipo: tipo || 'newsletter', created_at: new Date().toISOString() }, { onConflict: 'email' })
 
-    // Se viene dal popup manda il codice sconto
     if (tipo === 'popup') {
+      // Trova il codice promo attivo da mostrare
+      const { data: promo } = await supabaseAdmin
+        .from('codici_sconto')
+        .select('codice')
+        .eq('mostra_in_popup', true)
+        .eq('attivo', true)
+        .single()
+
       await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/email`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tipo: 'benvenuto_newsletter', email }),
+        body: JSON.stringify({ tipo: 'benvenuto_newsletter', email, codice: promo?.codice || 'WELCOME10' }),
       })
     }
 

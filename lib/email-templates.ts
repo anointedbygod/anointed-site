@@ -98,7 +98,7 @@ export function emailConfermaOrdine({
   `
 }
 
-export function emailBenvenutoNewsletter({ email }: { email: string }) {
+export function emailBenvenutoNewsletter({ email, codice = 'WELCOME10' }: { email: string; codice?: string }) {
   return `
 <!DOCTYPE html>
 <html>
@@ -126,7 +126,7 @@ export function emailBenvenutoNewsletter({ email }: { email: string }) {
       <!-- Codice sconto -->
       <div style="background:#3a2e2b;border-radius:4px;padding:24px 32px;margin-bottom:40px;display:inline-block;">
         <p style="font-family:Georgia,serif;font-size:11px;letter-spacing:0.14em;color:#c1a99a;margin:0 0 8px;">YOUR CODE</p>
-        <p style="font-family:monospace;font-size:24px;font-weight:700;color:#f1eae4;margin:0;letter-spacing:0.1em;">WELCOME10</p>
+        <p style="font-family:monospace;font-size:24px;font-weight:700;color:#f1eae4;margin:0;letter-spacing:0.1em;">${codice}</p>
       </div>
 
       <p style="font-family:Georgia,serif;font-size:13px;line-height:1.8;color:#5d4d42;margin:0 0 32px;">

@@ -22,12 +22,12 @@ export async function POST(req: Request) {
         break
       }
       case 'benvenuto_newsletter': {
-        const { email } = body
+        const { email, codice } = body
         await resend.emails.send({
           from: FROM,
           to: email,
-          subject: 'Benvenuta nel cerchio — il tuo 10% di sconto',
-          html: emailBenvenutoNewsletter({ email }),
+          subject: `Welcome to Anointed — your discount code`,
+          html: emailBenvenutoNewsletter({ email, codice }),
         })
         break
       }
