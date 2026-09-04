@@ -31,10 +31,19 @@ export async function POST(req: Request) {
 
     // Registra utilizzo sconto
     if (scontoId && emailCliente) {
-      await supabaseAdmin.from('utilizzi_sconti').insert({
-        codice_id: scontoId,
-        email: emailCliente.toLowerCase(),
-      }).onConflict('codice_id, email').ignore()
+      // Controlla se esiste già prima di inserire
+      const { data: esistente } = await supabaseAdmin
+        .from('utilizzi_sconti')
+        .select('id')
+        .eq('codice_id', scontoId)
+        .eq('email', emailCliente.toLowerCase())
+        .single()
+      if (!esistente) {
+        await supabaseAdmin.from('utilizzi_sconti').insert({
+          codice_id: scontoId,
+          email: emailCliente.toLowerCase(),
+        })
+      }
 
       await supabaseAdmin.rpc('incrementa_utilizzi_sconto', { sconto_id: scontoId })
     }

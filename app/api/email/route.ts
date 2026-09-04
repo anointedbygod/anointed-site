@@ -1,6 +1,6 @@
 import { Resend } from 'resend'
 import { NextResponse } from 'next/server'
-import { emailConfermaOrdine, emailBenvenutoNewsletter, emailCarrelloAbbandonato } from '@/lib/email-templates'
+import { emailConfermaOrdine, emailBenvenutoNewsletter, emailCarrelloAbbandonato, emailOrdineSpedito } from '@/lib/email-templates'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 const FROM = 'ANOINTED <onboarding@resend.dev>'
@@ -38,6 +38,26 @@ export async function POST(req: Request) {
           to: email,
           subject: `${nome}, il tuo carrello ti aspetta — ANOINTED`,
           html: emailCarrelloAbbandonato({ nome, prodotti, totale }),
+        })
+        break
+      }
+      case 'ordine_spedito': {
+        const { email, nome, ordineId, trackingUrl } = body
+        await resend.emails.send({
+          from: FROM,
+          to: email,
+          subject: `Il tuo ordine è in arrivo — ANOINTED`,
+          html: emailOrdineSpedito({ nome, ordineId, trackingUrl }),
+        })
+        break
+      }
+      case 'ordine_spedito': {
+        const { email, nome, ordineId, trackingUrl } = body
+        await resend.emails.send({
+          from: FROM,
+          to: email,
+          subject: `Il tuo ordine è in arrivo — ANOINTED`,
+          html: emailOrdineSpedito({ nome, ordineId, trackingUrl }),
         })
         break
       }
