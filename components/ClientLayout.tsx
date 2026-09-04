@@ -7,7 +7,7 @@ import Footer from '@/components/Footer'
 import NewsletterPopup from '@/components/NewsletterPopup'
 import CartDrawer from '@/components/CartDrawer'
 
-const OPAQUE_PATHS = ['/prodotti', '/storia', '/privacy', '/resi', '/contatti', '/checkout', '/ordini']
+const OPAQUE_PATHS = ['/prodotti', '/storia', '/privacy', '/resi', '/contatti', '/checkout', '/ordini', '/account']
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const [cartOpen, setCartOpen] = useState(false)

@@ -14,24 +14,35 @@ export async function POST(req: Request) {
 
   if (error || !sconto) return NextResponse.json({ error: 'Codice non valido' }, { status: 404 })
 
-  // Controlla scadenza
   if (sconto.scadenza && new Date(sconto.scadenza) < new Date()) {
     return NextResponse.json({ error: 'Codice scaduto' }, { status: 400 })
   }
 
-  // Controlla utilizzi totali
   if (sconto.utilizzi_max && sconto.utilizzi_attuali >= sconto.utilizzi_max) {
     return NextResponse.json({ error: 'Codice esaurito' }, { status: 400 })
   }
 
-  // Controlla spesa minima
   if (sconto.spesa_minima && totale < sconto.spesa_minima) {
-    return NextResponse.json({ 
-      error: `Spesa minima €${sconto.spesa_minima.toFixed(2)} richiesta` 
-    }, { status: 400 })
+    return NextResponse.json({ error: `Spesa minima €${sconto.spesa_minima.toFixed(2)} richiesta` }, { status: 400 })
   }
 
-  // Controlla utilizzo per email (se email fornita)
+  // Controlla iscrizione newsletter se richiesta
+  if (sconto.richiede_newsletter && email) {
+    const { data: iscritto } = await supabaseAdmin
+      .from('newsletter_iscritti')
+      .select('id')
+      .eq('email', email.toLowerCase())
+      .single()
+
+    if (!iscritto) {
+      return NextResponse.json({ 
+        error: 'NEWSLETTER_REQUIRED',
+        message: 'Devi essere iscritto alla newsletter per usare questo codice.',
+      }, { status: 403 })
+    }
+  }
+
+  // Controlla utilizzo per email
   if (email) {
     const { data: utilizzoEsistente } = await supabaseAdmin
       .from('utilizzi_sconti')
@@ -45,7 +56,6 @@ export async function POST(req: Request) {
     }
   }
 
-  // Calcola sconto
   const importoSconto = sconto.tipo === 'percentuale'
     ? (totale * sconto.valore) / 100
     : Math.min(sconto.valore, totale)

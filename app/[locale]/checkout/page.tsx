@@ -20,13 +20,20 @@ export default function CheckoutPage() {
   const [codiceSconto, setCodiceSconto] = useState('')
   const [scontoApplicato, setScontoApplicato] = useState<ScontoApplicato | null>(null)
   const [scontoError, setScontoError] = useState('')
+  const [needsNewsletter, setNeedsNewsletter] = useState(false)
+  const [iscrivendo, setIscrivendo] = useState(false)
   const [validandoSconto, setValidandoSconto] = useState(false)
 
   const [userId, setUserId] = useState<string | null>(null)
 
   useEffect(() => {
     const supabase = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
-    supabase.auth.getUser().then(({ data }) => setUserId(data.user?.id || null))
+    supabase.auth.getUser().then(({ data }) => {
+      setUserId(data.user?.id || null)
+      if (data.user?.email) {
+        update('email', data.user.email)
+      }
+    })
   }, [])
 
   const [form, setForm] = useState({
@@ -54,6 +61,24 @@ export default function CheckoutPage() {
     }
   }, [form.paese, zone, totale])
 
+  // Ri-valida lo sconto ogni volta che l'email cambia
+  useEffect(() => {
+    if (!scontoApplicato || !form.email) return
+    fetch('/api/valida-sconto', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ codice: scontoApplicato.codice, totale: subtotale, email: form.email }),
+    })
+      .then(r => r.json())
+      .then(data => {
+        if (!data.valido) {
+          setScontoApplicato(null)
+          setCodiceSconto('')
+          setScontoError(data.error || 'Codice non più valido per questa email')
+        }
+      })
+  }, [form.email])
+
   async function validaSconto() {
     if (!codiceSconto.trim()) return
     setValidandoSconto(true)
@@ -66,10 +91,27 @@ export default function CheckoutPage() {
     const data = await res.json()
     if (data.valido) {
       setScontoApplicato(data.sconto)
+      setNeedsNewsletter(false)
+    } else if (data.error === 'NEWSLETTER_REQUIRED') {
+      setNeedsNewsletter(true)
+      setScontoError('')
     } else {
       setScontoError(data.error || 'Codice non valido')
+      setNeedsNewsletter(false)
     }
     setValidandoSconto(false)
+  }
+
+  async function iscriviEUsaCodice() {
+    if (!form.email) return
+    setIscrivendo(true)
+    await fetch('/api/newsletter', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: form.email, tipo: 'popup' }),
+    })
+    setNeedsNewsletter(false)
+    await validaSconto()
+    setIscrivendo(false)
   }
 
   function update(field: string, value: string) {
@@ -178,7 +220,8 @@ export default function CheckoutPage() {
               </div>
               <div>
                 <label style={labelStyle}>EMAIL *</label>
-                <input required type="email" value={form.email} onChange={e => update('email', e.target.value)} style={inputStyle} onFocus={e => e.target.style.borderColor='#3a2e2b'} onBlur={e => e.target.style.borderColor='rgba(58,46,43,0.2)'} />
+                <input required type="email" value={form.email} disabled={!!userId} onChange={e => update('email', e.target.value)} style={{...inputStyle, background: userId ? 'rgba(193,169,154,0.1)' : 'white', cursor: userId ? 'not-allowed' : 'text'}} onFocus={e => e.target.style.borderColor='#3a2e2b'} onBlur={e => e.target.style.borderColor='rgba(58,46,43,0.2)'} />
+                {userId && <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', color: '#c1a99a', margin: '0.4rem 0 0' }}>Your account email</p>}
               </div>
             </div>
 
@@ -247,6 +290,14 @@ export default function CheckoutPage() {
                 </div>
               )}
               {scontoError && <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#c97a6b', margin: '0.5rem 0 0' }}>{scontoError}</p>}
+              {needsNewsletter && (
+                <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#c97a6b', margin: '0.5rem 0 0' }}>
+                  Non sei iscritto alla newsletter.{' '}
+                  <button type="button" onClick={iscriviEUsaCodice} disabled={iscrivendo} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#3a2e2b', textDecoration: 'underline', fontFamily: 'Inter, sans-serif', fontSize: '12px', padding: 0 }}>
+                    {iscrivendo ? '...' : 'Clicca qui per iscriverti'}
+                  </button>
+                </p>
+              )}
             </div>
 
             <button type="submit" disabled={loading} style={{ width: '100%', padding: '1.1rem', background: loading ? 'rgba(58,46,43,0.3)' : '#3a2e2b', color: '#f1eae4', border: 'none', borderRadius: '2px', cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.18em', fontWeight: 500 }}>
