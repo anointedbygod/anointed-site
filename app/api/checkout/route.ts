@@ -19,7 +19,7 @@ export async function POST(req: Request) {
       .insert({
         stato: 'pending',
         totale,
-        indirizzo_spedizione: { ...cliente, email: cliente.email },
+        indirizzo_spedizione: { ...cliente, nome: `${cliente.nome} ${cliente.cognome || ''}`.trim(), email: cliente.email },
         email_cliente: cliente.email,
       })
       .select().single()

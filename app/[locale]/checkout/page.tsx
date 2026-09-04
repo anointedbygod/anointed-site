@@ -82,7 +82,7 @@ export default function CheckoutPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           articoli,
-          cliente: { ...form, nome: `${form.nome} ${form.cognome}` },
+          cliente: { indirizzo: form.indirizzo, citta: form.citta, cap: form.cap, paese: form.paese, email: form.email, nome: `${form.nome} ${form.cognome}`.trim() },
           sconto: scontoApplicato,
           spedizione: zonaSelezionata ? { zona: zonaSelezionata.nome, costo: costoSpedizione } : null,
           totaleFinale,
