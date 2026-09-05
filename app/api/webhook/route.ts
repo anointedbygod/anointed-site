@@ -43,6 +43,15 @@ export async function POST(req: Request) {
       .update(updateData)
       .eq('id', ordineId)
 
+    // Marca il carrello abbandonato come completato
+    if (emailCliente) {
+      await supabaseAdmin
+        .from('carrelli_abbandonati')
+        .update({ completato: true })
+        .eq('email', emailCliente.toLowerCase())
+        .eq('completato', false)
+    }
+
     // Registra utilizzo sconto
     if (scontoId && emailCliente) {
       // Controlla se esiste già prima di inserire

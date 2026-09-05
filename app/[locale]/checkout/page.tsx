@@ -75,6 +75,24 @@ export default function CheckoutPage() {
     }
   }, [form.paese, zone, totale])
 
+  // Salva carrello sospeso (debounced) quando l'email è valida
+  useEffect(() => {
+    if (!form.email || !form.email.includes('@') || articoli.length === 0) return
+    const timer = setTimeout(() => {
+      fetch('/api/carrello-sospeso', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: form.email,
+          nome: form.nome,
+          articoli,
+          totale: totaleFinale,
+        }),
+      }).catch(() => {})
+    }, 2000)
+    return () => clearTimeout(timer)
+  }, [form.email, articoli.length])
+
   // Ri-valida lo sconto ogni volta che l'email cambia
   useEffect(() => {
     if (!scontoApplicato || !form.email) return
