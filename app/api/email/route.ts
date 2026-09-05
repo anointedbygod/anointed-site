@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server'
 import { emailConfermaOrdine, emailBenvenutoNewsletter, emailCarrelloAbbandonato, emailOrdineSpedito } from '@/lib/email-templates'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
-const FROM = 'ANOINTED <onboarding@resend.dev>'
+const FROM = 'ANOINTED <info@anointed.it>'
 
 export async function POST(req: Request) {
   const body = await req.json()
