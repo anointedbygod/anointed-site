@@ -8,7 +8,7 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const unOraFa = new Date(Date.now() - 60 * 60 * 1000).toISOString()
+  const unOraFa = new Date(Date.now() - 1 * 60 * 1000).toISOString()
 
   // Trova carrelli abbandonati da più di 1 ora, non completati, email non ancora inviata
   const { data: carrelli, error } = await supabaseAdmin
