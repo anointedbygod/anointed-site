@@ -33,6 +33,7 @@ export async function GET(req: Request) {
           nome: carrello.nome || 'there',
           prodotti: carrello.articoli.map((a: any) => ({ nome: a.prodottoNome, prezzo: a.prezzo * a.quantita })),
           totale: carrello.totale,
+          carrelloId: carrello.id,
         }),
       })
       await supabaseAdmin.from('carrelli_abbandonati').update({ email_inviata: true }).eq('id', carrello.id)

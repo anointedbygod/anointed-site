@@ -116,6 +116,11 @@ export default function AccountMenu({ textColor }: { textColor: string }) {
               onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
               {locale === 'it' ? 'I miei indirizzi' : 'My addresses'}
             </Link>
+            <Link href={`/${locale}/account?tab=wishlist`} onClick={() => setOpen(false)} style={{ display: 'block', padding: '0.65rem 1.25rem', fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#3a2e2b', textDecoration: 'none' }}
+              onMouseEnter={e => e.currentTarget.style.background = 'rgba(193,169,154,0.08)'}
+              onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+              {locale === 'it' ? 'I miei preferiti' : 'My wishlist'}
+            </Link>
             <button onClick={logout} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '0.65rem 1.25rem', fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#c97a6b', background: 'none', border: 'none', borderTop: '1px solid rgba(193,169,154,0.2)', cursor: 'pointer' }}
               onMouseEnter={e => e.currentTarget.style.background = 'rgba(193,169,154,0.08)'}
               onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>

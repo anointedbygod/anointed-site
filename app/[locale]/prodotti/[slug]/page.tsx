@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useParams, usePathname } from 'next/navigation'
 import Image from 'next/image'
 import { useCarrello } from '@/lib/carrello'
+import WishlistButton from '@/components/WishlistButton'
 
 interface Variante { id: string; taglia: string; colore: string; stock: number; colore_id?: string }
 interface ImgColore { url: string; ordine: number }
@@ -96,6 +97,9 @@ export default function ProdottoPage() {
           {/* LEFT — Gallery */}
           <div>
             <div style={{ aspectRatio: '3/4', borderRadius: '2px', overflow: 'hidden', background: imgs[activeImg] ? `url(${imgs[activeImg]}) center/cover` : 'linear-gradient(135deg, #e8d2c3 0%, #c1a99a 100%)', marginBottom: '0.75rem', position: 'relative' }}>
+              <div style={{ position: 'absolute', top: '16px', right: '16px', zIndex: 2 }}>
+                <WishlistButton prodottoId={prodotto.id} />
+              </div>
               {!imgs[activeImg] && (
                 <>
                   <Image src="/monogram-brown.svg" alt="" width={60} height={60} style={{ position: 'absolute', top: '16px', left: '16px', width: '44px', height: '44px', opacity: 0.2, pointerEvents: 'none', zIndex: 1 }} />

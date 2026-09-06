@@ -158,10 +158,12 @@ export function emailCarrelloAbbandonato({
   nome,
   prodotti,
   totale,
+  carrelloId,
 }: {
   nome: string
   prodotti: { nome: string; prezzo: number; immagine?: string }[]
   totale: number
+  carrelloId: string
 }) {
   return `
 <!DOCTYPE html>
@@ -199,8 +201,8 @@ export function emailCarrelloAbbandonato({
       </div>
 
       <div style="text-align:center;">
-        <a href="https://anointed.it/checkout" style="display:inline-block;background:#3a2e2b;color:#f1eae4;font-family:Georgia,serif;font-size:11px;letter-spacing:0.16em;text-decoration:none;padding:14px 32px;border-radius:2px;">
-          COMPLETA L'ORDINE
+        <a href="https://anointed.it/recupera-carrello?id=${carrelloId}" style="display:inline-block;background:#3a2e2b;color:#f1eae4;font-family:Georgia,serif;font-size:11px;letter-spacing:0.16em;text-decoration:none;padding:14px 32px;border-radius:2px;">
+          COMPLETE YOUR ORDER
         </a>
       </div>
     </td>

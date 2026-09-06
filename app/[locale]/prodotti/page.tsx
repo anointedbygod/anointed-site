@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import WishlistButton from '@/components/WishlistButton'
 import { useSearchParams, usePathname } from 'next/navigation'
 
 const CATS_FIXED_EN = [
@@ -160,6 +161,9 @@ function ProductCard({ prodotto, i, locale }: { prodotto: Prodotto; i: number; l
       style={{ textDecoration: 'none', display: 'block', opacity: 1, animation: `fadeUp 0.5s ease ${i * 0.06}s both` }}>
       <style>{`@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}`}</style>
       <div style={{ aspectRatio: '3/4', background: hasImg ? `url(${prodotto.immagini[0]}) center/cover` : 'linear-gradient(135deg, #e8d2c3 0%, #c1a99a 100%)', borderRadius: '2px', marginBottom: '0.875rem', overflow: 'hidden', position: 'relative' }}>
+        <div style={{ position: 'absolute', top: '10px', right: '10px', zIndex: 3 }} onClick={e => e.preventDefault()}>
+          <WishlistButton prodottoId={prodotto.id} size={16} />
+        </div>
         {!hasImg && <>
           <Image src="/monogram-brown.svg" alt="" width={40} height={40} style={{ position: 'absolute', top: '12px', left: '12px', width: '32px', height: '32px', opacity: 0.2, pointerEvents: 'none' }} />
           <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

@@ -32,12 +32,12 @@ export async function POST(req: Request) {
         break
       }
       case 'carrello_abbandonato': {
-        const { email, nome, prodotti, totale } = body
+        const { email, nome, prodotti, totale, carrelloId } = body
         await resend.emails.send({
           from: FROM,
           to: email,
-          subject: `${nome}, il tuo carrello ti aspetta — ANOINTED`,
-          html: emailCarrelloAbbandonato({ nome, prodotti, totale }),
+          subject: `${nome}, your cart is waiting — ANOINTED`,
+          html: emailCarrelloAbbandonato({ nome, prodotti, totale, carrelloId }),
         })
         break
       }

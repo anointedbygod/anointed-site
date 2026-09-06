@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { useRouter, usePathname } from 'next/navigation'
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { createBrowserClient } from '@supabase/ssr'
@@ -19,10 +19,13 @@ const STATO_STYLE: Record<string, { label: string; color: string; bg: string }> 
 }
 
 export default function AccountDashboard() {
-  const [tab, setTab] = useState<'orders' | 'address' | 'profile'>('orders')
+  const searchParams = useSearchParams()
+  const initialTab = (searchParams.get('tab') as 'orders' | 'address' | 'wishlist' | 'profile') || 'orders'
+  const [tab, setTab] = useState<'orders' | 'address' | 'wishlist' | 'profile'>(initialTab)
   const [user, setUser] = useState<any>(null)
   const [ordini, setOrdini] = useState<Ordine[]>([])
   const [indirizzi, setIndirizzi] = useState<Indirizzo[]>([])
+  const [wishlist, setWishlist] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [nuovoIndirizzo, setNuovoIndirizzo] = useState({ nome: '', indirizzo: '', citta: '', cap: '', paese: 'IT' })
   const [aggiungendoIndirizzo, setAggiungendoIndirizzo] = useState(false)
@@ -44,9 +47,11 @@ export default function AccountDashboard() {
       Promise.all([
         fetch(`/api/account/ordini?user_id=${data.user.id}&email=${data.user.email}`).then(r => r.json()),
         fetch(`/api/account/indirizzi?user_id=${data.user.id}`).then(r => r.json()),
-      ]).then(([ord, ind]) => {
+        fetch(`/api/wishlist?user_id=${data.user.id}`).then(r => r.json()),
+      ]).then(([ord, ind, wish]) => {
         setOrdini(Array.isArray(ord) ? ord : [])
         setIndirizzi(Array.isArray(ind) ? ind : [])
+        setWishlist(Array.isArray(wish) ? wish : [])
         setLoading(false)
       })
     })
@@ -115,6 +120,7 @@ export default function AccountDashboard() {
           {[
             { key: 'orders', label: locale === 'it' ? 'ORDINI' : 'ORDERS' },
             { key: 'address', label: locale === 'it' ? 'INDIRIZZI' : 'ADDRESSES' },
+            { key: 'wishlist', label: locale === 'it' ? 'PREFERITI' : 'WISHLIST' },
             { key: 'profile', label: locale === 'it' ? 'PROFILO' : 'PROFILE' },
           ].map(t => (
             <button key={t.key} onClick={() => setTab(t.key as any)} style={{
@@ -231,6 +237,36 @@ export default function AccountDashboard() {
                     {locale === 'it' ? 'ANNULLA' : 'CANCEL'}
                   </button>
                 </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* WISHLIST */}
+        {tab === 'wishlist' && (
+          <div>
+            {wishlist.length === 0 ? (
+              <div style={{ textAlign: 'center', padding: '4rem 0' }}>
+                <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', color: '#c1a99a', margin: '0 0 1.5rem' }}>
+                  {locale === 'it' ? 'Nessun prodotto salvato ancora.' : 'No saved products yet.'}
+                </p>
+                <Link href={`/${locale}/prodotti`} style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.16em', color: '#3a2e2b', textDecoration: 'none', borderBottom: '1px solid #3a2e2b', paddingBottom: '2px' }}>
+                  {locale === 'it' ? 'SCOPRI I PRODOTTI' : 'DISCOVER PRODUCTS'}
+                </Link>
+              </div>
+            ) : (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '1.25rem' }}>
+                {wishlist.map((w: any) => {
+                  const p = w.prodotti
+                  if (!p) return null
+                  return (
+                    <Link key={w.id} href={`/${locale}/prodotti/${p.slug}`} style={{ textDecoration: 'none' }}>
+                      <div style={{ aspectRatio: '3/4', background: p.immagini?.[0] ? `url(${p.immagini[0]}) center/cover` : 'linear-gradient(135deg, #e8d2c3, #c1a99a)', borderRadius: '2px', marginBottom: '0.6rem' }} />
+                      <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#3a2e2b', margin: '0 0 0.2rem' }}>{p.nome}</p>
+                      <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#5d4d42', margin: 0 }}>€{p.prezzo?.toFixed(2)}</p>
+                    </Link>
+                  )
+                })}
               </div>
             )}
           </div>
