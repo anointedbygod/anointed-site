@@ -1,17 +1,28 @@
 'use client'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 
 const TR = {
-  en: { collections: 'Collections', info: 'Info', tagline: 'Chosen. Set apart. Appointed.', copy: '© 2026 Anointed. All rights reserved.', funded: 'PROJECT FUNDED BY', cats: { twilli: 'Twilli', blazer: 'Blazer', pochette: 'Pochette', tshirt: 'T-Shirt', camicie: 'Shirts', pantaloni: 'Trousers' }, links: { story: 'Our Story', privacy: 'Privacy Policy', returns: 'Returns', contact: 'Contact' } },
-  it: { collections: 'Collezioni', info: 'Info', tagline: 'Scelta. Messa da parte. Nominata.', copy: '© 2026 Anointed. Tutti i diritti riservati.', funded: 'PROGETTO FINANZIATO DA', cats: { twilli: 'Twilli', blazer: 'Blazer', pochette: 'Pochette', tshirt: 'T-Shirt', camicie: 'Camicie', pantaloni: 'Pantaloni' }, links: { story: 'La Nostra Storia', privacy: 'Privacy Policy', returns: 'Resi', contact: 'Contatti' } },
+  en: { collections: 'Collections', info: 'Info', tagline: 'Chosen. Set apart. Appointed.', copy: '© 2026 Anointed. All rights reserved.', funded: 'PROJECT FUNDED BY', links: { story: 'About Us', world: 'Anointed World', privacy: 'Privacy Policy', returns: 'Returns', contact: 'Contact' } },
+  it: { collections: 'Collezioni', info: 'Info', tagline: 'Scelta. Messa da parte. Nominata.', copy: '© 2026 Anointed. Tutti i diritti riservati.', funded: 'PROGETTO FINANZIATO DA', links: { story: 'Chi Siamo', world: 'Anointed World', privacy: 'Privacy Policy', returns: 'Resi', contact: 'Contatti' } },
 }
+
+interface Sezione { nome: string; slug: string }
 
 export default function Footer() {
   const pathname = usePathname()
   const locale = (pathname.startsWith('/it') ? 'it' : 'en') as 'en'|'it'
   const t = TR[locale]
+  const [sezioni, setSezioni] = useState<Sezione[]>([])
+
+  useEffect(() => {
+    fetch('/api/sezioni')
+      .then(r => r.json())
+      .then(data => setSezioni(Array.isArray(data) ? data.map((s: any) => ({ nome: s.nome, slug: s.slug })) : []))
+      .catch(() => {})
+  }, [])
 
   return (
     <footer style={{ background: '#3a2e2b' }}>
@@ -20,11 +31,11 @@ export default function Footer() {
 
           <div>
             <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.18em', color: 'rgba(241,234,228,0.3)', margin: '0 0 1.25rem' }}>{t.collections.toUpperCase()}</p>
-            {Object.entries(t.cats).map(([key, label]) => (
-              <Link key={key} href={`/${locale}/prodotti?cat=${key}`} style={{ display: 'block', fontFamily: 'Inter, sans-serif', fontSize: '12px', letterSpacing: '0.1em', color: 'rgba(241,234,228,0.55)', textDecoration: 'none', marginBottom: '0.6rem', transition: 'color 0.2s' }}
+            {sezioni.map(sez => (
+              <Link key={sez.slug} href={`/${locale}/prodotti?cat=${sez.slug}`} style={{ display: 'block', fontFamily: 'Inter, sans-serif', fontSize: '12px', letterSpacing: '0.1em', color: 'rgba(241,234,228,0.55)', textDecoration: 'none', marginBottom: '0.6rem', transition: 'color 0.2s' }}
                 onMouseEnter={e => e.currentTarget.style.color = '#c1a99a'}
                 onMouseLeave={e => e.currentTarget.style.color = 'rgba(241,234,228,0.55)'}>
-                {label as string}
+                {sez.nome}
               </Link>
             ))}
           </div>
@@ -40,6 +51,7 @@ export default function Footer() {
             <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.18em', color: 'rgba(241,234,228,0.3)', margin: '0 0 1.25rem' }}>{t.info.toUpperCase()}</p>
             {[
               { label: t.links.story, href: `/${locale}/storia` },
+              { label: t.links.world, href: `/${locale}/anointed-world` },
               { label: t.links.privacy, href: `/${locale}/privacy` },
               { label: t.links.returns, href: `/${locale}/resi` },
               { label: t.links.contact, href: `/${locale}/contatti` },

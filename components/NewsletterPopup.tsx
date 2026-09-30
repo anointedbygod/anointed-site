@@ -10,21 +10,8 @@ export default function NewsletterPopup() {
   const [email, setEmail] = useState('')
   const [privacy, setPrivacy] = useState(false)
   const [sent, setSent] = useState(false)
-  const [codicePromo, setCodicePromo] = useState({ codice: 'WELCOME10', valore: 10 })
   const pathname = usePathname()
   const locale = pathname.startsWith('/it') ? 'it' : 'en'
-
-  useEffect(() => {
-    fetch('/api/sconti')
-      .then(r => r.json())
-      .then(data => {
-        if (Array.isArray(data)) {
-          const promo = data.find((s: any) => s.mostra_in_popup && s.attivo)
-          if (promo) setCodicePromo({ codice: promo.codice, valore: promo.valore })
-        }
-      })
-      .catch(() => {})
-  }, [])
 
   useEffect(() => {
     const seen = localStorage.getItem('anointed_popup_seen')
@@ -62,7 +49,7 @@ export default function NewsletterPopup() {
     if (!email || !privacy) return
     await fetch('/api/newsletter', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, tipo: 'popup' }),
+      body: JSON.stringify({ email, tipo: 'popup', locale }),
     })
     setSent(true)
     const expire = Date.now() + 7 * 24 * 60 * 60 * 1000
@@ -84,7 +71,8 @@ export default function NewsletterPopup() {
       ? 'Iscrivendoti accetti di ricevere comunicazioni da Anointed. Puoi cancellare in qualsiasi momento.'
       : 'By subscribing you agree to receive communications from Anointed. Unsubscribe at any time.',
     thanksTitle: locale === 'it' ? 'Sei dentro.' : "You're in.",
-    thanksSub:  locale === 'it' ? 'Il tuo regalo di benvenuto ti aspetta.' : 'Your welcome gift is waiting.',
+    thanksSub:  locale === 'it' ? 'Controlla la tua email: il tuo codice sconto ti aspetta.' : 'Check your email: your discount code is on its way.',
+    thanksSpam: locale === 'it' ? 'Non la vedi? Dai un\'occhiata anche nello spam.' : "Don't see it? Check your spam folder too.",
     thanksCta:  locale === 'it' ? 'INIZIA A FARE SHOPPING' : 'START SHOPPING',
   }
 
@@ -113,9 +101,9 @@ export default function NewsletterPopup() {
         <div className="popup-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
 
           {/* Immagine sx */}
-          <div className="popup-image" style={{ minHeight: '520px', background: 'linear-gradient(145deg, #3a2e2b 0%, #5d4d42 40%, #c1a99a 100%)', position: 'relative', display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-start', padding: '2rem' }}>
-            {/* Monogram watermark */}
-            <Image src="/monogram-beige.svg" alt="" width={120} height={120} style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '140px', height: '140px', opacity: 0.12, pointerEvents: 'none' }} />
+          <div className="popup-image" style={{ minHeight: '520px', background: 'url(/images/about/newsletter-popup.jpg) center/cover', position: 'relative', display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-start', padding: '2rem' }}>
+            {/* Overlay per leggibilità del logo */}
+            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(58,46,43,0) 55%, rgba(58,46,43,0.55) 100%)' }} />
             <Image src="/logo-beige.svg" alt="ANOINTED" width={140} height={32} style={{ height: '24px', width: 'auto', position: 'relative', zIndex: 1 }} />
           </div>
 
@@ -129,14 +117,12 @@ export default function NewsletterPopup() {
             {sent ? (
               /* Seconda schermata */
               <div style={{ textAlign: 'center' }}>
-                <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.24em', color: '#c1a99a', margin: '0 0 1.25rem' }}>— ANOINTED —</p>
-                <h2 style={{ fontFamily: 'Inter, sans-serif', fontSize: '32px', fontWeight: 300, color: '#3a2e2b', margin: '0 0 0.75rem', letterSpacing: '0.02em' }}>{t.thanksTitle}</h2>
-                <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', color: '#5d4d42', lineHeight: 1.7, margin: '0 0 2rem' }}>{t.thanksSub}</p>
-                {/* Codice grande */}
-                <div style={{ background: '#3a2e2b', padding: '1.25rem 2rem', marginBottom: '1.75rem', display: 'inline-block' }}>
-                  <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.2em', color: '#c1a99a', margin: '0 0 0.4rem' }}>IL TUO CODICE</p>
-                  <p style={{ fontFamily: 'monospace', fontSize: '28px', fontWeight: 700, color: '#f1eae4', margin: 0, letterSpacing: '0.1em' }}>{codicePromo.codice}</p>
+                <div style={{ width: '48px', height: '48px', borderRadius: '50%', border: '1px solid rgba(193,169,154,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem' }}>
+                  <svg width="20" height="16" viewBox="0 0 20 16" fill="none"><path d="M1 3L9.5 9.5C9.8 9.72 10.2 9.72 10.5 9.5L19 3M2 1H18C18.55 1 19 1.45 19 2V14C19 14.55 18.55 15 18 15H2C1.45 15 1 14.55 1 14V2C1 1.45 1.45 1 2 1Z" stroke="#3a2e2b" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </div>
+                <h2 style={{ fontFamily: 'Inter, sans-serif', fontSize: '32px', fontWeight: 300, color: '#3a2e2b', margin: '0 0 0.75rem', letterSpacing: '0.02em' }}>{t.thanksTitle}</h2>
+                <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', color: '#5d4d42', lineHeight: 1.7, margin: '0 0 0.6rem' }}>{t.thanksSub}</p>
+                <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#c1a99a', lineHeight: 1.6, margin: '0 0 2rem' }}>{t.thanksSpam}</p>
                 <Link href={`/${locale}/prodotti`} onClick={close} style={{ display: 'block', width: '100%', background: '#3a2e2b', color: '#f1eae4', fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.18em', fontWeight: 500, padding: '16px', textAlign: 'center', textDecoration: 'none', transition: 'background 0.25s' }}
                   onMouseEnter={e => e.currentTarget.style.background = '#5d4d42'}
                   onMouseLeave={e => e.currentTarget.style.background = '#3a2e2b'}>
@@ -146,7 +132,6 @@ export default function NewsletterPopup() {
             ) : (
               /* Form */
               <>
-                <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.24em', color: '#c1a99a', margin: '0 0 1.25rem' }}>{t.eyebrow}</p>
                 <h2 className="popup-title" style={{ fontFamily: 'Inter, sans-serif', fontSize: '38px', fontWeight: 300, color: '#3a2e2b', margin: '0 0 1rem', lineHeight: 1.05, letterSpacing: '0.01em' }}>{t.title}</h2>
                 <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', lineHeight: 1.75, color: '#5d4d42', margin: '0 0 2rem' }} dangerouslySetInnerHTML={{ __html: t.body }} />
 

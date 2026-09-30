@@ -8,16 +8,6 @@ import LanguageSwitcher from '@/components/LanguageSwitcher'
 import AccountMenu from '@/components/AccountMenu'
 import { usePathname } from 'next/navigation'
 
-const CATS_FIXED = [
-  { en: 'Twilli', it: 'Twilli', href: 'twilli' },
-  { en: 'Blazer', it: 'Blazer', href: 'blazer' },
-  { en: 'Pochette', it: 'Pochette', href: 'pochette' },
-  { en: 'T-Shirt', it: 'T-Shirt', href: 'tshirt' },
-  { en: 'Shirts', it: 'Camicie', href: 'camicie' },
-  { en: 'Trousers', it: 'Pantaloni', href: 'pantaloni' },
-  { en: 'Best Sellers', it: 'Best Sellers', href: 'bestseller' },
-]
-
 interface SezioneNav { nome: string; slug: string }
 
 export default function Navbar({ forceOpaque = false, onCartClick = () => {} }: { forceOpaque?: boolean; onCartClick?: () => void }) {
@@ -33,13 +23,13 @@ export default function Navbar({ forceOpaque = false, onCartClick = () => {} }: 
   const pathname = usePathname()
   const locale = pathname.startsWith('/it') ? 'it' : 'en'
   const collectionsLabel = locale === 'it' ? 'COLLEZIONI' : 'COLLECTIONS'
-  const storyLabel = locale === 'it' ? 'LA NOSTRA STORIA' : 'OUR STORY'
+  const storyLabel = locale === 'it' ? 'CHI SIAMO' : 'ABOUT US'
+  const worldLabel = 'ANOINTED WORLD'
 
   useEffect(() => {
     fetch('/api/sezioni').then(r => r.json()).then(data => {
       if (!Array.isArray(data)) return
-      const fixedSlugs = CATS_FIXED.map(c => c.href)
-      setSezioniDyn(data.filter((s: any) => !fixedSlugs.includes(s.slug)).map((s: any) => ({ nome: s.nome, slug: s.slug })))
+      setSezioniDyn(data.map((s: any) => ({ nome: s.nome, slug: s.slug })))
     }).catch(() => {})
   }, [])
 
@@ -110,21 +100,18 @@ export default function Navbar({ forceOpaque = false, onCartClick = () => {} }: 
               </svg>
             </button>
             <Link href={`/${locale}/storia`} style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.14em', color: textColor, textDecoration: 'none', transition: 'color 0.3s' }}>{storyLabel}</Link>
+            <Link href={`/${locale}/anointed-world`} style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.14em', color: textColor, textDecoration: 'none', transition: 'color 0.3s' }}>{worldLabel}</Link>
 
 
-            {/* Dropdown desktop */}
+            {/* Dropdown desktop — solo sezioni attive dal DB */}
             <div style={{ position: 'absolute', top: 'calc(100% + 1rem)', left: 0, background: '#f1eae4', border: '1px solid rgba(193,169,154,0.4)', borderRadius: '2px', padding: '0.5rem 0', minWidth: '200px', opacity: collectionsOpen ? 1 : 0, pointerEvents: collectionsOpen ? 'all' : 'none', transform: collectionsOpen ? 'translateY(0)' : 'translateY(-8px)', transition: 'opacity 0.2s, transform 0.2s', boxShadow: '0 12px 32px rgba(58,46,43,0.08)' }}>
-              {CATS_FIXED.map((cat, i) => (
-                <Link key={cat.href} href={`/${locale}/prodotti?cat=${cat.href}`} onClick={() => setCollectionsOpen(false)}
-                  style={{ ...linkStyle, borderBottom: i < CATS_FIXED.length - 1 ? '1px solid rgba(193,169,154,0.15)' : 'none' }}
-                  onMouseEnter={e => e.currentTarget.style.color = '#c1a99a'}
-                  onMouseLeave={e => e.currentTarget.style.color = '#3a2e2b'}>
-                  {(locale === 'it' ? cat.it : cat.en).toUpperCase()}
-                </Link>
-              ))}
-              {sezioniDyn.map((sez, i) => (
-                <Link key={sez.slug} href={`/${locale}/sezioni/${sez.slug}`} onClick={() => setCollectionsOpen(false)}
-                  style={{ ...linkStyle, borderTop: i === 0 ? '1px solid rgba(193,169,154,0.3)' : '1px solid rgba(193,169,154,0.15)' }}
+              {sezioniDyn.length === 0 ? (
+                <span style={{ ...linkStyle, color: '#c1a99a', cursor: 'default' }}>
+                  {locale === 'it' ? 'In arrivo' : 'Coming soon'}
+                </span>
+              ) : sezioniDyn.map((sez, i) => (
+                <Link key={sez.slug} href={`/${locale}/prodotti?cat=${sez.slug}`} onClick={() => setCollectionsOpen(false)}
+                  style={{ ...linkStyle, borderBottom: i < sezioniDyn.length - 1 ? '1px solid rgba(193,169,154,0.15)' : 'none' }}
                   onMouseEnter={e => e.currentTarget.style.color = '#c1a99a'}
                   onMouseLeave={e => e.currentTarget.style.color = '#3a2e2b'}>
                   {sez.nome.toUpperCase()}
@@ -174,16 +161,9 @@ export default function Navbar({ forceOpaque = false, onCartClick = () => {} }: 
         {/* Mobile menu drawer */}
         <div style={{ overflow: 'hidden', maxHeight: mobileOpen ? '100vh' : '0', transition: 'max-height 0.4s cubic-bezier(0.16,1,0.3,1)', background: 'rgba(241,234,228,0.98)', backdropFilter: 'blur(12px)' }}>
           <div style={{ padding: '1rem 1.25rem 2rem' }}>
-            {/* Categorie fisse */}
-            {CATS_FIXED.map((cat) => (
-              <Link key={cat.href} href={`/${locale}/prodotti?cat=${cat.href}`} onClick={() => setMobileOpen(false)}
-                style={{ display: 'block', padding: '0.875rem 0', borderBottom: '1px solid rgba(193,169,154,0.2)', fontFamily: 'Inter, sans-serif', fontSize: '13px', letterSpacing: '0.16em', color: '#3a2e2b', textDecoration: 'none' }}>
-                {(locale === 'it' ? cat.it : cat.en).toUpperCase()}
-              </Link>
-            ))}
-            {/* Sezioni dinamiche — continuano la lista senza linea extra */}
+            {/* Sezioni dinamiche dal DB */}
             {sezioniDyn.map((sez) => (
-              <Link key={sez.slug} href={`/${locale}/sezioni/${sez.slug}`} onClick={() => setMobileOpen(false)}
+              <Link key={sez.slug} href={`/${locale}/prodotti?cat=${sez.slug}`} onClick={() => setMobileOpen(false)}
                 style={{ display: 'block', padding: '0.875rem 0', borderBottom: '1px solid rgba(193,169,154,0.2)', fontFamily: 'Inter, sans-serif', fontSize: '13px', letterSpacing: '0.16em', color: '#3a2e2b', textDecoration: 'none' }}>
                 {sez.nome.toUpperCase()}
               </Link>
@@ -192,6 +172,10 @@ export default function Navbar({ forceOpaque = false, onCartClick = () => {} }: 
             <Link href={`/${locale}/storia`} onClick={() => setMobileOpen(false)}
               style={{ display: 'block', padding: '0.875rem 0', borderBottom: '1px solid rgba(193,169,154,0.2)', fontFamily: 'Inter, sans-serif', fontSize: '13px', letterSpacing: '0.16em', color: '#3a2e2b', textDecoration: 'none' }}>
               {storyLabel}
+            </Link>
+            <Link href={`/${locale}/anointed-world`} onClick={() => setMobileOpen(false)}
+              style={{ display: 'block', padding: '0.875rem 0', borderBottom: '1px solid rgba(193,169,154,0.2)', fontFamily: 'Inter, sans-serif', fontSize: '13px', letterSpacing: '0.16em', color: '#3a2e2b', textDecoration: 'none' }}>
+              {worldLabel}
             </Link>
 
             {/* Language switcher — senza linea sopra, solo padding */}

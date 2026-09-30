@@ -2,16 +2,24 @@ import { supabaseAdmin } from '@/lib/supabase-admin'
 import { NextResponse } from 'next/server'
 
 export async function POST(req: Request) {
-  const { email, tipo } = await req.json()
+  const { email, tipo, locale } = await req.json()
   if (!email) return NextResponse.json({ error: 'Email mancante' }, { status: 400 })
 
   try {
+    const emailLower = email.toLowerCase()
+
+    const { data: esistente } = await supabaseAdmin
+      .from('newsletter_iscritti')
+      .select('email')
+      .eq('email', emailLower)
+      .maybeSingle()
+
     await supabaseAdmin
       .from('newsletter_iscritti')
-      .upsert({ email: email.toLowerCase(), tipo: tipo || 'newsletter', created_at: new Date().toISOString() }, { onConflict: 'email' })
+      .upsert({ email: emailLower, tipo: tipo || 'newsletter', created_at: new Date().toISOString() }, { onConflict: 'email' })
 
-    if (tipo === 'popup') {
-      // Trova il codice promo attivo da mostrare
+    // Invia l'email di benvenuto solo alla prima iscrizione (non ad ogni re-invio del form)
+    if (!esistente) {
       const { data: promo } = await supabaseAdmin
         .from('codici_sconto')
         .select('codice')
@@ -22,7 +30,7 @@ export async function POST(req: Request) {
       await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/email`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tipo: 'benvenuto_newsletter', email, codice: promo?.codice || 'WELCOME10' }),
+        body: JSON.stringify({ tipo: 'benvenuto_newsletter', email, codice: promo?.codice || 'WELCOME10', locale: locale === 'it' ? 'it' : 'en' }),
       })
     }
 

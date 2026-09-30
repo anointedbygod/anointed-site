@@ -103,7 +103,6 @@ export default function AccountDashboard() {
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '3rem', flexWrap: 'wrap', gap: '1rem' }}>
           <div>
-            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.22em', color: '#c1a99a', margin: '0 0 0.5rem' }}>— {locale === 'it' ? 'IL TUO ACCOUNT' : 'YOUR ACCOUNT'} —</p>
             <h1 style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(1.4rem, 2.5vw, 2rem)', fontWeight: 300, color: '#3a2e2b', margin: 0 }}>
               {user?.user_metadata?.full_name || user?.email}
             </h1>

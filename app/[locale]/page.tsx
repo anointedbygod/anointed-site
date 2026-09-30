@@ -3,7 +3,8 @@ import Categories from '@/components/Categories'
 import BrandStory from '@/components/BrandStory'
 import BestSellers from '@/components/BestSellers'
 import EditorialBanner from '@/components/EditorialBanner'
-import Testimonials from '@/components/Testimonials'
+import InstagramShowcase from '@/components/InstagramShowcase'
+import AnointedWorldPreview from '@/components/AnointedWorldPreview'
 
 export default function Home() {
   return (
@@ -13,7 +14,8 @@ export default function Home() {
       <BrandStory />
       <BestSellers />
       <EditorialBanner />
-      <Testimonials />
+      <InstagramShowcase />
+      <AnointedWorldPreview />
     </main>
   )
 }

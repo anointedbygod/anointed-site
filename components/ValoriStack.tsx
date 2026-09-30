@@ -1,16 +1,36 @@
 'use client'
 
 import { useRef, useEffect, useState } from 'react'
+import { usePathname } from 'next/navigation'
 
-const VALORI = [
-  { num: '01', title: 'PURPOSEFUL', body: 'Every design reminds a woman of her direction, her strength and her identity. We believe every woman carries a unique calling.' },
-  { num: '02', title: 'EMPOWERING', body: 'Clothing becomes a daily reminder that a woman is worthy, strong and capable of rising again. Anointed is a symbol of confidence and self-worth.' },
-  { num: '03', title: 'ELEVATING', body: 'Fashion as a tool of renewal — a way to rediscover confidence, beauty and inner strength. Anointed exists to inspire women to grow and rise.' },
-  { num: '04', title: 'AUTHENTIC', body: 'We celebrate women who remain true to who they are. Our designs encourage clarity of identity, integrity and confidence.' },
-  { num: '05', title: 'AUTHORITATIVE', body: 'Elegance that does not need to ask for permission. Women who walk into rooms with presence, who lead, build and influence.' },
-]
+const VALORI = {
+  en: [
+    { num: '01', title: 'PURPOSEFUL', body: 'Every piece begins with intention. We create more than clothing: we create reminders of purpose, identity and direction.' },
+    { num: '02', title: 'REFINED', body: 'We believe in thoughtful design, timeless elegance and attention to detail. Nothing excessive, nothing accidental.' },
+    { num: '03', title: 'DISTINCTIVE', body: 'ANOINTED is made for women who do not need to blend in. Individuality is not a statement — it is a way of being.' },
+    { num: '04', title: 'AUTHENTIC', body: 'We value honesty, integrity and staying true to who you are, in what you wear and in how you live.' },
+    { num: '05', title: 'ENDURING', body: 'We create with a long-term vision: pieces, ideas and values designed to remain relevant beyond a season.' },
+  ],
+  it: [
+    { num: '01', title: 'CONSAPEVOLE', body: 'Ogni capo nasce da un’intenzione. Creiamo più che abbigliamento: creiamo promemoria di scopo, identità e direzione.' },
+    { num: '02', title: 'RAFFINATA', body: 'Crediamo in un design curato, un’eleganza senza tempo e nell’attenzione al dettaglio. Niente di eccessivo, niente di casuale.' },
+    { num: '03', title: 'DISTINTIVA', body: 'ANOINTED è pensato per donne che non hanno bisogno di passare inosservate. L’individualità non è una dichiarazione — è un modo di essere.' },
+    { num: '04', title: 'AUTENTICA', body: 'Diamo valore all’onestà, all’integrità e al restare fedeli a chi sei, in ciò che indossi e in come vivi.' },
+    { num: '05', title: 'DURATURA', body: 'Creiamo con una visione a lungo termine: capi, idee e valori pensati per restare rilevanti oltre una stagione.' },
+  ],
+} as const
+
+const TEXT = {
+  en: { heading: 'What we stand for.', scroll: 'SCROLL TO DISCOVER' },
+  it: { heading: 'In cosa crediamo.', scroll: 'SCORRI PER SCOPRIRE' },
+} as const
 
 export default function ValoriStack() {
+  const pathname = usePathname()
+  const locale = (pathname?.startsWith('/it') ? 'it' : 'en') as 'en' | 'it'
+  const valori = VALORI[locale]
+  const t = TEXT[locale]
+
   const containerRef = useRef<HTMLDivElement>(null)
   const [progress, setProgress] = useState(0)
 
@@ -28,12 +48,10 @@ export default function ValoriStack() {
   }, [])
 
   // Quante card sono "aperte" — progress 0→1 mappa su 0→5
-  const activeFloat = progress * (VALORI.length - 0.001)
-  const activeIndex = Math.floor(activeFloat)
-  const cardProgress = activeFloat - activeIndex
+  const activeFloat = progress * (valori.length - 0.001)
 
   return (
-    <div ref={containerRef} style={{ height: `${VALORI.length * 120 + 100}vh`, position: 'relative' }}>
+    <div ref={containerRef} style={{ height: `${valori.length * 120 + 100}vh`, position: 'relative' }}>
       <div style={{
         position: 'sticky', top: 0, height: '100vh',
         display: 'flex', flexDirection: 'column',
@@ -41,16 +59,13 @@ export default function ValoriStack() {
         background: '#f1eae4', overflow: 'hidden', padding: '0 1.5rem',
       }}>
 
-        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.22em', color: '#c1a99a', margin: '0 0 0.75rem', textAlign: 'center' }}>
-          03 — OUR VALUES
-        </p>
         <h2 style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(1.4rem, 2vw, 2rem)', fontWeight: 300, color: '#3a2e2b', textAlign: 'center', margin: '0 0 3rem' }}>
-          What we stand for.
+          {t.heading}
         </h2>
 
         {/* Stack */}
         <div style={{ position: 'relative', width: '100%', maxWidth: '520px', height: '320px' }}>
-          {VALORI.map((v, i) => {
+          {valori.map((v, i) => {
             const diff = i - activeFloat
             const isBehind = diff > 0
             const isPast = diff < -1
@@ -64,7 +79,7 @@ export default function ValoriStack() {
             let rotate = 0
             let scale = 1
             let opacity = 1
-            let zIndex = VALORI.length - i
+            let zIndex = valori.length - i
 
             if (isBehind) {
               // Card ancora nel mazzo — impilate sotto
@@ -72,7 +87,7 @@ export default function ValoriStack() {
               translateY = depth * 12
               scale = 1 - depth * 0.04
               opacity = Math.max(0, 1 - (depth - 1) * 0.4)
-              zIndex = VALORI.length - i
+              zIndex = valori.length - i
             } else if (isPast) {
               // Card già sfogliata — vola via
               const gone = Math.min(-diff - 1, 1)
@@ -88,7 +103,7 @@ export default function ValoriStack() {
               translateY = -p * 40
               rotate = p * 15
               opacity = 1
-              zIndex = VALORI.length + 1
+              zIndex = valori.length + 1
               scale = 1
             }
 
@@ -136,7 +151,7 @@ export default function ValoriStack() {
 
                 {/* Progress indicator */}
                 <div style={{ display: 'flex', gap: '6px', marginTop: '2rem' }}>
-                  {VALORI.map((_, j) => (
+                  {valori.map((_, j) => (
                     <div key={j} style={{
                       height: '2px', flex: 1, borderRadius: '1px',
                       background: j <= i
@@ -157,7 +172,7 @@ export default function ValoriStack() {
           color: 'rgba(193,169,154,0.4)', marginTop: '2.5rem',
           opacity: progress < 0.05 ? 1 : 0, transition: 'opacity 0.4s',
         }}>
-          SCROLL TO DISCOVER
+          {t.scroll}
         </p>
       </div>
     </div>

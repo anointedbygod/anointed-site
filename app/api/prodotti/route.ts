@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server'
 export async function GET() {
   const { data, error } = await supabaseAdmin
     .from('prodotti')
-    .select(`*, varianti(*)`)
+    .select(`*, varianti(*), sezioni(id, nome, slug)`)
     .eq('attivo', true)
     .order('created_at', { ascending: false })
   if (error) return NextResponse.json({ error }, { status: 500 })

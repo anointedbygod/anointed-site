@@ -98,7 +98,63 @@ export function emailConfermaOrdine({
   `
 }
 
-export function emailBenvenutoNewsletter({ email, codice = 'WELCOME10' }: { email: string; codice?: string }) {
+export function emailBenvenutoNewsletter({ email, codice = 'WELCOME10', locale = 'en' }: { email: string; codice?: string; locale?: 'en' | 'it' }) {
+  const L = locale === 'it'
+    ? {
+        tagline: 'SCELTA. MESSA DA PARTE. NOMINATA.',
+        heading: 'Sei scelta.',
+        salutation: 'Cara donna,',
+        paragraphs: [
+          'se sei arrivata fin qui, vorrei lasciarti un piccolo promemoria:',
+        ],
+        chosenLine: 'sei scelta.',
+        chosenList: ['Scelta da Dio.', 'Creata con intenzione.', 'Con valore.', 'Con uno scopo.'],
+        paragraphs2: [
+          'ANOINTED nasce dal desiderio di creare qualcosa che vada oltre ciò che indossiamo. Qualcosa che possa ricordarti chi sei, ciò che porti dentro di te e la donna che sei chiamata a diventare.',
+          'Crediamo che ogni donna abbia una storia unica, dei doni da custodire e uno scopo da vivere.',
+          'Per questo ogni pezzo ANOINTED vuole essere più di qualcosa di bello da indossare.',
+          'Vuole essere un reminder di identità, grazia, fede, forza e purpose.',
+          'Un piccolo segno da portare con te, ogni giorno, per ricordarti che non sei qui per caso.',
+          'Qualunque sia la stagione che stai vivendo, non dimenticare mai che la tua storia ha valore e che ciò che hai dentro di te può fare la differenza.',
+        ],
+        closingList: ['Continua a credere.', 'Continua a costruire.', 'Continua a diventare la donna che sei chiamata ad essere.'],
+        finalChosen: 'You are chosen.',
+        signoff: 'Con affetto,',
+        signature: 'Sofia',
+        role: 'Founder, ANOINTED',
+        codeLabel: 'IL TUO CODICE',
+        codeIntro: 'Come piccolo dono di benvenuto, ecco il tuo codice sconto per il tuo primo ordine.',
+        codeInstructions: 'Inseriscilo al checkout per ricevere il 10% di sconto sul tuo primo ordine.',
+        cta: 'SCOPRI LA COLLEZIONE',
+      }
+    : {
+        tagline: 'CHOSEN. SET APART. APPOINTED.',
+        heading: 'You are chosen.',
+        salutation: 'Dear woman,',
+        paragraphs: [
+          "if you've made it this far, I want to leave you with a small reminder:",
+        ],
+        chosenLine: 'you are chosen.',
+        chosenList: ['Chosen by God.', 'Created with intention.', 'With value.', 'With purpose.'],
+        paragraphs2: [
+          'ANOINTED was born from the desire to create something that goes beyond what we wear. Something that can remind you of who you are, what you carry within you, and the woman you are called to become.',
+          'We believe every woman has a unique story, gifts worth holding onto, and a purpose worth living.',
+          'That is why every ANOINTED piece wants to be more than something beautiful to wear.',
+          'It wants to be a reminder of identity, grace, faith, strength and purpose.',
+          'A small sign to carry with you, every day, to remind you that you are not here by chance.',
+          'Whatever season you are in right now, never forget that your story has value, and that what you carry within you can make a difference.',
+        ],
+        closingList: ['Keep believing.', 'Keep building.', 'Keep becoming the woman you are called to be.'],
+        finalChosen: 'You are chosen.',
+        signoff: 'With love,',
+        signature: 'Sofia',
+        role: 'Founder, ANOINTED',
+        codeLabel: 'YOUR CODE',
+        codeIntro: 'As a small welcome gift, here is your discount code for your first order.',
+        codeInstructions: 'Enter the code at checkout to get 10% off your first order.',
+        cta: 'DISCOVER THE COLLECTION',
+      }
+
   return `
 <!DOCTYPE html>
 <html>
@@ -111,31 +167,54 @@ export function emailBenvenutoNewsletter({ email, codice = 'WELCOME10' }: { emai
   <tr>
     <td style="background:#3a2e2b;padding:40px;text-align:center;">
       <p style="font-family:Georgia,serif;font-size:22px;font-weight:400;letter-spacing:0.28em;color:#f1eae4;margin:0;">ANOINTED</p>
-      <p style="font-family:Georgia,serif;font-size:10px;letter-spacing:0.18em;color:#c1a99a;margin:8px 0 0;">CHOSEN. SET APART. APPOINTED.</p>
+      <p style="font-family:Georgia,serif;font-size:10px;letter-spacing:0.18em;color:#c1a99a;margin:8px 0 0;">${L.tagline}</p>
     </td>
   </tr>
 
   <tr>
-    <td style="padding:48px 40px;text-align:center;">
-      <p style="font-family:Georgia,serif;font-size:10px;letter-spacing:0.2em;color:#c1a99a;margin:0 0 16px;">— WELCOME —</p>
-      <h1 style="font-family:Georgia,serif;font-size:28px;font-weight:400;color:#3a2e2b;margin:0 0 16px;line-height:1.3;">You are in the circle.</h1>
-      <p style="font-family:Georgia,serif;font-size:14px;line-height:1.8;color:#5d4d42;margin:0 0 40px;">
-        Thank you for subscribing. Here is your 10% discount code for your first order.
+    <td style="padding:48px 40px;">
+      <h1 style="font-family:Georgia,serif;font-size:26px;font-style:italic;font-weight:400;color:#3a2e2b;margin:0 0 28px;line-height:1.3;text-align:center;">${L.heading}</h1>
+
+      <p style="font-family:Georgia,serif;font-size:14px;line-height:1.85;color:#5d4d42;margin:0 0 20px;">${L.salutation}</p>
+      ${L.paragraphs.map(p => `<p style="font-family:Georgia,serif;font-size:14px;line-height:1.85;color:#5d4d42;margin:0 0 20px;">${p}</p>`).join('\n      ')}
+
+      <p style="font-family:Georgia,serif;font-size:18px;font-style:italic;font-weight:600;color:#3a2e2b;margin:0 0 20px;">${L.chosenLine}</p>
+
+      <p style="font-family:Georgia,serif;font-size:14px;line-height:1.9;color:#5d4d42;margin:0 0 28px;">
+        ${L.chosenList.join('<br>')}
       </p>
 
-      <!-- Codice sconto -->
-      <div style="background:#3a2e2b;border-radius:4px;padding:24px 32px;margin-bottom:40px;display:inline-block;">
-        <p style="font-family:Georgia,serif;font-size:11px;letter-spacing:0.14em;color:#c1a99a;margin:0 0 8px;">YOUR CODE</p>
-        <p style="font-family:monospace;font-size:24px;font-weight:700;color:#f1eae4;margin:0;letter-spacing:0.1em;">${codice}</p>
+      ${L.paragraphs2.map(p => `<p style="font-family:Georgia,serif;font-size:14px;line-height:1.85;color:#5d4d42;margin:0 0 20px;">${p}</p>`).join('\n      ')}
+
+      <p style="font-family:Georgia,serif;font-size:14px;line-height:1.9;color:#5d4d42;margin:0 0 28px;">
+        ${L.closingList.join('<br>')}
+      </p>
+
+      <p style="font-family:Georgia,serif;font-size:18px;font-style:italic;font-weight:600;color:#3a2e2b;margin:0 0 36px;text-align:center;">${L.finalChosen}</p>
+
+      <p style="font-family:Georgia,serif;font-size:14px;line-height:1.7;color:#5d4d42;margin:0 0 4px;">${L.signoff}</p>
+      <p style="font-family:Georgia,serif;font-size:16px;font-style:italic;color:#3a2e2b;margin:0 0 2px;">${L.signature}</p>
+      <p style="font-family:Georgia,serif;font-size:12px;letter-spacing:0.08em;color:#c1a99a;margin:0 0 40px;">${L.role}</p>
+
+      <div style="border-top:1px solid rgba(193,169,154,0.3);padding-top:36px;text-align:center;">
+        <p style="font-family:Georgia,serif;font-size:13px;line-height:1.8;color:#5d4d42;margin:0 0 24px;">
+          ${L.codeIntro}
+        </p>
+
+        <!-- Codice sconto -->
+        <div style="background:#3a2e2b;border-radius:4px;padding:24px 32px;margin-bottom:24px;display:inline-block;">
+          <p style="font-family:Georgia,serif;font-size:11px;letter-spacing:0.14em;color:#c1a99a;margin:0 0 8px;">${L.codeLabel}</p>
+          <p style="font-family:monospace;font-size:24px;font-weight:700;color:#f1eae4;margin:0;letter-spacing:0.1em;">${codice}</p>
+        </div>
+
+        <p style="font-family:Georgia,serif;font-size:13px;line-height:1.8;color:#5d4d42;margin:0 0 32px;">
+          ${L.codeInstructions}
+        </p>
+
+        <a href="https://anointed.it" style="display:inline-block;background:#3a2e2b;color:#f1eae4;font-family:Georgia,serif;font-size:11px;letter-spacing:0.16em;text-decoration:none;padding:14px 32px;border-radius:2px;">
+          ${L.cta}
+        </a>
       </div>
-
-      <p style="font-family:Georgia,serif;font-size:13px;line-height:1.8;color:#5d4d42;margin:0 0 32px;">
-        Enter the code at checkout to get 10% off your first order.
-      </p>
-
-      <a href="https://anointed.it" style="display:inline-block;background:#3a2e2b;color:#f1eae4;font-family:Georgia,serif;font-size:11px;letter-spacing:0.16em;text-decoration:none;padding:14px 32px;border-radius:2px;">
-        DISCOVER THE COLLECTION
-      </a>
     </td>
   </tr>
 

@@ -3,8 +3,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale } = await params
   const isIT = locale === 'it'
   return {
-    title: isIT ? 'Chi Siamo' : 'About Us',
-    description: isIT ? 'Scopri la storia di ANOINTED — un brand nato dalla fede e dallo scopo.' : 'Discover the story of ANOINTED — a brand born from faith and purpose.',
+    title: isIT ? 'Anointed World' : 'Anointed World',
+    description: isIT ? 'Eventi, incontri e progetti che portano il mondo ANOINTED nella realtà.' : 'Events, encounters and projects that bring the ANOINTED world to life.',
   }
 }
 export default function Layout({ children }: { children: React.ReactNode }) {

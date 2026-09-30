@@ -4,29 +4,21 @@ import Image from 'next/image'
 import { useRef, useEffect, useState, useCallback } from 'react'
 import { usePathname } from 'next/navigation'
 
-const CATS_FIXED = [
-  { slug: 'bestseller', nome: { en: 'Best Sellers', it: 'Best Sellers' }, bg: '#3a2e2b', monogram: '/monogram-beige.svg', light: false },
-  { slug: 'twilli',     nome: { en: 'Twilli',       it: 'Twilli'       }, bg: '#e8d2c3', monogram: '/monogram-brown.svg', light: true },
-  { slug: 'blazer',     nome: { en: 'Blazer',        it: 'Blazer'       }, bg: '#d4bfb0', monogram: '/monogram-brown.svg', light: true },
-  { slug: 'pochette',   nome: { en: 'Pochette',      it: 'Pochette'     }, bg: '#c1a99a', monogram: '/monogram-brown.svg', light: true },
-  { slug: 'tshirt',     nome: { en: 'T-Shirt',       it: 'T-Shirt'      }, bg: '#e8d2c3', monogram: '/monogram-brown.svg', light: true },
-  { slug: 'camicie',    nome: { en: 'Shirts',        it: 'Camicie'      }, bg: '#d4bfb0', monogram: '/monogram-brown.svg', light: true },
-  { slug: 'pantaloni',  nome: { en: 'Trousers',      it: 'Pantaloni'    }, bg: '#c1a99a', monogram: '/monogram-brown.svg', light: true },
-]
-
 const DYN_COLORS = [
   { bg: '#3a2e2b', monogram: '/monogram-beige.svg', light: false },
   { bg: '#c1a99a', monogram: '/monogram-brown.svg', light: true },
   { bg: '#d4bfb0', monogram: '/monogram-brown.svg', light: true },
+  { bg: '#e8d2c3', monogram: '/monogram-brown.svg', light: true },
 ]
 
-interface CatItem { slug: string; nome: string; bg: string; monogram: string; light: boolean; isDyn?: boolean }
+interface CatItem { slug: string; nome: string; bg: string; monogram: string; light: boolean }
 
 export default function Categories() {
   const [active, setActive] = useState(0)
   const [visible, setVisible] = useState(false)
   const [dragging, setDragging] = useState(false)
   const [items, setItems] = useState<CatItem[]>([])
+  const [loaded, setLoaded] = useState(false)
   const dragStart = useRef(0)
   const ref = useRef<HTMLElement>(null)
   const pathname = usePathname()
@@ -34,27 +26,19 @@ export default function Categories() {
   const label = locale === 'it' ? 'Collezioni' : 'Collections'
 
   useEffect(() => {
-    // Parti con le categorie fisse
-    const fixed: CatItem[] = CATS_FIXED.map(c => ({ ...c, nome: c.nome[locale] }))
-    setItems(fixed)
-
-    // Poi aggiungi le sezioni dinamiche dal DB
     fetch('/api/sezioni')
       .then(r => r.json())
       .then(data => {
-        if (!Array.isArray(data)) return
-        const fixedSlugs = CATS_FIXED.map(c => c.slug)
-        const dynamic = data.filter((s: any) => !fixedSlugs.includes(s.slug))
-        if (dynamic.length === 0) return
-        const dynItems: CatItem[] = dynamic.map((s: any, i: number) => ({
+        if (!Array.isArray(data)) { setLoaded(true); return }
+        const dynItems: CatItem[] = data.map((s: any, i: number) => ({
           slug: s.slug,
           nome: s.nome,
-          isDyn: true,
           ...DYN_COLORS[i % DYN_COLORS.length],
         }))
-        setItems([...fixed, ...dynItems])
+        setItems(dynItems)
+        setLoaded(true)
       })
-      .catch(() => {})
+      .catch(() => setLoaded(true))
   }, [locale])
 
   useEffect(() => {
@@ -83,11 +67,14 @@ export default function Categories() {
     return { opacity: 0, zIndex: 1 }
   }
 
+  // Niente sezioni attive: non mostrare la carousel (evita link rotti / placeholder)
+  if (loaded && items.length === 0) return null
+
   return (
     <section ref={ref} style={{ padding: '5rem 0 4rem', background: '#f1eae4', overflow: 'hidden' }}>
-      <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.24em', color: '#c1a99a', textAlign: 'center', marginBottom: '2.5rem', opacity: visible ? 1 : 0, transition: 'opacity 0.8s ease' }}>
-        — {label.toUpperCase()} —
-      </p>
+      <h2 style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(1.4rem, 2vw, 2rem)', fontWeight: 300, color: '#3a2e2b', textAlign: 'center', marginBottom: '2.5rem', opacity: visible ? 1 : 0, transition: 'opacity 0.8s ease' }}>
+        {label}
+      </h2>
 
       <div
         style={{ position: 'relative', height: '460px', perspective: '1000px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: dragging ? 'grabbing' : 'grab', userSelect: 'none', opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(24px)', transition: 'opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s' }}
@@ -99,9 +86,8 @@ export default function Categories() {
 
         {items.map((cat, i) => {
           const isActive = i === active
-          const href = cat.isDyn ? `/${locale}/sezioni/${cat.slug}` : `/${locale}/prodotti?cat=${cat.slug}`
           return (
-            <Link key={cat.slug} href={href}
+            <Link key={cat.slug} href={`/${locale}/prodotti?cat=${cat.slug}`}
               onClick={e => { if (!isActive) { e.preventDefault(); setActive(i) } }}
               style={{ position: 'absolute', width: '280px', height: '380px', background: cat.bg, borderRadius: '4px', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'flex-end', padding: '1.25rem', textDecoration: 'none', transformStyle: 'preserve-3d', transition: 'transform 0.55s cubic-bezier(0.25,0.46,0.45,0.94), opacity 0.55s ease, filter 0.55s ease, box-shadow 0.55s ease', overflow: 'hidden', ...getStyle(i) }}>
               <Image src={cat.monogram} alt="" width={48} height={48} style={{ position: 'absolute', top: '14px', left: '14px', width: '40px', height: '40px', opacity: 0.22, pointerEvents: 'none' }} />

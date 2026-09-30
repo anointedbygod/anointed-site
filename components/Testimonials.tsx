@@ -58,9 +58,9 @@ export default function Testimonials() {
   return (
     <section ref={ref} style={{ background: '#f1eae4' }}>
       <div style={{ padding: '6rem 0 4rem' }}>
-        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.22em', color: '#c1a99a', textAlign: 'center', marginBottom: '3.5rem', opacity: visible ? 1 : 0, transition: 'opacity 0.8s ease' }}>
-          — {t.title.toUpperCase()} —
-        </p>
+        <h2 style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(1.4rem, 2vw, 2rem)', fontWeight: 300, color: '#3a2e2b', textAlign: 'center', marginBottom: '3.5rem', opacity: visible ? 1 : 0, transition: 'opacity 0.8s ease' }}>
+          {t.title}
+        </h2>
         <div style={{ perspective: '1200px', position: 'relative', height: '280px', display: 'flex', alignItems: 'center', justifyContent: 'center', userSelect: 'none', cursor: dragging ? 'grabbing' : 'grab', overflow: 'hidden' }}
           onMouseDown={e => { setDragging(true); dragStart.current = e.clientX }}
           onMouseUp={e => { if (!dragging) return; setDragging(false); const d=e.clientX-dragStart.current; if(d<-40)next(); else if(d>40)prev() }}
@@ -102,7 +102,6 @@ export default function Testimonials() {
       <div style={{ margin: '0 1.5rem', height: '1px', background: 'rgba(193,169,154,0.25)' }} />
 
       <div style={{ padding: '5rem 1.5rem', textAlign: 'center' }}>
-        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.22em', color: '#c1a99a', margin: '0 0 1rem' }}>— {t.stayIn.toUpperCase()} —</p>
         <h3 style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(1.4rem, 3vw, 2.2rem)', fontWeight: 300, color: '#3a2e2b', margin: '0 0 0.75rem' }}>{t.nlTitle}</h3>
         <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', color: '#5d4d42', margin: '0 0 2.5rem' }}>{t.nlSub}</p>
         {sent ? (

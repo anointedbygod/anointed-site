@@ -22,12 +22,13 @@ export async function POST(req: Request) {
         break
       }
       case 'benvenuto_newsletter': {
-        const { email, codice } = body
+        const { email, codice, locale } = body
+        const isIt = locale === 'it'
         await resend.emails.send({
           from: FROM,
           to: email,
-          subject: `Welcome to Anointed — your discount code`,
-          html: emailBenvenutoNewsletter({ email, codice }),
+          subject: isIt ? `Sei scelta — il tuo codice sconto Anointed` : `You are chosen — your Anointed discount code`,
+          html: emailBenvenutoNewsletter({ email, codice, locale: isIt ? 'it' : 'en' }),
         })
         break
       }

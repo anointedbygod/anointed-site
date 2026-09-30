@@ -12,7 +12,6 @@ export default function SuccessoPage() {
   return (
     <main style={{ background: '#f1eae4', minHeight: '100vh', paddingTop: '64px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ textAlign: 'center', maxWidth: '480px', padding: '2rem' }}>
-        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.22em', color: '#c1a99a', margin: '0 0 1.5rem' }}>— THANK YOU —</p>
         <h1 style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(1.8rem, 3vw, 2.5rem)', fontWeight: 300, color: '#3a2e2b', margin: '0 0 1rem', lineHeight: 1.2 }}>
           Your order is confirmed.
         </h1>

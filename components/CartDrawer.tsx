@@ -43,7 +43,6 @@ export default function CartDrawer({ open, onClose }: { open: boolean; onClose: 
         {/* Header */}
         <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid rgba(193,169,154,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
           <div>
-            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.2em', color: '#c1a99a', margin: '0 0 0.2rem' }}>— CART —</p>
             <h2 style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px', fontWeight: 500, color: '#3a2e2b', margin: 0 }}>{title}</h2>
           </div>
           <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#c1a99a', fontSize: '20px', padding: '0.25rem', lineHeight: 1 }}>✕</button>

@@ -8,6 +8,7 @@ interface Prodotto { id: string; nome: string; prezzo: number; immagini: string[
 
 export default function BestSellers() {
   const [prodotti, setProdotti] = useState<Prodotto[]>([])
+  const [loaded, setLoaded] = useState(false)
   const [visible, setVisible] = useState(false)
   const ref = useRef<HTMLElement>(null)
   const pathname = usePathname()
@@ -16,7 +17,11 @@ export default function BestSellers() {
   const shopNow = locale === 'it' ? 'ACQUISTA' : 'SHOP NOW'
 
   useEffect(() => {
-    fetch('/api/prodotti').then(r => r.json()).then(data => setProdotti(data.filter((p: any) => p.bestseller === true).slice(0, 4))).catch(() => {})
+    fetch('/api/prodotti')
+      .then(r => r.json())
+      .then(data => setProdotti(Array.isArray(data) ? data.filter((p: any) => p.bestseller === true).slice(0, 4) : []))
+      .catch(() => {})
+      .finally(() => setLoaded(true))
   }, [])
 
   useEffect(() => {
@@ -25,19 +30,14 @@ export default function BestSellers() {
     return () => obs.disconnect()
   }, [])
 
-  const items = prodotti.length > 0 ? prodotti : [
-    { id: '1', nome: locale === 'it' ? 'Blazer Strutturato' : 'Blazer Structured', prezzo: 280, immagini: [], slug: 'blazer-structured' },
-    { id: '2', nome: 'Twilli', prezzo: 195, immagini: [], slug: 'twilli' },
-    { id: '3', nome: locale === 'it' ? 'Camicia Classic' : 'Classic Shirt', prezzo: 145, immagini: [], slug: 'classic-shirt' },
-    { id: '4', nome: locale === 'it' ? 'Pantaloni Sartoriali' : 'Tailored Pants', prezzo: 165, immagini: [], slug: 'tailored-pants' },
-  ]
+  // Nessun best seller reale ancora: nascondi tutta la sezione (niente placeholder)
+  if (loaded && prodotti.length === 0) return null
 
   return (
     <section ref={ref} style={{ background: '#f1eae4', padding: '6rem 1.5rem' }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '3rem' }}>
           <div>
-            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.22em', color: '#c1a99a', margin: '0 0 0.5rem', opacity: visible ? 1 : 0, transition: 'opacity 0.8s ease' }}>— SHOP —</p>
             <h2 style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(1.4rem, 2.5vw, 2rem)', fontWeight: 300, color: '#3a2e2b', margin: 0, opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(16px)', transition: 'opacity 0.8s ease 0.1s, transform 0.8s ease 0.1s' }}>Best Sellers</h2>
           </div>
           <Link href={`/${locale}/prodotti`} style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.16em', color: '#3a2e2b', textDecoration: 'none', borderBottom: '1px solid #3a2e2b', paddingBottom: '2px', opacity: visible ? 1 : 0, transition: 'opacity 0.8s ease 0.2s' }}
@@ -47,7 +47,7 @@ export default function BestSellers() {
           </Link>
         </div>
         <div className="bs-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem' }}>
-          {items.map((p, i) => <ProductCard key={p.id} prodotto={p} i={i} visible={visible} shopNow={shopNow} locale={locale} />)}
+          {prodotti.map((p, i) => <ProductCard key={p.id} prodotto={p} i={i} visible={visible} shopNow={shopNow} locale={locale} />)}
         </div>
       </div>
       <style>{`@media(max-width:767px){.bs-grid{grid-template-columns:repeat(2,1fr)!important;gap:0.75rem!important}}`}</style>
@@ -62,12 +62,10 @@ function ProductCard({ prodotto, i, visible, shopNow, locale }: any) {
     <Link href={`/${locale}/prodotti/${prodotto.slug}`} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
       style={{ textDecoration: 'none', opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(24px)', transition: `opacity 0.7s ease ${i*0.1}s, transform 0.7s ease ${i*0.1}s`, display: 'block' }}>
       <div style={{ aspectRatio: '3/4', background: hasImage ? `url(${prodotto.immagini[0]}) center/cover` : 'linear-gradient(135deg, #e8d2c3 0%, #c1a99a 100%)', borderRadius: '2px', marginBottom: '1rem', overflow: 'hidden', position: 'relative' }}>
-        {/* Monogram su placeholder */}
         {!hasImage && (
           <Image src="/monogram-brown.svg" alt="" width={40} height={40}
             style={{ position: 'absolute', top: '12px', left: '12px', width: '32px', height: '32px', opacity: 0.2, pointerEvents: 'none' }} />
         )}
-        {/* Monogram su foto reale con opacità bassissima */}
         {hasImage && (
           <Image src="/monogram-beige.svg" alt="" width={40} height={40}
             style={{ position: 'absolute', top: '12px', left: '12px', width: '32px', height: '32px', opacity: 0.15, pointerEvents: 'none', zIndex: 2 }} />

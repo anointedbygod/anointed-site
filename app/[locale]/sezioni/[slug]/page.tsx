@@ -57,7 +57,6 @@ export default function SezioneSlugPage() {
           {backLabel}
         </Link>
 
-        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.22em', color: '#c1a99a', margin: '0 0 0.75rem' }}>— {sezione.nome.toUpperCase()} —</p>
         <h1 style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(1.8rem, 3vw, 2.8rem)', fontWeight: 300, color: '#3a2e2b', margin: '0 0 3rem', letterSpacing: '0.04em' }}>
           {sezione.nome}
         </h1>

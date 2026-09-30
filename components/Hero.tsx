@@ -35,22 +35,16 @@ export default function Hero() {
     }}>
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'linear-gradient(160deg, #3a2e2b 0%, #5d4d42 60%, #3a2e2b 100%)',
+        background: 'url(/images/about/hero.jpg) center 78%/cover',
         zIndex: 0,
       }} />
-      <div style={{ position: 'absolute', inset: 0, background: 'rgba(30,22,20,0.35)', zIndex: 1 }} />
+      <div style={{
+        position: 'absolute', inset: 0,
+        background: 'linear-gradient(180deg, rgba(20,14,12,0.35) 0%, rgba(20,14,12,0.15) 35%, rgba(20,14,12,0.1) 55%, rgba(20,14,12,0.55) 100%)',
+        zIndex: 1,
+      }} />
 
       <div style={{ position: 'relative', zIndex: 2, textAlign: 'center', padding: '0 2rem', maxWidth: '800px' }}>
-        <p style={{
-          fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.28em',
-          color: '#c1a99a', margin: '0 0 2rem',
-          opacity: loaded ? 1 : 0,
-          transform: loaded ? 'translateY(0)' : 'translateY(12px)',
-          transition: 'opacity 0.9s ease, transform 0.9s ease',
-        }}>
-          — ANOINTED —
-        </p>
-
         <h1 style={{
           fontFamily: 'Inter, sans-serif',
           fontSize: 'clamp(2.2rem, 5vw, 4.2rem)',

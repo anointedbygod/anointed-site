@@ -139,7 +139,7 @@ export default function CheckoutPage() {
     setIscrivendo(true)
     await fetch('/api/newsletter', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: form.email, tipo: 'popup' }),
+      body: JSON.stringify({ email: form.email, tipo: 'popup', locale }),
     })
     setNeedsNewsletter(false)
     await validaSconto()
@@ -226,7 +226,6 @@ export default function CheckoutPage() {
   return (
     <main style={{ background: '#f1eae4', minHeight: '100vh', paddingTop: '64px' }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '3rem 1.5rem 6rem' }}>
-        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.22em', color: '#c1a99a', margin: '0 0 0.75rem', textAlign: 'center' }}>— CHECKOUT —</p>
         <h1 style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', fontWeight: 300, color: '#3a2e2b', margin: '0 0 3rem', textAlign: 'center', letterSpacing: '0.04em' }}>
           {locale === 'it' ? 'Completa il tuo ordine' : 'Complete your order'}
         </h1>
