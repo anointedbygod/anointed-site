@@ -54,7 +54,7 @@ export default function BrandStory() {
           </div>
 
           {/* Foto editoriale About Us */}
-          <div style={{ height: '560px', background: 'url(/images/about/brandstory-about.jpg) center/cover', borderRadius: '2px', opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(30px)', transition: 'opacity 0.9s ease 0.2s, transform 0.9s ease 0.2s', position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ aspectRatio: '2 / 3', background: 'url(/images/about/brandstory-about.jpg) center/cover', borderRadius: '2px', opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(30px)', transition: 'opacity 0.9s ease 0.2s, transform 0.9s ease 0.2s', position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Image src="/monogram-beige.svg" alt="" width={80} height={80}
               style={{ position: 'absolute', top: '16px', left: '16px', width: '48px', height: '48px', opacity: 0.55, pointerEvents: 'none' }} />
           </div>
@@ -138,7 +138,6 @@ export default function BrandStory() {
       <style>{`
         @media (max-width: 767px) {
           .story-grid { grid-template-columns: 1fr !important; gap: 2.5rem !important; }
-          .story-grid > div:last-child { height: 300px !important; }
         }
       `}</style>
     </section>

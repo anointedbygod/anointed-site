@@ -87,7 +87,7 @@ export default function NewsletterPopup() {
         .popup-card { animation: ${closing ? 'fadeOut 220ms ease forwards' : 'fadeIn 400ms ease'} }
         @media (max-width: 767px) {
           .popup-grid { grid-template-columns: 1fr !important; }
-          .popup-image { min-height: 240px !important; }
+          .popup-image { min-height: 240px !important; background-position: center bottom !important; }
           .popup-content { padding: 32px 24px !important; }
           .popup-title { font-size: 32px !important; }
         }
@@ -101,7 +101,7 @@ export default function NewsletterPopup() {
         <div className="popup-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
 
           {/* Immagine sx */}
-          <div className="popup-image" style={{ minHeight: '520px', background: 'url(/images/about/newsletter-popup.jpg) center/cover', position: 'relative', display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-start', padding: '2rem' }}>
+          <div className="popup-image" style={{ minHeight: '520px', background: 'url(/images/about/newsletter-popup.jpg) center bottom/cover', position: 'relative', display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-start', padding: '2rem' }}>
             {/* Overlay per leggibilità del logo */}
             <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(58,46,43,0) 55%, rgba(58,46,43,0.55) 100%)' }} />
             <Image src="/logo-beige.svg" alt="ANOINTED" width={140} height={32} style={{ height: '24px', width: 'auto', position: 'relative', zIndex: 1 }} />

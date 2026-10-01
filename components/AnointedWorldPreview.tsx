@@ -2,6 +2,7 @@
 import Link from 'next/link'
 import { useRef, useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
+import Globe from './Globe'
 
 interface EventPreview {
   date: string
@@ -78,8 +79,22 @@ export default function AnointedWorldPreview() {
           filter: 'blur(50px)', pointerEvents: 'none',
         }} />
 
-        <h2 style={{ position: 'relative', fontFamily: 'Inter, sans-serif', fontSize: 'clamp(1.4rem, 2vw, 2rem)', fontWeight: 300, color: '#3a2e2b', textAlign: 'center', margin: '0 0 0.75rem', opacity: sectionVisible ? 1 : 0, transition: 'opacity 0.8s ease' }}>
-          {t.title}
+        <h2 className="aw-title" style={{
+          position: 'relative', fontFamily: 'Inter, sans-serif',
+          fontSize: 'clamp(2.2rem, 5.5vw, 3.8rem)', color: '#3a2e2b', textAlign: 'center',
+          margin: '0 0 0.9rem', letterSpacing: '-0.01em', lineHeight: 1,
+          opacity: sectionVisible ? 1 : 0,
+          transform: sectionVisible ? 'translateY(0)' : 'translateY(14px)',
+          transition: 'opacity 0.8s ease, transform 0.8s ease',
+        }}>
+          <span style={{ fontWeight: 300, fontStyle: 'italic', color: '#5d4d42' }}>Anointed</span>{' '}
+          <span style={{ fontWeight: 700 }}>
+            W
+            <span style={{ display: 'inline-block', margin: '0 0.08em -0.08em', verticalAlign: 'bottom' }}>
+              <Globe size={56} />
+            </span>
+            rld
+          </span>
         </h2>
         <p style={{ position: 'relative', fontFamily: 'Inter, sans-serif', fontSize: '13px', color: '#5d4d42', textAlign: 'center', margin: '0 0 3.5rem', opacity: sectionVisible ? 1 : 0, transition: 'opacity 0.8s ease 0.1s' }}>
           {t.subtitle}
@@ -124,6 +139,11 @@ export default function AnointedWorldPreview() {
       </div>
 
       <style>{`
+        .aw-blink { animation: awBlink 2.6s ease-in-out infinite; }
+        @keyframes awBlink {
+          0%, 100% { opacity: 0.25; }
+          50% { opacity: 1; }
+        }
         @media (max-width: 767px) {
           .aw-grid { grid-template-columns: 1fr !important; }
         }

@@ -149,7 +149,7 @@ export default function StoriaPage() {
       {/* 06 — The founder */}
       <section style={{ background: '#f1eae4', padding: '6rem 1.5rem' }}>
         <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-          <SofiaSection label={t.founderLabel} name={t.founderName} bio={t.founderBio} photoLabel={t.sofiaPhoto} />
+          <SofiaSection label={t.founderLabel} name={t.founderName} bio={t.founderBio} photoLabel={t.sofiaPhoto} photoSrc="/images/about/sofia-founder.jpg" />
         </div>
       </section>
 
@@ -261,7 +261,7 @@ function FoundingStory({ title, paragraphs }: { title: string; paragraphs: strin
   )
 }
 
-function SofiaSection({ label, name, bio, photoLabel }: { label: string; name: string; bio: string[]; photoLabel: string }) {
+function SofiaSection({ label, name, bio, photoLabel, photoSrc }: { label: string; name: string; bio: string[]; photoLabel: string; photoSrc?: string }) {
   const { ref, visible } = useVisible()
 
   return (
@@ -270,7 +270,7 @@ function SofiaSection({ label, name, bio, photoLabel }: { label: string; name: s
 
         <div style={{
           aspectRatio: '3/4',
-          background: 'linear-gradient(135deg, #c1a99a 0%, #5d4d42 100%)',
+          background: photoSrc ? `url(${photoSrc}) center/cover` : 'linear-gradient(135deg, #c1a99a 0%, #5d4d42 100%)',
           borderRadius: '2px',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           position: 'sticky', top: '96px',
@@ -278,9 +278,11 @@ function SofiaSection({ label, name, bio, photoLabel }: { label: string; name: s
           transform: visible ? 'translateY(0)' : 'translateY(30px)',
           transition: 'opacity 0.9s ease, transform 0.9s ease',
         }}>
-          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '9px', letterSpacing: '0.18em', color: 'rgba(241,234,228,0.5)' }}>
-            {photoLabel}
-          </p>
+          {!photoSrc && (
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '9px', letterSpacing: '0.18em', color: 'rgba(241,234,228,0.5)' }}>
+              {photoLabel}
+            </p>
+          )}
         </div>
 
         <div style={{
