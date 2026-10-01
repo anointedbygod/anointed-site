@@ -51,6 +51,7 @@ export default function InstagramShowcase() {
   const phoneWrapRef = useRef<HTMLDivElement>(null)
   const phoneRef = useRef<HTMLDivElement>(null)
   const labelRef = useRef<HTMLDivElement>(null)
+  const scrimRef = useRef<HTMLDivElement>(null)
   const ctaRef = useRef<HTMLDivElement>(null)
   const [ready, setReady] = useState(false)
 
@@ -60,18 +61,22 @@ export default function InstagramShowcase() {
       gsap.set(fixedRef.current, { opacity: 0 })
       gsap.set(phoneWrapRef.current, { scale: 0.22, y: 90 })
       gsap.set(labelRef.current, { opacity: 0, x: 60 })
-      gsap.set(ctaRef.current, { opacity: 0, y: 40 })
+      gsap.set(scrimRef.current, { opacity: 0 })
+      gsap.set(ctaRef.current, { opacity: 0, y: 16 })
 
       // This is the same anchoring this section used successfully earlier
       // in the build: start directly off the brown EditorialBanner section
       // (not a guessed pixel offset), so the phone floats in right under
       // "You are appointed" while it's still on screen, near its end.
+      // start moved from 85% to 90% so the entrance kicks off a touch
+      // sooner (less scroll needed after the brown section's bottom
+      // appears) per Sofia's "parta di poco poco prima" note.
       const brownSection = document.getElementById('editorial-banner')
 
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: brownSection || trackRef.current,
-          start: 'bottom 85%',
+          start: 'bottom 90%',
           endTrigger: trackRef.current,
           end: 'bottom bottom',
           scrub: 0.6,
@@ -84,10 +89,14 @@ export default function InstagramShowcase() {
         .to(labelRef.current, { opacity: 1, x: 0, duration: 1.4, ease: 'power2.out' }, 0.9)
         // 2. brief hold once the label has landed
         .to({}, { duration: 0.4 })
-        // 3. CTA rises from below, settling right under the label — the
-        // phone stays put the whole time, nothing crossfades with another
-        // photo.
-        .to(ctaRef.current, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' })
+        // 3. the phone's own screen dims a touch, then the CTA fades up
+        // directly on top of it — the phone itself never disappears and
+        // nothing crossfades with another photo, it all happens inside
+        // the mockup. This also sidesteps the old mobile issue where the
+        // CTA, stacked below the label, could end up scrolled out of
+        // view: it now always travels with the phone.
+        .to(scrimRef.current, { opacity: 1, duration: 0.5, ease: 'power1.out' })
+        .to(ctaRef.current, { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' }, '-=0.2')
         // 4. hold on the finished, frozen state
         .to({}, { duration: 0.35 })
         // 5. one fast, simple opacity fade — not a crossfade with another
@@ -104,7 +113,7 @@ export default function InstagramShowcase() {
   }, [])
 
   return (
-    <section ref={trackRef} className="ig-track" style={{ position: 'relative', height: '190vh', background: '#f1eae4' }}>
+    <section ref={trackRef} className="ig-track" style={{ position: 'relative', height: '150vh', background: '#f1eae4' }}>
       <div ref={fixedRef} style={{
         position: 'fixed', inset: 0, zIndex: 35, pointerEvents: 'none', overflow: 'hidden',
         background: '#f1eae4',
@@ -123,10 +132,11 @@ export default function InstagramShowcase() {
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 'clamp(1.5rem, 5vw, 5rem)',
           padding: '0 1.5rem',
         }}>
-          {/* iPhone mockup */}
+          {/* iPhone mockup — sized up a bit (was min(74vw,340px)) per
+              Sofia's "si vede un po' troppo piccolo" note */}
           <div ref={phoneWrapRef} style={{ flexShrink: 0, willChange: 'transform, opacity' }}>
             <div ref={phoneRef} style={{
-              width: 'min(74vw, 340px)', aspectRatio: '430 / 880',
+              width: 'min(80vw, 390px)', aspectRatio: '430 / 880',
               background: '#1a1512', borderRadius: '54px', padding: '14px',
               boxShadow: '0 30px 60px -18px rgba(58,46,43,0.22)',
               position: 'relative',
@@ -137,7 +147,7 @@ export default function InstagramShowcase() {
               }} />
               <div style={{
                 width: '100%', height: '100%', borderRadius: '38px', overflow: 'hidden',
-                background: '#f1eae4', display: 'flex', flexDirection: 'column',
+                background: '#f1eae4', display: 'flex', flexDirection: 'column', position: 'relative',
               }}>
                 {/* IG header */}
                 <div style={{ padding: '30px 16px 10px', display: 'flex', flexDirection: 'column', gap: '10px', background: '#fff' }}>
@@ -176,12 +186,34 @@ export default function InstagramShowcase() {
                     <div key={i} style={{ aspectRatio: '1/1', background: `url(${src}) center/cover` }} />
                   ))}
                 </div>
+
+                {/* dark scrim + CTA, overlaid on the phone's own screen */}
+                <div ref={scrimRef} style={{
+                  position: 'absolute', inset: 0, zIndex: 10, pointerEvents: 'none',
+                  background: 'rgba(26,21,18,0.78)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  <div ref={ctaRef} style={{ textAlign: 'center', padding: '0 1.75rem', pointerEvents: 'auto' }}>
+                    <p style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', fontSize: '13.5px', color: '#f1eae4', margin: '0 0 1.1rem' }}>
+                      {t.ctaCaption}
+                    </p>
+                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" style={{
+                      display: 'inline-block', fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.14em',
+                      fontWeight: 500, color: '#3a2e2b', background: '#f1eae4',
+                      textDecoration: 'none', padding: '0.8rem 1.7rem', borderRadius: '100px',
+                      transition: 'background 0.25s, color 0.25s',
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.background = '#fff' }}
+                    onMouseLeave={e => { e.currentTarget.style.background = '#f1eae4' }}>
+                      {t.cta.toUpperCase()}
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* side label — never overlaps the phone, enters from the right.
-              The CTA lives inside the same column, directly beneath it. */}
+          {/* side label — never overlaps the phone, enters from the right */}
           <div ref={labelRef} className="ig-label" style={{ maxWidth: '280px', flexShrink: 0 }}>
             <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '10.5px', letterSpacing: '0.16em', color: '#c1a99a', margin: '0 0 0.6rem', textTransform: 'uppercase' }}>
               {t.eyebrow}
@@ -192,22 +224,6 @@ export default function InstagramShowcase() {
             <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', lineHeight: 1.7, color: '#5d4d42', margin: 0 }}>
               {t.sub}
             </p>
-
-            <div ref={ctaRef} style={{ marginTop: '1.85rem', pointerEvents: 'auto' }}>
-              <p style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', fontSize: '14px', color: '#5d4d42', margin: '0 0 1.1rem' }}>
-                {t.ctaCaption}
-              </p>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" style={{
-                display: 'inline-block', fontFamily: 'Inter, sans-serif', fontSize: '10.5px', letterSpacing: '0.16em',
-                fontWeight: 500, color: '#f1eae4', background: '#3a2e2b',
-                textDecoration: 'none', padding: '0.9rem 2.2rem', borderRadius: '100px',
-                transition: 'background 0.25s',
-              }}
-              onMouseEnter={e => e.currentTarget.style.background = '#5d4d42'}
-              onMouseLeave={e => e.currentTarget.style.background = '#3a2e2b'}>
-                {t.cta.toUpperCase()}
-              </a>
-            </div>
           </div>
         </div>
       </div>
@@ -216,7 +232,7 @@ export default function InstagramShowcase() {
         @media (max-width: 767px) {
           .ig-stage { flex-direction: column !important; gap: 1rem !important; }
           .ig-label { text-align: center; max-width: 90% !important; }
-          .ig-track { height: 160vh !important; }
+          .ig-track { height: 128vh !important; }
           .ig-glow { width: 480px !important; height: 380px !important; filter: blur(34px) !important; }
         }
       `}</style>

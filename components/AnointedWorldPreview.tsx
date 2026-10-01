@@ -53,11 +53,48 @@ function useVisible(threshold = 0.1) {
   return { ref, visible }
 }
 
+// Tracks the actual rendered font-size of the "W…rld" word (the h2's own
+// clamp() value, resolved by the browser at the current viewport) and
+// turns it straight into a pixel size for the globe icon — no CSS em/
+// !important guesswork, no fixed breakpoints. Whatever size the browser
+// decides the text is, the globe is measured from that exact number.
+function useGlobeSize(wordRef: React.RefObject<HTMLElement | null>) {
+  const [size, setSize] = useState(40)
+
+  useEffect(() => {
+    const el = wordRef.current
+    if (!el) return
+
+    const measure = () => {
+      const fontSize = parseFloat(getComputedStyle(el).fontSize)
+      if (!fontSize) return
+      // Ratio tuned against the bold "W"/"rld" cap-height so the circle
+      // optically matches the letters around it rather than a guessed
+      // em multiple.
+      setSize(Math.round(fontSize * 0.72))
+    }
+
+    measure()
+
+    const ro = new ResizeObserver(measure)
+    ro.observe(el)
+    window.addEventListener('resize', measure)
+    return () => {
+      ro.disconnect()
+      window.removeEventListener('resize', measure)
+    }
+  }, [wordRef])
+
+  return size
+}
+
 export default function AnointedWorldPreview() {
   const [sectionVisible, setSectionVisible] = useState(false)
   const [email, setEmail] = useState('')
   const [sent, setSent] = useState(false)
   const ref = useRef<HTMLElement>(null)
+  const wordRef = useRef<HTMLSpanElement>(null)
+  const globeSize = useGlobeSize(wordRef)
   const pathname = usePathname()
   const locale = (pathname.startsWith('/it') ? 'it' : 'en') as 'en'|'it'
   const t = TR[locale]
@@ -88,10 +125,13 @@ export default function AnointedWorldPreview() {
           transition: 'opacity 0.8s ease, transform 0.8s ease',
         }}>
           <span style={{ fontWeight: 300, fontStyle: 'italic', color: '#5d4d42' }}>Anointed</span>{' '}
-          <span style={{ fontWeight: 700 }}>
+          <span ref={wordRef} style={{ fontWeight: 700, display: 'inline-flex', alignItems: 'center' }}>
             W
-            <span style={{ display: 'inline-block', margin: '0 0.08em -0.08em', verticalAlign: 'bottom' }}>
-              <Globe size={56} />
+            <span style={{
+              display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+              width: `${globeSize}px`, height: `${globeSize}px`, margin: '0 0.08em',
+            }}>
+              <Globe size={globeSize} />
             </span>
             rld
           </span>
