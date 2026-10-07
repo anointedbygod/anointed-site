@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, usePathname } from 'next/navigation'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useCarrello } from '@/lib/carrello'
 import WishlistButton from '@/components/WishlistButton'
 
@@ -174,6 +175,11 @@ export default function ProdottoPage() {
                 <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', lineHeight: 1.8, color: '#5d4d42', margin: 0 }}>{prodotto.descrizione}</p>
               </>
             )}
+
+            <div style={{ height: '1px', background: 'rgba(193,169,154,0.3)', margin: '1.5rem 0 1.1rem' }} />
+            <Link href={`/${locale}/filiera`} style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.14em', color: '#5d4d42', textDecoration: 'none', borderBottom: '1px solid rgba(93,77,66,0.4)', paddingBottom: '3px' }}>
+              {locale === 'it' ? 'MADE IN ITALY · SCOPRI LA FILIERA →' : 'MADE IN ITALY · DISCOVER THE SUPPLY CHAIN →'}
+            </Link>
           </div>
         </div>
       </div>

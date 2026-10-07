@@ -32,9 +32,10 @@ const CONTENT = {
       },
       {
         title: 'Made in Italy.',
-        body: 'Every Anointed piece is crafted in Italy, where decades of tailoring expertise meet a slower, more deliberate way of making clothes. We select natural materials — silk, wool and cashmere — chosen for how they feel, move and last, not simply how they look. It is a standard rooted in European craftsmanship: precise construction, honest fabrics and pieces made to be worn for years, not seasons.',
+        body: 'Every Anointed piece is crafted in Italy, where decades of tailoring expertise meet a slower, more deliberate way of making clothes. We select natural materials — silk, wool and cashmere — chosen for how they feel, move and last, not simply how they look. It is a standard rooted in European craftsmanship: precise construction, honest fabrics and pieces made to be worn for years, not seasons. Our fabrics are woven by Lanificio Cariaggi, in Cagli.',
       },
     ],
+    madeCta: 'Discover our supply chain',
     foundingTitle: 'The story behind the name.',
     foundingParagraphs: [
       'Sometimes, the moments that change our direction arrive quietly.',
@@ -76,9 +77,10 @@ const CONTENT = {
       },
       {
         title: 'Made in Italy.',
-        body: 'Ogni capo Anointed è realizzato in Italia, dove decenni di sartorialità incontrano un modo di fare moda più lento e curato. Selezioniamo materiali naturali — seta, lana e cashmere — scelti per come si sentono, si muovono e durano nel tempo, non solo per come appaiono. Uno standard che affonda le radici nell\'artigianalità europea: costruzione precisa, tessuti onesti e capi pensati per essere indossati per anni, non per una stagione.',
+        body: 'Ogni capo Anointed è realizzato in Italia, dove decenni di sartorialità incontrano un modo di fare moda più lento e curato. Selezioniamo materiali naturali — seta, lana e cashmere — scelti per come si sentono, si muovono e durano nel tempo, non solo per come appaiono. Uno standard che affonda le radici nell\'artigianalità europea: costruzione precisa, tessuti onesti e capi pensati per essere indossati per anni, non per una stagione. I nostri tessuti sono tessuti dal Lanificio Cariaggi, a Cagli.',
       },
     ],
+    madeCta: 'Scopri la nostra filiera',
     foundingTitle: 'La storia dietro il nome.',
     foundingParagraphs: [
       'A volte, i momenti che cambiano la nostra direzione arrivano in silenzio.',
@@ -139,7 +141,7 @@ export default function StoriaPage() {
       {/* 03 — Our Values */}
       <ValoriStack />
       {/* 04 — Craftsmanship */}
-      <Chapter title={t.chapters[2].title} body={t.chapters[2].body} imageRight={false} photoLabel={t.photo} photoSrc="/images/about/chapter-craftsmanship.jpg" />
+      <Chapter title={t.chapters[2].title} body={t.chapters[2].body} imageRight={false} photoLabel={t.photo} photoSrc="/images/about/chapter-craftsmanship.jpg" ctaLabel={t.madeCta} ctaHref={`/${locale}/filiera`} />
 
       {/* 05 — Founding story */}
       <section style={{ background: '#3a2e2b', padding: '7rem 1.5rem' }}>
@@ -174,8 +176,8 @@ export default function StoriaPage() {
   )
 }
 
-function Chapter({ title, body, imageRight, dark, photoLabel, photoSrc }: {
-  title: string; body: string; imageRight: boolean; dark?: boolean; photoLabel: string; photoSrc?: string
+function Chapter({ title, body, imageRight, dark, photoLabel, photoSrc, ctaLabel, ctaHref }: {
+  title: string; body: string; imageRight: boolean; dark?: boolean; photoLabel: string; photoSrc?: string; ctaLabel?: string; ctaHref?: string
 }) {
   const { ref, visible } = useVisible()
 
@@ -198,6 +200,15 @@ function Chapter({ title, body, imageRight, dark, photoLabel, photoSrc }: {
           <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', lineHeight: 1.85, color: dark ? 'rgba(241,234,228,0.65)' : '#5d4d42', margin: 0, maxWidth: '440px' }}>
             {body}
           </p>
+          {ctaLabel && ctaHref && (
+            <Link href={ctaHref} style={{
+              display: 'inline-block', marginTop: '1.75rem', fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.16em',
+              color: dark ? '#f1eae4' : '#3a2e2b', textDecoration: 'none',
+              borderBottom: `1px solid ${dark ? 'rgba(241,234,228,0.5)' : 'rgba(58,46,43,0.5)'}`, paddingBottom: '4px',
+            }}>
+              {ctaLabel.toUpperCase()} →
+            </Link>
+          )}
         </div>
 
         <div style={{

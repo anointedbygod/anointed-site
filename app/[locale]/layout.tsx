@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages } from 'next-intl/server'
+import Script from 'next/script'
 import ClientLayout from '@/components/ClientLayout'
 import '../globals.css'
 
@@ -52,9 +53,28 @@ export default async function LocaleLayout({
 }) {
   const { locale } = await params
   const messages = await getMessages()
+  // Iubenda cookie banner: attivo solo se NEXT_PUBLIC_IUBENDA_SITE_ID è impostato in .env.local
+  const iubendaSiteId = process.env.NEXT_PUBLIC_IUBENDA_SITE_ID
+  const iubendaCookiePolicyId = process.env.NEXT_PUBLIC_IUBENDA_COOKIE_POLICY_ID
   return (
-    <html lang={locale}>
-      <body>
+    <html lang={locale} suppressHydrationWarning>
+
+      <body suppressHydrationWarning>
+        {iubendaSiteId && (
+          <>
+            <Script id="iubenda-config" strategy="beforeInteractive">{`
+              var _iub = _iub || [];
+              _iub.csConfiguration = {
+                siteId: ${iubendaSiteId},
+                cookiePolicyId: ${iubendaCookiePolicyId},
+                lang: "it",
+                storage: { useSiteId: true }
+              };
+            `}</Script>
+            <Script src={`https://cs.iubenda.com/autoblocking/${iubendaSiteId}.js`} strategy="beforeInteractive" />
+            <Script src="https://cdn.iubenda.com/cs/iubenda_cs.js" strategy="beforeInteractive" />
+          </>
+        )}
         <NextIntlClientProvider messages={messages}>
           <ClientLayout>
             {children}

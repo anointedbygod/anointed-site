@@ -5,8 +5,8 @@ import { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 
 const TR = {
-  en: { collections: 'Collections', info: 'Info', tagline: 'Chosen. Set apart. Appointed.', copy: '© 2026 Anointed. All rights reserved.', funded: 'PROJECT FUNDED BY', links: { story: 'About Us', world: 'Anointed World', privacy: 'Privacy Policy', returns: 'Returns', contact: 'Contact' } },
-  it: { collections: 'Collezioni', info: 'Info', tagline: 'Scelta. Messa da parte. Nominata.', copy: '© 2026 Anointed. Tutti i diritti riservati.', funded: 'PROGETTO FINANZIATO DA', links: { story: 'Chi Siamo', world: 'Anointed World', privacy: 'Privacy Policy', returns: 'Resi', contact: 'Contatti' } },
+  en: { collections: 'Collections', info: 'Info', tagline: 'Chosen. Set apart. Appointed.', copy: '© 2026 Anointed. All rights reserved.', funded: 'PROJECT FUNDED BY', links: { story: 'About Us', supply: 'Our Supply Chain', world: 'Anointed World', privacy: 'Privacy Policy', returns: 'Returns', contact: 'Contact' } },
+  it: { collections: 'Collezioni', info: 'Info', tagline: 'Scelta. Messa da parte. Nominata.', copy: '© 2026 Anointed. Tutti i diritti riservati.', funded: 'PROGETTO FINANZIATO DA', links: { story: 'Chi Siamo', supply: 'La Filiera', world: 'Anointed World', privacy: 'Privacy Policy', returns: 'Resi', contact: 'Contatti' } },
 }
 
 interface Sezione { nome: string; slug: string }
@@ -51,6 +51,7 @@ export default function Footer() {
             <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.18em', color: 'rgba(241,234,228,0.3)', margin: '0 0 1.25rem' }}>{t.info.toUpperCase()}</p>
             {[
               { label: t.links.story, href: `/${locale}/storia` },
+              { label: t.links.supply, href: `/${locale}/filiera` },
               { label: t.links.world, href: `/${locale}/anointed-world` },
               { label: t.links.privacy, href: `/${locale}/privacy` },
               { label: t.links.returns, href: `/${locale}/resi` },

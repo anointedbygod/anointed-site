@@ -24,6 +24,7 @@ export default function Navbar({ forceOpaque = false, onCartClick = () => {} }: 
   const locale = pathname.startsWith('/it') ? 'it' : 'en'
   const collectionsLabel = locale === 'it' ? 'COLLEZIONI' : 'COLLECTIONS'
   const storyLabel = locale === 'it' ? 'CHI SIAMO' : 'ABOUT US'
+  const supplyLabel = locale === 'it' ? 'LA FILIERA' : 'SUPPLY CHAIN'
   const worldLabel = 'ANOINTED WORLD'
 
   useEffect(() => {
@@ -100,6 +101,7 @@ export default function Navbar({ forceOpaque = false, onCartClick = () => {} }: 
               </svg>
             </button>
             <Link href={`/${locale}/storia`} style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.14em', color: textColor, textDecoration: 'none', transition: 'color 0.3s' }}>{storyLabel}</Link>
+            <Link href={`/${locale}/filiera`} style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.14em', color: textColor, textDecoration: 'none', transition: 'color 0.3s' }}>{supplyLabel}</Link>
             <Link href={`/${locale}/anointed-world`} style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.14em', color: textColor, textDecoration: 'none', transition: 'color 0.3s' }}>{worldLabel}</Link>
 
 
@@ -172,6 +174,10 @@ export default function Navbar({ forceOpaque = false, onCartClick = () => {} }: 
             <Link href={`/${locale}/storia`} onClick={() => setMobileOpen(false)}
               style={{ display: 'block', padding: '0.875rem 0', borderBottom: '1px solid rgba(193,169,154,0.2)', fontFamily: 'Inter, sans-serif', fontSize: '13px', letterSpacing: '0.16em', color: '#3a2e2b', textDecoration: 'none' }}>
               {storyLabel}
+            </Link>
+            <Link href={`/${locale}/filiera`} onClick={() => setMobileOpen(false)}
+              style={{ display: 'block', padding: '0.875rem 0', borderBottom: '1px solid rgba(193,169,154,0.2)', fontFamily: 'Inter, sans-serif', fontSize: '13px', letterSpacing: '0.16em', color: '#3a2e2b', textDecoration: 'none' }}>
+              {supplyLabel}
             </Link>
             <Link href={`/${locale}/anointed-world`} onClick={() => setMobileOpen(false)}
               style={{ display: 'block', padding: '0.875rem 0', borderBottom: '1px solid rgba(193,169,154,0.2)', fontFamily: 'Inter, sans-serif', fontSize: '13px', letterSpacing: '0.16em', color: '#3a2e2b', textDecoration: 'none' }}>
