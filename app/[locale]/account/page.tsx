@@ -4,6 +4,7 @@ import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { createBrowserClient } from '@supabase/ssr'
+import { authFetch } from '@/lib/auth-client'
 
 interface Ordine { id: string; stato: string; totale: number; created_at: string; tracking_url: string | null; righe_ordine: any[] }
 interface Indirizzo { id: string; nome: string; indirizzo: string; citta: string; cap: string; paese: string; predefinito: boolean }
@@ -45,9 +46,9 @@ export default function AccountDashboard() {
       setUser(data.user)
       // Carica ordini e indirizzi
       Promise.all([
-        fetch(`/api/account/ordini?user_id=${data.user.id}&email=${data.user.email}`).then(r => r.json()),
-        fetch(`/api/account/indirizzi?user_id=${data.user.id}`).then(r => r.json()),
-        fetch(`/api/wishlist?user_id=${data.user.id}`).then(r => r.json()),
+        authFetch('/api/account/ordini').then(r => r.json()),
+        authFetch('/api/account/indirizzi').then(r => r.json()),
+        authFetch('/api/wishlist').then(r => r.json()),
       ]).then(([ord, ind, wish]) => {
         setOrdini(Array.isArray(ord) ? ord : [])
         setIndirizzi(Array.isArray(ind) ? ind : [])
@@ -65,9 +66,9 @@ export default function AccountDashboard() {
   async function aggiungiIndirizzo() {
     if (!nuovoIndirizzo.nome || !nuovoIndirizzo.indirizzo) return
     setAggiungendoIndirizzo(true)
-    const res = await fetch('/api/account/indirizzi', {
+    const res = await authFetch('/api/account/indirizzi', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...nuovoIndirizzo, user_id: user.id }),
+      body: JSON.stringify(nuovoIndirizzo),
     })
     const data = await res.json()
     if (!data.error) {
@@ -79,7 +80,7 @@ export default function AccountDashboard() {
   }
 
   async function eliminaIndirizzo(id: string) {
-    await fetch(`/api/account/indirizzi?id=${id}`, { method: 'DELETE' })
+    await authFetch(`/api/account/indirizzi?id=${id}`, { method: 'DELETE' })
     setIndirizzi(prev => prev.filter(i => i.id !== id))
   }
 

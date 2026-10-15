@@ -74,6 +74,7 @@ export default function ProdottoPage() {
     if (!selectedTaglia) return
     aggiungi({
       varianteId: varianteSel?.id || `${prodotto!.id}-${selectedColore?.nome}-${selectedTaglia}`,
+      prodottoId: prodotto!.id,
       prodottoNome: prodotto!.nome,
       taglia: selectedTaglia,
       colore: selectedColore?.nome || '',

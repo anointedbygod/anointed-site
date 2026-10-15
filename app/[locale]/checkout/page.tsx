@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useCarrello } from '@/lib/carrello'
 import { createBrowserClient } from '@supabase/ssr'
+import { authFetch } from '@/lib/auth-client'
 import { useRouter, usePathname } from 'next/navigation'
 
 interface Zona { id: string; nome: string; paesi: string[]; costo: number; soglia_gratuita: number | null }
@@ -21,6 +22,8 @@ export default function CheckoutPage() {
   const [scontoApplicato, setScontoApplicato] = useState<ScontoApplicato | null>(null)
   const [scontoError, setScontoError] = useState('')
   const [needsNewsletter, setNeedsNewsletter] = useState(false)
+  const [consensoNl, setConsensoNl] = useState(false)
+  const [terminiOk, setTerminiOk] = useState(false)
   const [iscrivendo, setIscrivendo] = useState(false)
   const [validandoSconto, setValidandoSconto] = useState(false)
 
@@ -41,7 +44,7 @@ export default function CheckoutPage() {
       if (session?.user?.email) {
         update('email', session.user.email)
         // Carica indirizzi salvati
-        fetch(`/api/account/indirizzi?user_id=${session.user.id}`)
+        authFetch('/api/account/indirizzi')
           .then(r => r.json())
           .then(data => { if (Array.isArray(data)) setIndirizziSalvati(data) })
       }
@@ -77,13 +80,13 @@ export default function CheckoutPage() {
 
   // Salva carrello sospeso (debounced) quando l'email è valida
   useEffect(() => {
-    if (!form.email || !form.email.includes('@') || articoli.length === 0) return
+    // Solo utenti loggati: l'email e il consenso li verifica il server dal token
+    if (!userId || articoli.length === 0) return
     const timer = setTimeout(() => {
-      fetch('/api/carrello-sospeso', {
+      authFetch('/api/carrello-sospeso', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          email: form.email,
           nome: form.nome,
           articoli,
           totale: totaleFinale,
@@ -91,7 +94,7 @@ export default function CheckoutPage() {
       }).catch(() => {})
     }, 2000)
     return () => clearTimeout(timer)
-  }, [form.email, articoli.length])
+  }, [userId, articoli.length])
 
   // Ri-valida lo sconto ogni volta che l'email cambia
   useEffect(() => {
@@ -135,11 +138,11 @@ export default function CheckoutPage() {
   }
 
   async function iscriviEUsaCodice() {
-    if (!form.email) return
+    if (!form.email || !consensoNl) return
     setIscrivendo(true)
     await fetch('/api/newsletter', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: form.email, tipo: 'popup', locale }),
+      body: JSON.stringify({ email: form.email, tipo: 'popup', locale, consenso: true }),
     })
     setNeedsNewsletter(false)
     await validaSconto()
@@ -156,10 +159,10 @@ export default function CheckoutPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (articoli.length === 0) return
+    if (articoli.length === 0 || !terminiOk) return
     setLoading(true)
     try {
-      const res = await fetch('/api/checkout', {
+      const res = await authFetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -169,6 +172,7 @@ export default function CheckoutPage() {
           sconto: scontoApplicato,
           spedizione: zonaSelezionata ? { zona: zonaSelezionata.nome, costo: costoSpedizione } : null,
           totaleFinale,
+          terminiAccettati: true,
         }),
       })
       const { url } = await res.json()
@@ -345,14 +349,35 @@ export default function CheckoutPage() {
               )}
               {scontoError && <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#c97a6b', margin: '0.5rem 0 0' }}>{scontoError}</p>}
               {needsNewsletter && (
-                <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#c97a6b', margin: '0.5rem 0 0' }}>
-                  Non sei iscritto alla newsletter.{' '}
-                  <button type="button" onClick={iscriviEUsaCodice} disabled={iscrivendo} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#3a2e2b', textDecoration: 'underline', fontFamily: 'Inter, sans-serif', fontSize: '12px', padding: 0 }}>
-                    {iscrivendo ? '...' : 'Clicca qui per iscriverti'}
+                <div style={{ margin: '0.5rem 0 0' }}>
+                  <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#c97a6b', margin: '0 0 0.5rem' }}>
+                    {locale === 'it' ? 'Questo codice è riservato agli iscritti alla newsletter.' : 'This code is reserved for newsletter subscribers.'}
+                  </p>
+                  <label style={{ display: 'flex', gap: '8px', alignItems: 'flex-start', cursor: 'pointer', marginBottom: '0.5rem' }}>
+                    <input type="checkbox" checked={consensoNl} onChange={e => setConsensoNl(e.target.checked)} style={{ width: '16px', height: '16px', flexShrink: 0, marginTop: '2px', accentColor: '#3a2e2b' }} />
+                    <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', color: '#5d4d42', lineHeight: 1.6 }}>
+                      {locale === 'it' ? 'Acconsento a ricevere email promozionali e newsletter di ANOINTED (annullabile in ogni momento). ' : 'I agree to receive ANOINTED promotional emails and newsletters (you can unsubscribe at any time). '}
+                      <a href={`/${locale}/privacy`} target="_blank" rel="noopener noreferrer" style={{ color: '#3a2e2b', textDecoration: 'underline' }}>Privacy Policy</a>
+                    </span>
+                  </label>
+                  <button type="button" onClick={iscriviEUsaCodice} disabled={iscrivendo || !consensoNl} style={{ background: 'none', border: 'none', cursor: consensoNl ? 'pointer' : 'not-allowed', color: '#3a2e2b', textDecoration: 'underline', fontFamily: 'Inter, sans-serif', fontSize: '12px', padding: 0, opacity: consensoNl ? 1 : 0.4 }}>
+                    {iscrivendo ? '...' : (locale === 'it' ? 'Iscriviti e usa il codice' : 'Subscribe and use the code')}
                   </button>
-                </p>
+                </div>
               )}
             </div>
+
+            <label style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', cursor: 'pointer', margin: '0 0 1rem' }}>
+              <input type="checkbox" required checked={terminiOk} onChange={e => setTerminiOk(e.target.checked)} style={{ width: '16px', height: '16px', flexShrink: 0, marginTop: '2px', accentColor: '#3a2e2b' }} />
+              <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#5d4d42', lineHeight: 1.6 }}>
+                {locale === 'it' ? 'Ho letto e accetto le ' : 'I have read and accept the '}
+                <a href={`/${locale}/condizioni`} target="_blank" rel="noopener noreferrer" style={{ color: '#3a2e2b', textDecoration: 'underline' }}>{locale === 'it' ? 'Condizioni di Vendita' : 'Terms of Sale'}</a>
+                {locale === 'it' ? ', la ' : ', the '}
+                <a href={`/${locale}/privacy`} target="_blank" rel="noopener noreferrer" style={{ color: '#3a2e2b', textDecoration: 'underline' }}>Privacy Policy</a>
+                {locale === 'it' ? ' e ho preso visione del ' : ' and have noted the '}
+                <a href={`/${locale}/resi`} target="_blank" rel="noopener noreferrer" style={{ color: '#3a2e2b', textDecoration: 'underline' }}>{locale === 'it' ? 'diritto di recesso di 14 giorni' : '14-day right of withdrawal'}</a>. *
+              </span>
+            </label>
 
             <button type="submit" disabled={loading} style={{ width: '100%', padding: '1.1rem', background: loading ? 'rgba(58,46,43,0.3)' : '#3a2e2b', color: '#f1eae4', border: 'none', borderRadius: '2px', cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.18em', fontWeight: 500 }}>
               {loading ? '...' : (locale === 'it' ? 'PROCEDI AL PAGAMENTO' : 'PROCEED TO PAYMENT')}

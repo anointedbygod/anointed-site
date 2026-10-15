@@ -1,25 +1,21 @@
 import { supabaseAdmin } from '@/lib/supabase-admin'
+import { getUserFromRequest } from '@/lib/auth'
 import { NextResponse } from 'next/server'
 
+// Ordini dell'utente loggato. L'identità arriva SOLO dal token di sessione.
 export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url)
-  const user_id = searchParams.get('user_id')
-  const email = searchParams.get('email')
+  const user = await getUserFromRequest(req)
+  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  if (!user_id && !email) return NextResponse.json({ error: 'Missing params' }, { status: 400 })
-
-  // Cerca per user_id OR email, evitando duplicati
   let query = supabaseAdmin.from('ordini').select('*, righe_ordine(*)')
-
-  if (user_id && email) {
-    query = query.or(`user_id.eq.${user_id},email_cliente.eq.${email}`)
-  } else if (user_id) {
-    query = query.eq('user_id', user_id)
-  } else if (email) {
-    query = query.eq('email_cliente', email)
+  // Gli ordini fatti da ospite si collegano per email solo se l'email dell'account è verificata
+  if (user.email && user.email_confirmed_at) {
+    query = query.or(`user_id.eq.${user.id},email_cliente.eq.${user.email}`)
+  } else {
+    query = query.eq('user_id', user.id)
   }
 
   const { data, error } = await query.order('created_at', { ascending: false })
-  if (error) return NextResponse.json({ error }, { status: 500 })
+  if (error) return NextResponse.json({ error: 'Errore' }, { status: 500 })
   return NextResponse.json(data)
 }

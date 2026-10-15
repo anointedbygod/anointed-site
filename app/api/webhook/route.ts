@@ -82,7 +82,7 @@ export async function POST(req: Request) {
       try {
         await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/email`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${process.env.CRON_SECRET}` },
           body: JSON.stringify({
             tipo: 'conferma_ordine',
             email: ordine?.indirizzo_spedizione?.email || emailCliente,

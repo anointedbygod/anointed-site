@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { createBrowserClient } from '@supabase/ssr'
+import { authFetch } from '@/lib/auth-client'
 
 export default function WishlistButton({ prodottoId, size = 20 }: { prodottoId: string; size?: number }) {
   const [userId, setUserId] = useState<string | null>(null)
@@ -16,7 +17,7 @@ export default function WishlistButton({ prodottoId, size = 20 }: { prodottoId: 
     supabase.auth.getUser().then(({ data }) => {
       setUserId(data.user?.id || null)
       if (data.user?.id) {
-        fetch(`/api/wishlist?user_id=${data.user.id}`)
+        authFetch('/api/wishlist')
           .then(r => r.json())
           .then(list => {
             if (Array.isArray(list)) setInWishlist(list.some((w: any) => w.prodotto_id === prodottoId))
@@ -34,12 +35,12 @@ export default function WishlistButton({ prodottoId, size = 20 }: { prodottoId: 
     }
     setLoading(true)
     if (inWishlist) {
-      await fetch(`/api/wishlist?user_id=${userId}&prodotto_id=${prodottoId}`, { method: 'DELETE' })
+      await authFetch(`/api/wishlist?prodotto_id=${prodottoId}`, { method: 'DELETE' })
       setInWishlist(false)
     } else {
-      await fetch('/api/wishlist', {
+      await authFetch('/api/wishlist', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user_id: userId, prodotto_id: prodottoId }),
+        body: JSON.stringify({ prodotto_id: prodottoId }),
       })
       setInWishlist(true)
     }

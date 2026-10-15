@@ -5,10 +5,10 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   const { id } = await params
   const { data, error } = await supabaseAdmin
     .from('carrelli_abbandonati')
-    .select('*')
+    .select('articoli, totale')
     .eq('id', id)
     .single()
 
   if (error || !data) return NextResponse.json({ error: 'Not found' }, { status: 404 })
-  return NextResponse.json(data)
+  return NextResponse.json({ articoli: data.articoli, totale: data.totale })
 }

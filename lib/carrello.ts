@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware'
 
 interface Articolo {
   varianteId: string
+  prodottoId?: string
   prodottoNome: string
   taglia: string
   colore: string

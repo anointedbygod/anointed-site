@@ -24,9 +24,16 @@ export async function GET(req: Request) {
   let sent = 0
   for (const carrello of carrelli) {
     try {
+      // Ricontrolla il consenso adesso: se nel frattempo si e' disiscritta/o, non si invia
+      const { data: consenso } = await supabaseAdmin
+        .from('newsletter_iscritti').select('email').eq('email', String(carrello.email).toLowerCase()).maybeSingle()
+      if (!consenso) {
+        await supabaseAdmin.from('carrelli_abbandonati').update({ email_inviata: true }).eq('id', carrello.id)
+        continue
+      }
       await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/email`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${process.env.CRON_SECRET}` },
         body: JSON.stringify({
           tipo: 'carrello_abbandonato',
           email: carrello.email,
