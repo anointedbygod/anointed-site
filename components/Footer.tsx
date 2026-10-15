@@ -3,13 +3,17 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
+import { datiVenditore } from '@/lib/azienda'
 
 const TR = {
-  en: { collections: 'Collections', info: 'Info', tagline: 'Chosen. Set apart. Appointed.', copy: '© 2026 Anointed. All rights reserved.', funded: 'PROJECT FUNDED BY', links: { story: 'About Us', supply: 'Our Supply Chain', world: 'Anointed World', privacy: 'Privacy Policy', returns: 'Returns', contact: 'Contact' } },
-  it: { collections: 'Collezioni', info: 'Info', tagline: 'Scelta. Messa da parte. Nominata.', copy: '© 2026 Anointed. Tutti i diritti riservati.', funded: 'PROGETTO FINANZIATO DA', links: { story: 'Chi Siamo', supply: 'La Filiera', world: 'Anointed World', privacy: 'Privacy Policy', returns: 'Resi', contact: 'Contatti' } },
+  en: { collections: 'Collections', info: 'Info', tagline: 'Chosen. Set apart. Appointed.', copy: '© 2026 Anointed. All rights reserved.', funded: 'PROJECT FUNDED BY', links: { story: 'About Us', supply: 'Our Supply Chain', world: 'Anointed World', privacy: 'Privacy Policy', terms: 'Terms of Sale', returns: 'Returns', contact: 'Contact' }, cookies: 'Cookie preferences' },
+  it: { collections: 'Collezioni', info: 'Info', tagline: 'Scelta. Messa da parte. Nominata.', copy: '© 2026 Anointed. Tutti i diritti riservati.', funded: 'PROGETTO FINANZIATO DA', links: { story: 'Chi Siamo', supply: 'La Filiera', world: 'Anointed World', privacy: 'Privacy Policy', terms: 'Condizioni di Vendita', returns: 'Resi', contact: 'Contatti' }, cookies: 'Preferenze cookie' },
 }
 
 interface Sezione { nome: string; slug: string }
+
+// Sito di IBH: inserire l'URL per rendere "IBH" cliccabile nel footer
+const IBH_URL = ''
 
 export default function Footer() {
   const pathname = usePathname()
@@ -54,6 +58,7 @@ export default function Footer() {
               { label: t.links.supply, href: `/${locale}/filiera` },
               { label: t.links.world, href: `/${locale}/anointed-world` },
               { label: t.links.privacy, href: `/${locale}/privacy` },
+              { label: t.links.terms, href: `/${locale}/condizioni` },
               { label: t.links.returns, href: `/${locale}/resi` },
               { label: t.links.contact, href: `/${locale}/contatti` },
             ].map(l => (
@@ -63,16 +68,26 @@ export default function Footer() {
                 {l.label}
               </Link>
             ))}
+            <a href="#" className="iubenda-cs-preferences-link" style={{ display: 'block', fontFamily: 'Inter, sans-serif', fontSize: '12px', letterSpacing: '0.1em', color: 'rgba(241,234,228,0.55)', textDecoration: 'none', marginBottom: '0.6rem' }}>{t.cookies}</a>
           </div>
         </div>
 
+        {/* Dati del venditore (obbligatori: P.IVA, sede, REA/capitale se societa') */}
+        {datiVenditore().length > 0 && (
+          <p style={{ borderTop: '1px solid rgba(241,234,228,0.08)', marginTop: '3rem', paddingTop: '1.25rem', fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.1em', lineHeight: 1.8, color: 'rgba(241,234,228,0.4)', textAlign: 'center', marginBottom: 0 }}>
+            {datiVenditore().join(' · ')}
+          </p>
+        )}
+
         {/* Copyright + credits */}
-        <div style={{ borderTop: '1px solid rgba(241,234,228,0.08)', marginTop: '3rem', padding: '1.25rem 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
+        <div style={{ borderTop: '1px solid rgba(241,234,228,0.08)', marginTop: '1.25rem', padding: '1.25rem 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
           <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.12em', color: 'rgba(241,234,228,0.2)', margin: 0 }}>
             {t.copy}
           </p>
           <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '9px', letterSpacing: '0.1em', color: 'rgba(241,234,228,0.2)', margin: 0 }}>
-            Built by <span style={{ color: 'rgba(193,169,154,0.5)' }}>Nicandro Grande</span> · <em style={{ fontStyle: 'italic', color: 'rgba(241,234,228,0.15)' }}>Inspired by Heaven</em>
+            Built by <span style={{ color: 'rgba(193,169,154,0.5)' }}>Nicandro Grande</span> · {IBH_URL
+              ? <a href={IBH_URL} target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(193,169,154,0.5)', textDecoration: 'none', letterSpacing: '0.14em' }}>IBH</a>
+              : <span style={{ color: 'rgba(193,169,154,0.5)', letterSpacing: '0.14em' }}>IBH</span>}
           </p>
         </div>
 

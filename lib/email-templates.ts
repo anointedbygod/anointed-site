@@ -98,7 +98,7 @@ export function emailConfermaOrdine({
   `
 }
 
-export function emailBenvenutoNewsletter({ email, codice = 'WELCOME10', locale = 'en' }: { email: string; codice?: string; locale?: 'en' | 'it' }) {
+export function emailBenvenutoNewsletter({ email, codice = 'WELCOME10', locale = 'en', unsubUrl }: { email: string; codice?: string; locale?: 'en' | 'it'; unsubUrl?: string }) {
   const L = locale === 'it'
     ? {
         tagline: 'SCELTA. MESSA DA PARTE. NOMINATA.',
@@ -221,6 +221,7 @@ export function emailBenvenutoNewsletter({ email, codice = 'WELCOME10', locale =
   <tr>
     <td style="background:#3a2e2b;padding:32px 40px;text-align:center;">
       <p style="font-family:Georgia,serif;font-size:11px;letter-spacing:0.14em;color:#c1a99a;margin:0 0 8px;">ANOINTED</p>
+${unsubUrl ? `<p style="font-family:Georgia,serif;font-size:10px;color:rgba(241,234,228,0.55);margin:0 0 8px;">${locale === 'it' ? 'Ricevi questa email perché ti sei iscritta alla newsletter di ANOINTED.' : 'You receive this email because you subscribed to ANOINTED.'} <a href="${unsubUrl}" style="color:#c1a99a;">${locale === 'it' ? 'Annulla l\'iscrizione' : 'Unsubscribe'}</a></p>` : ''}
       <p style="font-family:Georgia,serif;font-size:10px;color:rgba(241,234,228,0.4);margin:0;">© 2026 Anointed. All rights reserved.</p>
     </td>
   </tr>
@@ -238,12 +239,15 @@ export function emailCarrelloAbbandonato({
   prodotti,
   totale,
   carrelloId,
+  unsubUrl,
 }: {
   nome: string
   prodotti: { nome: string; prezzo: number; immagine?: string }[]
   totale: number
   carrelloId: string
+  unsubUrl?: string
 }) {
+  const locale = 'en'
   return `
 <!DOCTYPE html>
 <html>
@@ -290,6 +294,7 @@ export function emailCarrelloAbbandonato({
   <tr>
     <td style="background:#3a2e2b;padding:32px 40px;text-align:center;">
       <p style="font-family:Georgia,serif;font-size:11px;letter-spacing:0.14em;color:#c1a99a;margin:0 0 8px;">ANOINTED</p>
+${unsubUrl ? `<p style="font-family:Georgia,serif;font-size:10px;color:rgba(241,234,228,0.55);margin:0 0 8px;">${false ? 'Ricevi questa email perché ti sei iscritta alla newsletter di ANOINTED.' : 'You receive this email because you subscribed to ANOINTED.'} <a href="${unsubUrl}" style="color:#c1a99a;">${false ? 'Annulla l\'iscrizione' : 'Unsubscribe'}</a></p>` : ''}
       <p style="font-family:Georgia,serif;font-size:10px;color:rgba(241,234,228,0.4);margin:0;">© 2026 Anointed. All rights reserved.</p>
     </td>
   </tr>

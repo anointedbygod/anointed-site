@@ -2,8 +2,10 @@ import { supabaseAdmin } from '@/lib/supabase-admin'
 import { NextResponse } from 'next/server'
 
 export async function POST(req: Request) {
-  const { email, tipo, locale } = await req.json()
+  const { email, tipo, locale, consenso } = await req.json()
   if (!email) return NextResponse.json({ error: 'Email mancante' }, { status: 400 })
+  // Consenso esplicito obbligatorio (GDPR): niente iscrizione senza casella spuntata dall'utente
+  if (consenso !== true) return NextResponse.json({ error: 'Consenso mancante' }, { status: 400 })
 
   try {
     const emailLower = email.toLowerCase()

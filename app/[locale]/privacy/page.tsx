@@ -2,15 +2,14 @@
 import { usePathname } from 'next/navigation'
 
 // Site/document ids from the Iubenda account (anointedbyheaven@gmail.com, site anointed.it).
-// Only an Italian version exists today — the account's current plan supports a single
-// language. Once Sofia upgrades and the English document is generated, this will get
-// its own id and the src below can branch on `locale`.
-const IUBENDA_PRIVACY_COOKIE_POLICY_ID = 10974198
+// Italian and English documents (generated and kept up to date by Iubenda).
+const IUBENDA_PRIVACY_COOKIE_POLICY_IDS = { it: 10974198, en: 29094859 }
 
 export default function PrivacyPage() {
   const pathname = usePathname()
   const locale = pathname.startsWith('/it') ? 'it' : 'en'
   const isIT = locale === 'it'
+  const IUBENDA_PRIVACY_COOKIE_POLICY_ID = IUBENDA_PRIVACY_COOKIE_POLICY_IDS[locale]
 
   return (
     <main style={{ background: '#f1eae4', minHeight: '100vh', paddingTop: '64px' }}>

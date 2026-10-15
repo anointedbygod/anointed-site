@@ -55,7 +55,10 @@ export default async function LocaleLayout({
   const messages = await getMessages()
   // Iubenda cookie banner: attivo solo se NEXT_PUBLIC_IUBENDA_SITE_ID è impostato in .env.local
   const iubendaSiteId = process.env.NEXT_PUBLIC_IUBENDA_SITE_ID
-  const iubendaCookiePolicyId = process.env.NEXT_PUBLIC_IUBENDA_COOKIE_POLICY_ID
+  // Documento Iubenda per lingua: IT dall'env, EN fisso (ID pubblico, non segreto)
+  const IUBENDA_POLICY_EN = 29094859
+  const iubendaLang = locale === 'it' ? 'it' : 'en'
+  const iubendaCookiePolicyId = iubendaLang === 'en' ? IUBENDA_POLICY_EN : process.env.NEXT_PUBLIC_IUBENDA_COOKIE_POLICY_ID
   return (
     <html lang={locale} suppressHydrationWarning>
 
@@ -67,7 +70,7 @@ export default async function LocaleLayout({
               _iub.csConfiguration = {
                 siteId: ${iubendaSiteId},
                 cookiePolicyId: ${iubendaCookiePolicyId},
-                lang: "it",
+                lang: "${iubendaLang}",
                 storage: { useSiteId: true }
               };
             `}</Script>

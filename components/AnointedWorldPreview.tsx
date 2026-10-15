@@ -92,6 +92,7 @@ export default function AnointedWorldPreview() {
   const [sectionVisible, setSectionVisible] = useState(false)
   const [email, setEmail] = useState('')
   const [sent, setSent] = useState(false)
+  const [consent, setConsent] = useState(false)
   const ref = useRef<HTMLElement>(null)
   const wordRef = useRef<HTMLSpanElement>(null)
   const globeSize = useGlobeSize(wordRef)
@@ -169,11 +170,18 @@ export default function AnointedWorldPreview() {
         {sent ? (
           <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.16em', color: '#c1a99a' }}>{t.nlThanks}</p>
         ) : (
-          <form onSubmit={async e => { e.preventDefault(); if (!email) return; await fetch("/api/newsletter", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email, tipo: "newsletter", locale }) }); setSent(true) }} style={{ display: 'flex', justifyContent: 'center', maxWidth: '440px', margin: '0 auto' }}>
+          <form onSubmit={async e => { e.preventDefault(); if (!email || !consent) return; await fetch("/api/newsletter", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email, tipo: "newsletter", locale, consenso: true }) }); setSent(true) }} style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', maxWidth: '440px', margin: '0 auto' }}>
             <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder={t.nlPlaceholder} required style={{ flex: 1, fontFamily: 'Inter, sans-serif', fontSize: '12px', background: 'rgba(58,46,43,0.05)', border: '1px solid rgba(193,169,154,0.4)', borderRight: 'none', color: '#3a2e2b', padding: '0.85rem 1.25rem', outline: 'none', borderRadius: '1px 0 0 1px' }} />
             <button type="submit" style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.16em', background: '#3a2e2b', border: '1px solid #3a2e2b', color: '#f1eae4', padding: '0.85rem 1.5rem', cursor: 'pointer', borderRadius: '0 1px 1px 0', whiteSpace: 'nowrap', fontWeight: 500 }} onMouseEnter={e => e.currentTarget.style.background = '#5d4d42'} onMouseLeave={e => e.currentTarget.style.background = '#3a2e2b'}>
               {t.nlCta}
             </button>
+            <label style={{ flexBasis: '100%', display: 'flex', gap: '10px', alignItems: 'flex-start', textAlign: 'left', marginTop: '1rem', cursor: 'pointer' }}>
+              <input type="checkbox" required checked={consent} onChange={e => setConsent(e.target.checked)} style={{ width: '16px', height: '16px', flexShrink: 0, marginTop: '2px', accentColor: '#3a2e2b' }} />
+              <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', color: '#5d4d42', lineHeight: 1.6 }}>
+                {locale === 'it' ? 'Acconsento a ricevere email promozionali e newsletter di ANOINTED. Posso annullare l\'iscrizione in ogni momento. Leggi la ' : 'I agree to receive ANOINTED promotional emails and newsletters. I can unsubscribe at any time. Read the '}
+                <a href={`/${locale}/privacy`} target="_blank" rel="noopener noreferrer" style={{ color: '#3a2e2b', textDecoration: 'underline' }}>Privacy Policy</a>.
+              </span>
+            </label>
           </form>
         )}
       </div>

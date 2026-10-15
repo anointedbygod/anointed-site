@@ -1,11 +1,15 @@
 import { Resend } from 'resend'
 import { NextResponse } from 'next/server'
+import { isInternalRequest } from '@/lib/auth'
+import { urlDisiscrizione } from '@/lib/unsubscribe'
 import { emailConfermaOrdine, emailBenvenutoNewsletter, emailCarrelloAbbandonato, emailOrdineSpedito } from '@/lib/email-templates'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 const FROM = 'ANOINTED <noreply@anointed.it>'
 
 export async function POST(req: Request) {
+  // Solo chiamate interne (webhook Stripe, cron): impedisce a chiunque di spedire email dal dominio
+  if (!isInternalRequest(req)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   const body = await req.json()
   const { tipo } = body
 
@@ -28,7 +32,7 @@ export async function POST(req: Request) {
           from: FROM,
           to: email,
           subject: isIt ? `Sei scelta — il tuo codice sconto Anointed` : `You are chosen — your Anointed discount code`,
-          html: emailBenvenutoNewsletter({ email, codice, locale: isIt ? 'it' : 'en' }),
+          html: emailBenvenutoNewsletter({ email, codice, locale: isIt ? 'it' : 'en', unsubUrl: urlDisiscrizione(email, isIt ? 'it' : 'en') }),
         })
         break
       }
@@ -38,17 +42,7 @@ export async function POST(req: Request) {
           from: FROM,
           to: email,
           subject: `${nome}, your cart is waiting — ANOINTED`,
-          html: emailCarrelloAbbandonato({ nome, prodotti, totale, carrelloId }),
-        })
-        break
-      }
-      case 'ordine_spedito': {
-        const { email, nome, ordineId, trackingUrl } = body
-        await resend.emails.send({
-          from: FROM,
-          to: email,
-          subject: `Il tuo ordine è in arrivo — ANOINTED`,
-          html: emailOrdineSpedito({ nome, ordineId, trackingUrl }),
+          html: emailCarrelloAbbandonato({ nome, prodotti, totale, carrelloId, unsubUrl: urlDisiscrizione(email, 'en') }),
         })
         break
       }
@@ -68,6 +62,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ success: true })
   } catch (err) {
     console.error('EMAIL ERROR:', err)
-    return NextResponse.json({ error: String(err) }, { status: 500 })
+    return NextResponse.json({ error: 'Invio non riuscito' }, { status: 500 })
   }
 }

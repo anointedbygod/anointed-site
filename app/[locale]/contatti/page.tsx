@@ -8,10 +8,27 @@ export default function ContattiPage() {
   const isIT = locale === 'it'
   const [sent, setSent] = useState(false)
   const [form, setForm] = useState({ nome: '', email: '', oggetto: '', messaggio: '' })
+  const [privacy, setPrivacy] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [error, setError] = useState('')
+  const [hp, setHp] = useState('') // honeypot anti-bot
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    setSent(true)
+    if (!privacy || sending) return
+    setSending(true)
+    setError('')
+    try {
+      const res = await fetch('/api/contatti', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...form, privacy, sito: hp }),
+      })
+      if (!res.ok) throw new Error()
+      setSent(true)
+    } catch {
+      setError(isIT ? 'Invio non riuscito. Riprova o scrivici a info@anointed.it.' : 'Could not send. Please try again or write to info@anointed.it.')
+    }
+    setSending(false)
   }
 
   const inputStyle: React.CSSProperties = {
@@ -109,7 +126,17 @@ export default function ContattiPage() {
                     rows={5} style={{ ...inputStyle, resize: 'none' }}
                     onFocus={e => e.target.style.borderColor='#c1a99a'} onBlur={e => e.target.style.borderColor='rgba(193,169,154,0.35)'} />
                 </div>
-                <button type="submit" style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.18em', fontWeight: 500, background: '#3a2e2b', color: '#f1eae4', border: 'none', padding: '1rem', borderRadius: '1px', cursor: 'pointer', transition: 'background 0.2s' }}
+                <input type="text" tabIndex={-1} autoComplete="off" aria-hidden="true" value={hp} onChange={e => setHp(e.target.value)} style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, opacity: 0 }} />
+                <label style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', cursor: 'pointer' }}>
+                  <input type="checkbox" required checked={privacy} onChange={e => setPrivacy(e.target.checked)} style={{ width: '16px', height: '16px', flexShrink: 0, marginTop: '2px', accentColor: '#3a2e2b' }} />
+                  <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#5d4d42', lineHeight: 1.6 }}>
+                    {isIT ? 'Ho letto la ' : 'I have read the '}
+                    <a href={`/${locale}/privacy`} target="_blank" rel="noopener noreferrer" style={{ color: '#3a2e2b', textDecoration: 'underline' }}>Privacy Policy</a>
+                    {isIT ? ' e acconsento al trattamento dei miei dati per rispondere alla richiesta. *' : ' and consent to my data being processed to answer my request. *'}
+                  </span>
+                </label>
+                {error && <p role="alert" style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#c97a6b', margin: 0 }}>{error}</p>}
+                <button type="submit" disabled={sending} style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.18em', fontWeight: 500, background: '#3a2e2b', color: '#f1eae4', border: 'none', padding: '1rem', borderRadius: '1px', cursor: 'pointer', transition: 'background 0.2s' }}
                   onMouseEnter={e => e.currentTarget.style.background='#5d4d42'}
                   onMouseLeave={e => e.currentTarget.style.background='#3a2e2b'}>
                   {isIT ? 'INVIA MESSAGGIO' : 'SEND MESSAGE'}

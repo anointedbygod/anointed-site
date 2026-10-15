@@ -49,7 +49,7 @@ export default function NewsletterPopup() {
     if (!email || !privacy) return
     await fetch('/api/newsletter', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, tipo: 'popup', locale }),
+      body: JSON.stringify({ email, tipo: 'popup', locale, consenso: true }),
     })
     setSent(true)
     const expire = Date.now() + 7 * 24 * 60 * 60 * 1000
@@ -64,7 +64,7 @@ export default function NewsletterPopup() {
       ? 'Unisciti alle donne che camminano con scopo. Ricevi il <strong>10% di sconto</strong> sul tuo primo ordine e scopri per prima le nuove collezioni.'
       : 'Join the women who walk with purpose. Receive <strong>10% off</strong> your first order and be the first to discover new collections.',
     placeholder: locale === 'it' ? 'Indirizzo email' : 'Email address',
-    privacy:    locale === 'it' ? 'Accetto la' : 'I agree to the',
+    privacy:    locale === 'it' ? 'Acconsento a ricevere email promozionali di ANOINTED e ho letto la' : 'I agree to receive ANOINTED promotional emails and have read the',
     privacyLink: locale === 'it' ? 'Privacy Policy' : 'Privacy Policy',
     cta:        locale === 'it' ? 'SBLOCCA IL 10%' : 'UNLOCK MY 10%',
     micro:      locale === 'it'
