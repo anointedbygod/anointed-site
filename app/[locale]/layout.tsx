@@ -71,7 +71,15 @@ export default async function LocaleLayout({
                 siteId: ${iubendaSiteId},
                 cookiePolicyId: ${iubendaCookiePolicyId},
                 lang: "${iubendaLang}",
-                storage: { useSiteId: true }
+                storage: { useSiteId: true },
+                callback: {
+                  // Scatta quando l'utente ha risposto al banner (o l'aveva gia' fatto / non serve):
+                  // il popup newsletter aspetta questo evento per non sovrapporsi al banner.
+                  onPreferenceExpressedOrNotNeeded: function () {
+                    window.__iubDecided = true;
+                    window.dispatchEvent(new Event('iubenda-decided'));
+                  }
+                }
               };
             `}</Script>
             <Script src={`https://cs.iubenda.com/autoblocking/${iubendaSiteId}.js`} strategy="beforeInteractive" />

@@ -17,15 +17,40 @@ export default function NewsletterPopup() {
     const seen = localStorage.getItem('anointed_popup_seen')
     if (seen && Date.now() < parseInt(seen)) return
 
-    // Appare dopo 4 secondi O al 35% di scroll
-    const timer = setTimeout(() => setVisible(true), 4000)
+    let timer: ReturnType<typeof setTimeout> | undefined
+    let handleScroll: (() => void) | null = null
+    let armed = false
+    let fallback: ReturnType<typeof setTimeout> | undefined
 
-    const handleScroll = () => {
-      const progress = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)
-      if (progress > 0.35) { setVisible(true); clearTimeout(timer) }
+    // Appare dopo 4 secondi O al 35% di scroll, ma SOLO dopo che l'utente ha risposto al banner cookie
+    const arm = () => {
+      if (armed) return
+      armed = true
+      timer = setTimeout(() => setVisible(true), 4000)
+      handleScroll = () => {
+        const progress = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)
+        if (progress > 0.35) { setVisible(true); if (timer) clearTimeout(timer) }
+      }
+      window.addEventListener('scroll', handleScroll, { passive: true, once: true } as any)
     }
-    window.addEventListener('scroll', handleScroll, { passive: true, once: true } as any)
-    return () => { clearTimeout(timer); window.removeEventListener('scroll', handleScroll) }
+
+    const w = window as any
+    const bannerPresente = () => !!document.getElementById('iubenda-cs-banner')
+
+    if (w.__iubDecided) arm()
+    else {
+      window.addEventListener('iubenda-decided', arm, { once: true })
+      // Rete di sicurezza: se dopo 12s non c'e' nessun banner (script bloccato da adblock o non
+      // configurato) non c'e' sovrapposizione possibile, quindi si procede. Se il banner c'e', si aspetta.
+      fallback = setTimeout(() => { if (!bannerPresente()) arm() }, 12000)
+    }
+
+    return () => {
+      if (timer) clearTimeout(timer)
+      if (fallback) clearTimeout(fallback)
+      window.removeEventListener('iubenda-decided', arm)
+      if (handleScroll) window.removeEventListener('scroll', handleScroll)
+    }
   }, [])
 
   useEffect(() => {
