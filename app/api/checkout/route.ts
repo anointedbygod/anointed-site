@@ -122,6 +122,9 @@ export async function POST(req: Request) {
 
     const metadata: Record<string, string> = { ordine_id: ordine.id, email: cliente.email }
     if (scontoValidato) metadata.sconto_id = scontoValidato.id
+    // Prova dell'accettazione di Condizioni di Vendita / Privacy / recesso (visibile anche nella dashboard Stripe)
+    metadata.termini_accettati_il = new Date().toISOString()
+    metadata.termini_versione = '2026-10-15'
 
     const sessionParams: Stripe.Checkout.SessionCreateParams = {
       payment_method_types: ['card'],

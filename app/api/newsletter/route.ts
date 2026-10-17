@@ -16,9 +16,16 @@ export async function POST(req: Request) {
       .eq('email', emailLower)
       .maybeSingle()
 
-    await supabaseAdmin
+    const base = { email: emailLower, tipo: tipo || 'newsletter', created_at: new Date().toISOString() }
+    // Prova del consenso (GDPR art. 7): data, fonte, lingua. Richiede supabase/consensi.sql;
+    // se le colonne non ci sono ancora, si ripiega sul salvataggio base senza rompere l'iscrizione.
+    const prova = { consenso_at: new Date().toISOString(), consenso_fonte: tipo || 'newsletter', consenso_lingua: locale === 'it' ? 'it' : 'en' }
+    const { error: errProva } = await supabaseAdmin
       .from('newsletter_iscritti')
-      .upsert({ email: emailLower, tipo: tipo || 'newsletter', created_at: new Date().toISOString() }, { onConflict: 'email' })
+      .upsert({ ...base, ...prova }, { onConflict: 'email' })
+    if (errProva) {
+      await supabaseAdmin.from('newsletter_iscritti').upsert(base, { onConflict: 'email' })
+    }
 
     // Invia l'email di benvenuto solo alla prima iscrizione (non ad ogni re-invio del form)
     if (!esistente) {

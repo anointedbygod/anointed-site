@@ -380,7 +380,7 @@ export default function CheckoutPage() {
             </label>
 
             <button type="submit" disabled={loading} style={{ width: '100%', padding: '1.1rem', background: loading ? 'rgba(58,46,43,0.3)' : '#3a2e2b', color: '#f1eae4', border: 'none', borderRadius: '2px', cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.18em', fontWeight: 500 }}>
-              {loading ? '...' : (locale === 'it' ? 'PROCEDI AL PAGAMENTO' : 'PROCEED TO PAYMENT')}
+              {loading ? '...' : (locale === 'it' ? 'ORDINA CON OBBLIGO DI PAGARE' : 'ORDER WITH OBLIGATION TO PAY')}
             </button>
           </form>
 

@@ -8,6 +8,8 @@ const BASE = `
   margin: 0 auto;
 `
 
+import { AZIENDA, datiVenditore } from '@/lib/azienda'
+
 export function emailConfermaOrdine({
   nome,
   ordineId,
@@ -76,9 +78,21 @@ export function emailConfermaOrdine({
         ${indirizzo.paese}
       </p>
 
-      <p style="font-family:Georgia,serif;font-size:13px;line-height:1.8;color:#5d4d42;margin:0;">
+      <p style="font-family:Georgia,serif;font-size:13px;line-height:1.8;color:#5d4d42;margin:0 0 32px;">
         For any questions, contact us at <a href="mailto:info@anointed.it" style="color:#3a2e2b;">info@anointed.it</a>
       </p>
+
+      <!-- Informazioni obbligatorie (art. 49 e 51 Codice del Consumo) -->
+      <div style="border-top:1px solid rgba(193,169,154,0.3);padding-top:20px;">
+        <p style="font-family:Georgia,serif;font-size:11px;letter-spacing:0.14em;color:#c1a99a;margin:0 0 10px;">RIGHT OF WITHDRAWAL · DIRITTO DI RECESSO</p>
+        <p style="font-family:Georgia,serif;font-size:12px;line-height:1.7;color:#5d4d42;margin:0 0 10px;">
+          You may withdraw from this purchase within 14 days of receiving the goods, without giving any reason. Write to ${AZIENDA.email} or ${AZIENDA.pec}; model form and procedure: <a href="https://www.anointed.it/en/resi" style="color:#3a2e2b;">Returns &amp; Refunds</a>. Return shipping costs are borne by the customer. Legal guarantee of conformity: 2 years from delivery. Full terms: <a href="https://www.anointed.it/en/condizioni" style="color:#3a2e2b;">Terms of Sale</a>.
+        </p>
+        <p style="font-family:Georgia,serif;font-size:12px;line-height:1.7;color:#5d4d42;margin:0 0 10px;">
+          Puoi recedere dall'acquisto entro 14 giorni dal ricevimento della merce, senza dover fornire alcuna motivazione. Scrivi a ${AZIENDA.email} o ${AZIENDA.pec}; modulo tipo e procedura: <a href="https://www.anointed.it/it/resi" style="color:#3a2e2b;">Resi e Rimborsi</a>. Le spese di restituzione sono a carico del cliente. Garanzia legale di conformità: 2 anni dalla consegna. Condizioni complete: <a href="https://www.anointed.it/it/condizioni" style="color:#3a2e2b;">Condizioni di Vendita</a>.
+        </p>
+        <p style="font-family:Georgia,serif;font-size:11px;line-height:1.7;color:#8a7a70;margin:0;">${datiVenditore().join(' · ')}</p>
+      </div>
     </td>
   </tr>
 

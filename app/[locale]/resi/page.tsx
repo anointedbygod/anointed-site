@@ -1,6 +1,7 @@
 'use client'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
+import { AZIENDA } from '@/lib/azienda'
 
 export default function ResiPage() {
   const pathname = usePathname()
@@ -62,6 +63,27 @@ export default function ResiPage() {
                 <li>Returns of products damaged due to misuse are not accepted</li>
               </ul>
             )}
+          </Section>
+
+          <Section title={isIT ? 'Modulo tipo di recesso' : 'Model withdrawal form'}>
+            <p>{isIT
+              ? 'Compila e invia questo modulo solo se desideri recedere dal contratto (puoi anche comunicarci il recesso con una qualsiasi dichiarazione esplicita).'
+              : 'Complete and send this form only if you wish to withdraw from the contract (you may also notify us of your withdrawal by any other unequivocal statement).'}</p>
+            <div style={{ background: '#fff', border: '1px solid rgba(193,169,154,0.35)', borderRadius: '4px', padding: '1.25rem 1.5rem', margin: '1rem 0', fontSize: '13px', lineHeight: 1.9 }}>
+              <p style={{ margin: '0 0 0.75rem' }}>
+                {isIT ? 'Destinatario: ' : 'To: '}{AZIENDA.ragioneSociale}, {AZIENDA.sede} — {AZIENDA.pec} / {AZIENDA.email}
+              </p>
+              <p style={{ margin: '0 0 0.75rem' }}>
+                {isIT
+                  ? 'Con la presente notifico il recesso dal mio contratto di vendita dei seguenti beni: ………………………………'
+                  : 'I hereby give notice that I withdraw from my contract of sale of the following goods: ………………………………'}
+              </p>
+              <p style={{ margin: 0 }}>
+                {isIT
+                  ? 'Ordinato il / ricevuto il (*): ………… · N. ordine: ………… · Nome del consumatore: ………… · Indirizzo del consumatore: ………… · Firma (solo se il modulo è inviato in formato cartaceo): ………… · Data: …………  (*) Cancellare la dicitura inutile.'
+                  : 'Ordered on / received on (*): ………… · Order no.: ………… · Consumer\'s name: ………… · Consumer\'s address: ………… · Signature (only if sent on paper): ………… · Date: …………  (*) Delete as appropriate.'}
+              </p>
+            </div>
           </Section>
 
           <Section title={isIT ? 'Prodotti difettosi' : 'Defective Products'}>
