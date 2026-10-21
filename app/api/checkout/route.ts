@@ -1,3 +1,4 @@
+import { COMING_SOON } from '@/lib/config'
 import Stripe from 'stripe'
 import { supabaseAdmin } from '@/lib/supabase-admin'
 import { getUserFromRequest } from '@/lib/auth'
@@ -13,6 +14,7 @@ const bad = (error: string, status = 400) => NextResponse.json({ error }, { stat
 // del carrello inviato dal browser si usano solo prodotto, colore, taglia e quantità.
 export async function POST(req: Request) {
   try {
+    if (COMING_SOON) return NextResponse.json({ error: 'Coming soon: gli acquisti non sono ancora attivi / purchases are not open yet' }, { status: 403 })
     const { articoli, cliente, sconto, terminiAccettati } = await req.json()
     // Accettazione esplicita di condizioni di vendita / privacy / recesso prima del pagamento
     if (terminiAccettati !== true) return NextResponse.json({ error: 'Termini non accettati' }, { status: 400 })

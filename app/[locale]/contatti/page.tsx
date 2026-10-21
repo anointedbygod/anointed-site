@@ -68,7 +68,7 @@ export default function ContattiPage() {
               </div>
               <div>
                 <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.18em', color: '#c1a99a', margin: '0 0 0.4rem' }}>INSTAGRAM</p>
-                <a href="https://instagram.com/anointed" target="_blank" rel="noopener noreferrer" style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', color: '#3a2e2b', textDecoration: 'none', borderBottom: '1px solid rgba(58,46,43,0.3)' }}>
+                <a href="https://instagram.com/anointedworld.official" target="_blank" rel="noopener noreferrer" style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', color: '#3a2e2b', textDecoration: 'none', borderBottom: '1px solid rgba(58,46,43,0.3)' }}>
                   @anointed
                 </a>
               </div>

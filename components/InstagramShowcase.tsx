@@ -197,7 +197,7 @@ export default function InstagramShowcase() {
                     <p style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', fontSize: '13.5px', color: '#f1eae4', margin: '0 0 1.1rem' }}>
                       {t.ctaCaption}
                     </p>
-                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" style={{
+                    <a href="https://instagram.com/anointedworld.official" target="_blank" rel="noopener noreferrer" style={{
                       display: 'inline-block', fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.14em',
                       fontWeight: 500, color: '#3a2e2b', background: '#f1eae4',
                       textDecoration: 'none', padding: '0.8rem 1.7rem', borderRadius: '100px',

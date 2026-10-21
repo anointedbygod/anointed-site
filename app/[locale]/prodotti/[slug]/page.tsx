@@ -1,4 +1,5 @@
 'use client'
+import { COMING_SOON } from '@/lib/config'
 
 import { useState, useEffect } from 'react'
 import { useParams, usePathname } from 'next/navigation'
@@ -71,7 +72,7 @@ export default function ProdottoPage() {
   const sizeGuide = locale === 'it' ? 'Guida taglie' : 'Size guide'
 
   function handleAggiungi() {
-    if (!selectedTaglia) return
+    if (COMING_SOON || !selectedTaglia) return
     aggiungi({
       varianteId: varianteSel?.id || `${prodotto!.id}-${selectedColore?.nome}-${selectedTaglia}`,
       prodottoId: prodotto!.id,
@@ -166,8 +167,8 @@ export default function ProdottoPage() {
             )}
 
             {/* CTA */}
-            <button onClick={handleAggiungi} disabled={!selectedTaglia || !inStock} style={{ width: '100%', padding: '1rem', borderRadius: '1px', cursor: (!selectedTaglia || !inStock) ? 'not-allowed' : 'pointer', fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.18em', fontWeight: 500, background: added ? '#c1a99a' : (!selectedTaglia || !inStock) ? 'rgba(58,46,43,0.15)' : '#3a2e2b', color: (!selectedTaglia || !inStock) ? '#c1a99a' : '#f1eae4', border: 'none', transition: 'background 0.3s', marginBottom: '1rem' }}>
-              {added ? addedText : !inStock ? outOfStock : !selectedTaglia ? selectSize : addToCart}
+            <button onClick={handleAggiungi} disabled={COMING_SOON || !selectedTaglia || !inStock} style={{ width: '100%', padding: '1rem', borderRadius: '1px', cursor: (!selectedTaglia || !inStock) ? 'not-allowed' : 'pointer', fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.18em', fontWeight: 500, background: added ? '#c1a99a' : (!selectedTaglia || !inStock) ? 'rgba(58,46,43,0.15)' : '#3a2e2b', color: (!selectedTaglia || !inStock) ? '#c1a99a' : '#f1eae4', border: 'none', transition: 'background 0.3s', marginBottom: '1rem' }}>
+              {COMING_SOON ? 'COMING SOON' : added ? addedText : !inStock ? outOfStock : !selectedTaglia ? selectSize : addToCart}
             </button>
 
             {prodotto.descrizione && (

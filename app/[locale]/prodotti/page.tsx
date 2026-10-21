@@ -1,4 +1,5 @@
 'use client'
+import { COMING_SOON, GENERI } from '@/lib/config'
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
@@ -53,6 +54,11 @@ export default function ProdottiPage() {
     <main style={{ background: '#f1eae4', minHeight: '100vh', paddingTop: '64px' }}>
       <div style={{ padding: '4rem 1.5rem 2rem', textAlign: 'center', maxWidth: '1200px', margin: '0 auto' }}>
         <h1 style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(1.8rem, 3vw, 2.8rem)', fontWeight: 300, color: '#3a2e2b', margin: 0, letterSpacing: '0.04em' }}>{activeLabel}</h1>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', marginTop: '1.25rem' }}>
+          {GENERI.map(g => (
+            <span key={g.value} style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.18em', color: '#3a2e2b', borderBottom: '1px solid #3a2e2b', paddingBottom: '4px' }}>{g.label.toUpperCase()}</span>
+          ))}
+        </div>
       </div>
 
       <div style={{ padding: '0 1.5rem', maxWidth: '1200px', margin: '0 auto' }}>
@@ -116,6 +122,11 @@ function ProductCard({ prodotto, i, locale }: { prodotto: Prodotto; i: number; l
             <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '9px', letterSpacing: '0.16em', color: 'rgba(58,46,43,0.3)' }}>PHOTO</p>
           </div>
         </>}
+        {COMING_SOON && (
+          <div style={{ position: 'absolute', top: '10px', left: '10px', zIndex: 3, background: 'rgba(241,234,228,0.92)', padding: '0.3rem 0.65rem', borderRadius: '1px' }}>
+            <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '9px', letterSpacing: '0.16em', color: '#3a2e2b' }}>COMING SOON</span>
+          </div>
+        )}
         {hasImg && <Image src="/monogram-beige.svg" alt="" width={40} height={40} style={{ position: 'absolute', top: '12px', left: '12px', width: '32px', height: '32px', opacity: 0.12, pointerEvents: 'none', zIndex: 2 }} />}
         <div style={{ position: 'absolute', inset: 0, background: 'rgba(58,46,43,0.06)', opacity: hovered ? 1 : 0, transition: 'opacity 0.3s' }} />
         <div style={{ position: 'absolute', bottom: '0.875rem', left: '50%', transform: hovered ? 'translateX(-50%) translateY(0)' : 'translateX(-50%) translateY(8px)', opacity: hovered ? 1 : 0, transition: 'opacity 0.3s, transform 0.3s', background: 'rgba(241,234,228,0.92)', backdropFilter: 'blur(8px)', borderRadius: '1px', padding: '0.45rem 1.1rem', whiteSpace: 'nowrap', zIndex: 3 }}>
