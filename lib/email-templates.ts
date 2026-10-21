@@ -324,3 +324,43 @@ ${unsubUrl ? `<p style="font-family:Georgia,serif;font-size:10px;color:rgba(241,
 export function emailOrdineSpedito({ nome, ordineId, trackingUrl }: { nome: string; ordineId: string; trackingUrl: string }) {
   return `<!DOCTYPE html><html><head><meta charset="utf-8"></head><body style="margin:0;padding:0;background:#e8d2c3;"><table width="100%" cellpadding="0" cellspacing="0" style="background:#e8d2c3;padding:40px 20px;"><tr><td><table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;margin:0 auto;background:#f1eae4;border-radius:4px;overflow:hidden;"><tr><td style="background:#3a2e2b;padding:40px;text-align:center;"><p style="font-family:Georgia,serif;font-size:22px;letter-spacing:0.28em;color:#f1eae4;margin:0;">ANOINTED</p><p style="font-family:Georgia,serif;font-size:10px;letter-spacing:0.18em;color:#c1a99a;margin:8px 0 0;">CHOSEN. SET APART. APPOINTED.</p></td></tr><tr><td style="padding:48px 40px;text-align:center;"><p style="font-family:Georgia,serif;font-size:10px;letter-spacing:0.2em;color:#c1a99a;margin:0 0 16px;">— ORDER SHIPPED —</p><h1 style="font-family:Georgia,serif;font-size:28px;font-weight:400;color:#3a2e2b;margin:0 0 16px;">On its way to you, ${nome}.</h1><p style="font-family:Georgia,serif;font-size:14px;line-height:1.8;color:#5d4d42;margin:0 0 8px;">Il tuo ordine <strong>#${ordineId.slice(0,8).toUpperCase()}</strong> has been shipped.</p><p style="font-family:Georgia,serif;font-size:14px;line-height:1.8;color:#5d4d42;margin:0 0 40px;">You can track your package in real time by clicking the button below.</p><a href="${trackingUrl}" style="display:inline-block;background:#3a2e2b;color:#f1eae4;font-family:Georgia,serif;font-size:11px;letter-spacing:0.16em;text-decoration:none;padding:16px 40px;border-radius:2px;">TRACK YOUR ORDER →</a><p style="font-family:Georgia,serif;font-size:12px;color:#c1a99a;margin:40px 0 0;">For any questions, contact us at <a href="mailto:info@anointed.it" style="color:#3a2e2b;">info@anointed.it</a></p></td></tr><tr><td style="background:#3a2e2b;padding:32px 40px;text-align:center;"><p style="font-family:Georgia,serif;font-size:11px;letter-spacing:0.14em;color:#c1a99a;margin:0 0 8px;">ANOINTED</p><p style="font-family:Georgia,serif;font-size:10px;color:rgba(241,234,228,0.4);margin:0;">© 2026 Anointed. All rights reserved.</p></td></tr></table></td></tr></table></body></html>`
 }
+
+// Email di conferma iscrizione newsletter (doppio consenso)
+export function emailConfermaNewsletter({ locale = 'en', confirmUrl }: { locale?: 'en' | 'it'; confirmUrl: string }) {
+  const isIt = locale === 'it'
+  const L = isIt
+    ? { heading: 'Conferma la tua iscrizione', body: 'Hai chiesto di iscriverti alla newsletter di ANOINTED. Conferma il tuo indirizzo con un clic: subito dopo ti invieremo il tuo codice sconto.', cta: 'CONFERMA ISCRIZIONE', ignore: 'Se non sei stata tu, ignora questa email: non verrai iscritta e non riceverai altro. Il link scade tra 7 giorni.' }
+    : { heading: 'Confirm your subscription', body: 'You asked to join the ANOINTED newsletter. Confirm your address with one click and we will send you your discount code right after.', cta: 'CONFIRM SUBSCRIPTION', ignore: 'If this was not you, just ignore this email: you will not be subscribed and you will not receive anything else. The link expires in 7 days.' }
+  return `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width"></head>
+<body style="margin:0;padding:0;background:#e8d2c3;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#e8d2c3;padding:40px 20px;">
+<tr><td>
+<table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;margin:0 auto;background:#f1eae4;border-radius:4px;overflow:hidden;">
+  <tr>
+    <td style="background:#3a2e2b;padding:36px;text-align:center;">
+      <p style="font-family:Georgia,serif;font-size:22px;letter-spacing:0.28em;color:#f1eae4;margin:0;">ANOINTED</p>
+    </td>
+  </tr>
+  <tr>
+    <td style="padding:44px 40px;text-align:center;">
+      <h1 style="font-family:Georgia,serif;font-size:24px;font-style:italic;font-weight:400;color:#3a2e2b;margin:0 0 24px;">${L.heading}</h1>
+      <p style="font-family:Georgia,serif;font-size:14px;line-height:1.85;color:#5d4d42;margin:0 0 32px;">${L.body}</p>
+      <a href="${confirmUrl}" style="display:inline-block;background:#3a2e2b;color:#f1eae4;font-family:Georgia,serif;font-size:11px;letter-spacing:0.16em;text-decoration:none;padding:14px 32px;">${L.cta}</a>
+      <p style="font-family:Georgia,serif;font-size:11px;line-height:1.7;color:#8a7a70;margin:32px 0 0;">${L.ignore}</p>
+    </td>
+  </tr>
+  <tr>
+    <td style="background:#3a2e2b;padding:24px 40px;text-align:center;">
+      <p style="font-family:Georgia,serif;font-size:10px;color:rgba(241,234,228,0.55);margin:0;">${datiVenditore()}</p>
+    </td>
+  </tr>
+</table>
+</td></tr>
+</table>
+</body>
+</html>
+  `
+}

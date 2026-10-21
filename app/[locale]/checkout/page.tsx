@@ -22,6 +22,7 @@ export default function CheckoutPage() {
   const [scontoApplicato, setScontoApplicato] = useState<ScontoApplicato | null>(null)
   const [scontoError, setScontoError] = useState('')
   const [needsNewsletter, setNeedsNewsletter] = useState(false)
+  const [nlInfo, setNlInfo] = useState('')
   const [consensoNl, setConsensoNl] = useState(false)
   const [terminiOk, setTerminiOk] = useState(false)
   const [iscrivendo, setIscrivendo] = useState(false)
@@ -127,6 +128,7 @@ export default function CheckoutPage() {
     if (data.valido) {
       setScontoApplicato(data.sconto)
       setNeedsNewsletter(false)
+      setNlInfo('')
     } else if (data.error === 'NEWSLETTER_REQUIRED') {
       setNeedsNewsletter(true)
       setScontoError('')
@@ -140,12 +142,23 @@ export default function CheckoutPage() {
   async function iscriviEUsaCodice() {
     if (!form.email || !consensoNl) return
     setIscrivendo(true)
-    await fetch('/api/newsletter', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: form.email, tipo: 'popup', locale, consenso: true }),
-    })
+    setNlInfo('')
+    let res: Response | null = null
+    try {
+      res = await fetch('/api/newsletter', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: form.email, tipo: 'checkout', locale, consenso: true }),
+      })
+    } catch { /* rete */ }
+    if (!res || !res.ok) {
+      setScontoError(locale === 'it' ? "Non siamo riusciti a inviare l'email di conferma. Controlla l'indirizzo e riprova." : 'We could not send the confirmation email. Please check the address and try again.')
+      setIscrivendo(false)
+      return
+    }
+    const d = await res.json().catch(() => ({}))
     setNeedsNewsletter(false)
-    await validaSconto()
+    if (d.gia) await validaSconto()
+    else setNlInfo(locale === 'it' ? "Ti abbiamo inviato un'email: conferma l'iscrizione, poi torna qui e premi APPLICA." : 'We have sent you an email: confirm your subscription, then come back here and press APPLY.')
     setIscrivendo(false)
   }
 
@@ -348,6 +361,7 @@ export default function CheckoutPage() {
                 </div>
               )}
               {scontoError && <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#c97a6b', margin: '0.5rem 0 0' }}>{scontoError}</p>}
+              {nlInfo && <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#5d4d42', margin: '0.5rem 0 0' }}>{nlInfo}</p>}
               {needsNewsletter && (
                 <div style={{ margin: '0.5rem 0 0' }}>
                   <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#c97a6b', margin: '0 0 0.5rem' }}>

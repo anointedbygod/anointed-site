@@ -10,6 +10,9 @@ export default function NewsletterPopup() {
   const [email, setEmail] = useState('')
   const [privacy, setPrivacy] = useState(false)
   const [sent, setSent] = useState(false)
+  const [gia, setGia] = useState(false)
+  const [errore, setErrore] = useState('')
+  const [invio, setInvio] = useState(false)
   const pathname = usePathname()
   const locale = pathname.startsWith('/it') ? 'it' : 'en'
 
@@ -71,11 +74,24 @@ export default function NewsletterPopup() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (!email || !privacy) return
-    await fetch('/api/newsletter', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, tipo: 'popup', locale, consenso: true }),
-    })
+    if (!email || !privacy || invio) return
+    setInvio(true); setErrore('')
+    let res: Response | null = null
+    try {
+      res = await fetch('/api/newsletter', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, tipo: 'popup', locale, consenso: true }),
+      })
+    } catch { /* rete */ }
+    setInvio(false)
+    if (!res || !res.ok) {
+      setErrore(res?.status === 429
+        ? (locale === 'it' ? 'Troppi tentativi, riprova tra qualche minuto.' : 'Too many attempts, please try again in a few minutes.')
+        : (locale === 'it' ? "Non siamo riusciti a inviare l'email. Controlla l'indirizzo e riprova." : 'We could not send the email. Please check the address and try again.'))
+      return
+    }
+    const d = await res.json().catch(() => ({}))
+    setGia(d.gia === true)
     setSent(true)
     const expire = Date.now() + 7 * 24 * 60 * 60 * 1000
     localStorage.setItem('anointed_popup_seen', String(expire))
@@ -95,8 +111,10 @@ export default function NewsletterPopup() {
     micro:      locale === 'it'
       ? 'Iscrivendoti accetti di ricevere comunicazioni da Anointed. Puoi cancellare in qualsiasi momento.'
       : 'By subscribing you agree to receive communications from Anointed. Unsubscribe at any time.',
-    thanksTitle: locale === 'it' ? 'Sei dentro.' : "You're in.",
-    thanksSub:  locale === 'it' ? 'Controlla la tua email: il tuo codice sconto ti aspetta.' : 'Check your email: your discount code is on its way.',
+    thanksTitle: gia ? (locale === 'it' ? 'Sei già dentro.' : "You're already in.") : (locale === 'it' ? 'Quasi fatto.' : 'Almost there.'),
+    thanksSub:  gia
+      ? (locale === 'it' ? 'Sei già iscritta: usa il codice sconto che ti abbiamo inviato.' : 'You are already subscribed: use the discount code we sent you.')
+      : (locale === 'it' ? "Ti abbiamo inviato un'email: conferma l'iscrizione e ti arriverà il tuo codice sconto." : 'We have sent you an email: confirm your subscription and your discount code will follow.'),
     thanksSpam: locale === 'it' ? 'Non la vedi? Dai un\'occhiata anche nello spam.' : "Don't see it? Check your spam folder too.",
     thanksCta:  locale === 'it' ? 'INIZIA A FARE SHOPPING' : 'START SHOPPING',
   }
@@ -177,8 +195,9 @@ export default function NewsletterPopup() {
                   <button type="submit" style={{ width: '100%', background: '#3a2e2b', color: '#f1eae4', padding: '16px', border: 'none', fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.18em', fontWeight: 500, cursor: 'pointer', transition: 'background 0.25s, transform 0.25s' }}
                     onMouseEnter={e => { e.currentTarget.style.background = '#5d4d42'; e.currentTarget.style.transform = 'translateY(-1px)' }}
                     onMouseLeave={e => { e.currentTarget.style.background = '#3a2e2b'; e.currentTarget.style.transform = 'translateY(0)' }}>
-                    {t.cta}
+                    {invio ? '...' : t.cta}
                   </button>
+                  {errore && <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#c97a6b', margin: 0 }}>{errore}</p>}
                 </form>
 
                 <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', color: 'rgba(58,46,43,0.35)', lineHeight: 1.6, margin: '1.25rem 0 0' }}>{t.micro}</p>
