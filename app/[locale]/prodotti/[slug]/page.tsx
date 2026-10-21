@@ -11,7 +11,7 @@ import WishlistButton from '@/components/WishlistButton'
 interface Variante { id: string; taglia: string; colore: string; stock: number; colore_id?: string }
 interface ImgColore { url: string; ordine: number }
 interface ColoreData { id: string; nome: string; prezzo_aggiuntivo: number; immagini_colore: ImgColore[]; varianti: Variante[] }
-interface Prodotto { id: string; nome: string; prezzo: number; descrizione: string; immagini: string[]; slug: string; categoria: string; varianti: Variante[]; prezzo_per_colore: boolean }
+interface Prodotto { id: string; nome: string; prezzo: number; descrizione: string; composizione?: string | null; cura?: string | null; paese_origine?: string | null; produttore?: string | null; immagini: string[]; slug: string; categoria: string; varianti: Variante[]; prezzo_per_colore: boolean }
 
 export default function ProdottoPage() {
   const params = useParams()
@@ -175,6 +175,18 @@ export default function ProdottoPage() {
               <>
                 <div style={{ height: '1px', background: 'rgba(193,169,154,0.3)', margin: '1.5rem 0' }} />
                 <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', lineHeight: 1.8, color: '#5d4d42', margin: 0 }}>{prodotto.descrizione}</p>
+              </>
+            )}
+
+            {(prodotto.composizione || prodotto.cura || prodotto.paese_origine || prodotto.produttore) && (
+              <>
+                <div style={{ height: '1px', background: 'rgba(193,169,154,0.3)', margin: '1.5rem 0' }} />
+                <dl style={{ margin: 0, display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '0.55rem 1.25rem', fontFamily: 'Inter, sans-serif', fontSize: '12px', lineHeight: 1.7, color: '#5d4d42' }}>
+                  {prodotto.composizione && (<><dt style={{ letterSpacing: '0.12em', fontSize: '10px', color: '#3a2e2b', fontWeight: 500, paddingTop: '2px' }}>{locale === 'it' ? 'COMPOSIZIONE' : 'COMPOSITION'}</dt><dd style={{ margin: 0 }}>{prodotto.composizione}</dd></>)}
+                  {prodotto.cura && (<><dt style={{ letterSpacing: '0.12em', fontSize: '10px', color: '#3a2e2b', fontWeight: 500, paddingTop: '2px' }}>{locale === 'it' ? 'CURA' : 'CARE'}</dt><dd style={{ margin: 0 }}>{prodotto.cura}</dd></>)}
+                  {prodotto.paese_origine && (<><dt style={{ letterSpacing: '0.12em', fontSize: '10px', color: '#3a2e2b', fontWeight: 500, paddingTop: '2px' }}>{locale === 'it' ? 'ORIGINE' : 'ORIGIN'}</dt><dd style={{ margin: 0 }}>{prodotto.paese_origine}</dd></>)}
+                  {prodotto.produttore && (<><dt style={{ letterSpacing: '0.12em', fontSize: '10px', color: '#3a2e2b', fontWeight: 500, paddingTop: '2px' }}>{locale === 'it' ? 'PRODUTTORE' : 'MANUFACTURER'}</dt><dd style={{ margin: 0 }}>{prodotto.produttore}</dd></>)}
+                </dl>
               </>
             )}
 
