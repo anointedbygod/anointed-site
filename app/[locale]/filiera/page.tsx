@@ -15,71 +15,98 @@ function useVisible(threshold = 0.15) {
   return { ref, visible }
 }
 
-// NOTE: struttura con testi PLACEHOLDER. I fatti su Cariaggi (sede a Cagli,
-// oltre 60 anni di storia, fibre pregiate come cashmere e seta) arrivano dal
-// sito pubblico del lanificio. Tutto il resto va sostituito con i testi
-// approvati da Sofia / Cariaggi. Nessun riferimento ad altri marchi o
-// azionisti: se verra' approvato, va aggiunto qui in modo esplicito.
+// Testi forniti da Sofia. Como: nessun produttore citato (sono più produttori).
+// I contenuti su Cariaggi (storia, sostenibilità) sono tratti dal sito pubblico del lanificio.
 const CONTENT = {
   en: {
     eyebrow: 'OUR SUPPLY CHAIN',
-    heroTitle1: 'Fabrics with a place',
-    heroTitle2: 'and a story.',
-    heroBody: 'Every Anointed piece begins long before the first cut: in the Italian mill where the fibres become cloth.',
-    introTitle: 'Born in Italy, from fibre to finished piece.',
+    heroTitle1: 'The Art of',
+    heroTitle2: 'Italian Craftsmanship',
+    heroBody: 'At ANOINTED, quality begins with the materials we choose and the people who bring our creations to life.',
     introBody: [
-      'Anointed fabrics are woven in Italy by Lanificio Cariaggi, a historic textile company working with fine natural fibres.',
-      '[Placeholder text — to be replaced with the approved story of the partnership between Anointed and Cariaggi.]',
+      'Rooted in Italian textile traditions, we carefully select exceptional materials and collaborate with skilled artisans who share our commitment to quality, authenticity, and timeless elegance.',
+      'We believe true luxury lies not only in what we create, but also in how it is made.',
     ],
-    millLabel: 'THE MILL',
-    millTitle: 'Lanificio Cariaggi',
-    millBody: '[Placeholder text — short description of the mill, its history and its way of working, approved by Cariaggi.]',
+    millLabel: '01 — LANIFICIO CARIAGGI',
+    millTitle: 'The Art of Cashmere',
+    millBlocks: [
+      { h: 'Italian Excellence Since 1958', p: [
+        "Founded in 1958 in Cagli, in Italy's Marche region, Cariaggi is one of the world's leading manufacturers of luxury cashmere yarns, internationally recognized for its exceptional quality, innovation, and Italian textile expertise.",
+        'With over 65 years of experience, Cariaggi transforms carefully selected cashmere fibres from China and Mongolia into premium yarns spun in Italy, combining advanced technologies with generations of traditional craftsmanship.',
+      ] },
+      { h: 'Sustainability & Animal Welfare', p: [
+        'Beyond exceptional quality, Cariaggi places strong emphasis on responsible sourcing, environmental sustainability, and animal welfare.',
+        'Its commitment includes internationally recognized initiatives such as the Good Cashmere Standard and the Sustainable Fibre Alliance, which promote the welfare of cashmere goats, responsible land management, and improved conditions for local herding communities.',
+        'At ANOINTED, we have chosen Cariaggi not only for the exceptional quality of its cashmere, but also for its commitment to responsible practices and respect for animals and the environment.',
+      ] },
+    ],
     facts: [
       { value: 'Cagli', label: 'Marche, Italy' },
-      { value: '60+', label: 'years of textile tradition' },
-      { value: 'Cashmere & silk', label: 'fine natural fibres' },
+      { value: '1958', label: 'founded — 65+ years of tradition' },
+      { value: 'Cashmere', label: 'luxury yarns spun in Italy' },
     ],
     photoMill: 'MILL PHOTO',
-    pillarsTitle: 'What it means for you.',
-    pillars: [
-      { title: 'Fine natural fibres', body: '[Placeholder — why cashmere and silk, how they feel and how they last.]' },
-      { title: 'Made in Italy', body: '[Placeholder — craftsmanship, construction and the Italian standard Anointed works to.]' },
-      { title: 'Made to last', body: '[Placeholder — pieces designed to be worn for years, not seasons.]' },
+    blocks: [
+      { label: '02 — COMO', title: 'The Art of Silk', bg: '#f1eae4', p: [
+        'Located in Northern Italy, Como is one of the world\'s most renowned silk-producing districts, with a centuries-old tradition of textile excellence.',
+        'Combining generations of craftsmanship with advanced technologies, the region is internationally recognized for its expertise in silk weaving, printing, and finishing.',
+        "At ANOINTED, we select premium silk from textile manufacturers in the Como district, valuing its exceptional quality, natural lustre, softness, and refined elegance.",
+        'Through our silk creations, we celebrate the heritage of Italian textile craftsmanship and the timeless beauty of this precious material.',
+      ] },
+      { label: '03 — MADE IN ITALY', title: 'Our Commitment to Craftsmanship', bg: '#e8d2c3', p: [
+        'At ANOINTED, Made in Italy represents more than a label. It reflects our commitment to quality, authenticity, and the preservation of Italian craftsmanship.',
+        'We believe in supporting local businesses, independent manufacturers, and skilled artisans, recognizing the importance of preserving traditional expertise and creating opportunities within Italian communities.',
+        'By choosing to collaborate with Italian producers, we aim to contribute to the growth of local businesses while celebrating the knowledge, dedication, and attention to detail that make Italian craftsmanship exceptional.',
+        'From the selection of materials to the finishing touches, every creation reflects our belief that true luxury is not only about what we make, but also about the people and values behind it.',
+      ] },
     ],
-    quote: '[Placeholder — a few words from Sofia on why she chose this mill.]',
-    quoteBy: 'Sofia Meneghetti',
-    storyLink: 'Read the Anointed story',
+    storyLink: 'Read the ANOINTED story',
     ctaTitle: 'Feel the difference.',
     ctaButton: 'DISCOVER THE COLLECTION',
   },
   it: {
     eyebrow: 'LA NOSTRA FILIERA',
-    heroTitle1: 'Tessuti con un luogo',
-    heroTitle2: 'e una storia.',
-    heroBody: 'Ogni capo Anointed nasce molto prima del primo taglio: nel lanificio italiano dove le fibre diventano tessuto.',
-    introTitle: 'Nato in Italia, dalla fibra al capo finito.',
+    heroTitle1: "L'Arte dell'",
+    heroTitle2: 'Artigianalità Italiana',
+    heroBody: 'In ANOINTED la qualità nasce dai materiali che scegliamo e dalle persone che danno vita alle nostre creazioni.',
     introBody: [
-      'I tessuti di Anointed sono tessuti in Italia dal Lanificio Cariaggi, storica azienda tessile che lavora fibre naturali pregiate.',
-      '[Testo segnaposto — da sostituire con la storia approvata della collaborazione tra Anointed e Cariaggi.]',
+      'Radicati nelle tradizioni tessili italiane, selezioniamo con cura materiali eccezionali e collaboriamo con abili artigiani che condividono il nostro impegno per qualità, autenticità ed eleganza senza tempo.',
+      'Crediamo che il vero lusso non risieda solo in ciò che creiamo, ma anche nel modo in cui viene realizzato.',
     ],
-    millLabel: 'IL LANIFICIO',
-    millTitle: 'Lanificio Cariaggi',
-    millBody: '[Testo segnaposto — breve descrizione del lanificio, della sua storia e del modo di lavorare, approvata da Cariaggi.]',
+    millLabel: '01 — LANIFICIO CARIAGGI',
+    millTitle: 'L\'Arte del Cashmere',
+    millBlocks: [
+      { h: 'Eccellenza italiana dal 1958', p: [
+        "Fondato nel 1958 a Cagli, nelle Marche, Cariaggi è uno dei principali produttori al mondo di filati di cashmere di lusso, riconosciuto a livello internazionale per l'eccezionale qualità, l'innovazione e la competenza tessile italiana.",
+        'Con oltre 65 anni di esperienza, Cariaggi trasforma fibre di cashmere accuratamente selezionate, provenienti da Cina e Mongolia, in filati pregiati lavorati in Italia, unendo tecnologie avanzate e generazioni di sapere artigianale.',
+      ] },
+      { h: 'Sostenibilità e benessere animale', p: [
+        "Oltre all'eccezionale qualità, Cariaggi pone grande attenzione all'approvvigionamento responsabile, alla sostenibilità ambientale e al benessere animale.",
+        'Il suo impegno include iniziative riconosciute a livello internazionale come il Good Cashmere Standard e la Sustainable Fibre Alliance, che promuovono il benessere delle capre da cashmere, la gestione responsabile del territorio e migliori condizioni per le comunità locali di pastori.',
+        "In ANOINTED abbiamo scelto Cariaggi non solo per l'eccezionale qualità del suo cashmere, ma anche per il suo impegno verso pratiche responsabili e il rispetto di animali e ambiente.",
+      ] },
+    ],
     facts: [
       { value: 'Cagli', label: 'Marche, Italia' },
-      { value: '60+', label: 'anni di tradizione tessile' },
-      { value: 'Cashmere e seta', label: 'fibre naturali pregiate' },
+      { value: '1958', label: 'fondato — oltre 65 anni di tradizione' },
+      { value: 'Cashmere', label: 'filati di lusso lavorati in Italia' },
     ],
     photoMill: 'FOTO DEL LANIFICIO',
-    pillarsTitle: 'Cosa significa per te.',
-    pillars: [
-      { title: 'Fibre naturali pregiate', body: '[Segnaposto — perché cashmere e seta, come si sentono e come durano.]' },
-      { title: 'Made in Italy', body: "[Segnaposto — artigianalità, costruzione e lo standard italiano a cui lavora Anointed.]" },
-      { title: 'Pensati per durare', body: '[Segnaposto — capi pensati per essere indossati per anni, non per una stagione.]' },
+    blocks: [
+      { label: '02 — COMO', title: "L'Arte della Seta", bg: '#f1eae4', p: [
+        'Situata nel Nord Italia, Como è uno dei distretti serici più rinomati al mondo, con una tradizione tessile secolare di eccellenza.',
+        'Unendo generazioni di sapere artigianale e tecnologie avanzate, il territorio è riconosciuto a livello internazionale per la sua competenza nella tessitura, nella stampa e nella nobilitazione della seta.',
+        "In ANOINTED selezioniamo seta pregiata da produttori tessili del distretto di Como, apprezzandone l'eccezionale qualità, la naturale lucentezza, la morbidezza e la raffinata eleganza.",
+        "Con le nostre creazioni in seta celebriamo il patrimonio dell'artigianato tessile italiano e la bellezza senza tempo di questo materiale prezioso.",
+      ] },
+      { label: '03 — MADE IN ITALY', title: "Il nostro impegno per l'artigianalità", bg: '#e8d2c3', p: [
+        "In ANOINTED il Made in Italy è più di un'etichetta. Riflette il nostro impegno per la qualità, l'autenticità e la tutela dell'artigianato italiano.",
+        "Crediamo nel sostenere le imprese locali, i produttori indipendenti e gli abili artigiani, riconoscendo l'importanza di preservare il sapere tradizionale e di creare opportunità nelle comunità italiane.",
+        "Scegliendo di collaborare con produttori italiani, vogliamo contribuire alla crescita delle imprese locali celebrando la conoscenza, la dedizione e l'attenzione al dettaglio che rendono eccezionale l'artigianato italiano.",
+        'Dalla scelta dei materiali alle rifiniture, ogni creazione riflette la nostra convinzione che il vero lusso non riguarda solo ciò che realizziamo, ma anche le persone e i valori che ci sono dietro.',
+      ] },
     ],
-    quote: '[Segnaposto — poche parole di Sofia su perché ha scelto questo lanificio.]',
-    quoteBy: 'Sofia Meneghetti',
-    storyLink: 'Leggi la storia di Anointed',
+    storyLink: 'Leggi la storia di ANOINTED',
     ctaTitle: 'Senti la differenza.',
     ctaButton: 'SCOPRI LA COLLEZIONE',
   },
@@ -112,10 +139,9 @@ export default function FilieraPage() {
         </p>
       </section>
 
-      <Intro title={t.introTitle} body={t.introBody} />
+      <Intro body={t.introBody} />
       <Mill t={t} />
-      <Pillars title={t.pillarsTitle} pillars={t.pillars} />
-      <Quote quote={t.quote} by={t.quoteBy} />
+      {t.blocks.map((b, i) => <TextBlock key={i} {...b} />)}
 
       {/* CTA finale */}
       <section style={{ padding: '6rem 1.5rem', textAlign: 'center', background: '#f1eae4' }}>
@@ -141,7 +167,7 @@ export default function FilieraPage() {
   )
 }
 
-function Intro({ title, body }: { title: string; body: string[] }) {
+function Intro({ body }: { body: string[] }) {
   const { ref, visible } = useVisible()
   return (
     <section ref={ref} style={{ background: '#f1eae4', padding: '6rem 1.5rem 3rem' }}>
@@ -150,11 +176,8 @@ function Intro({ title, body }: { title: string; body: string[] }) {
         opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(24px)',
         transition: 'opacity 0.9s ease, transform 0.9s ease',
       }}>
-        <h2 style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(1.6rem, 2.5vw, 2.4rem)', fontWeight: 300, color: '#3a2e2b', lineHeight: 1.25, margin: '0 0 1.75rem' }}>
-          {title}
-        </h2>
         {body.map((p, i) => (
-          <p key={i} style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', lineHeight: 1.9, color: '#5d4d42', margin: '0 0 1.1rem' }}>{p}</p>
+          <p key={i} style={{ fontFamily: 'Inter, sans-serif', fontSize: i === 1 ? '16px' : '14px', fontStyle: i === 1 ? 'italic' : 'normal', lineHeight: 1.9, color: '#5d4d42', margin: '0 0 1.1rem' }}>{p}</p>
         ))}
       </div>
     </section>
@@ -165,7 +188,7 @@ function Mill({ t }: { t: typeof CONTENT['en'] }) {
   const { ref, visible } = useVisible()
   return (
     <section ref={ref} style={{ background: '#3a2e2b', padding: '6rem 1.5rem' }}>
-      <div className="fil-grid" style={{ maxWidth: '1100px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5rem', alignItems: 'center' }}>
+      <div className="fil-grid" style={{ maxWidth: '1100px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5rem', alignItems: 'start' }}>
         <div style={{
           aspectRatio: '4/5', background: 'rgba(241,234,228,0.05)', border: '1px solid rgba(241,234,228,0.1)',
           borderRadius: '2px', display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -179,9 +202,16 @@ function Mill({ t }: { t: typeof CONTENT['en'] }) {
           transition: 'opacity 0.9s ease 0.2s, transform 0.9s ease 0.2s',
         }}>
           <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.14em', fontWeight: 500, color: '#c1a99a', margin: '0 0 0.75rem' }}>{t.millLabel}</p>
-          <h2 style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(1.6rem, 2.5vw, 2.4rem)', fontWeight: 300, color: '#f1eae4', margin: '0 0 1.5rem', lineHeight: 1.2 }}>{t.millTitle}</h2>
-          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', lineHeight: 1.85, color: 'rgba(241,234,228,0.65)', margin: '0 0 2.25rem', maxWidth: '440px' }}>{t.millBody}</p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
+          <h2 style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(1.6rem, 2.5vw, 2.4rem)', fontWeight: 300, color: '#f1eae4', margin: '0 0 1.75rem', lineHeight: 1.2 }}>{t.millTitle}</h2>
+          {t.millBlocks.map((b, i) => (
+            <div key={i} style={{ marginBottom: '1.75rem' }}>
+              <h3 style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.14em', fontWeight: 500, color: '#c1a99a', margin: '0 0 0.9rem' }}>{b.h.toUpperCase()}</h3>
+              {b.p.map((p, j) => (
+                <p key={j} style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', lineHeight: 1.85, color: 'rgba(241,234,228,0.65)', margin: '0 0 0.9rem', maxWidth: '460px' }}>{p}</p>
+              ))}
+            </div>
+          ))}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem', marginTop: '2rem' }}>
             {t.facts.map((f, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'baseline', gap: '1rem', borderTop: '1px solid rgba(241,234,228,0.1)', paddingTop: '1rem' }}>
                 <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '1.3rem', fontWeight: 300, color: '#f1eae4', minWidth: '9rem' }}>{f.value}</span>
@@ -200,53 +230,20 @@ function Mill({ t }: { t: typeof CONTENT['en'] }) {
   )
 }
 
-function Pillars({ title, pillars }: { title: string; pillars: { title: string; body: string }[] }) {
+function TextBlock({ label, title, p, bg }: { label: string; title: string; p: string[]; bg: string }) {
   const { ref, visible } = useVisible()
   return (
-    <section ref={ref} style={{ background: '#f1eae4', padding: '6rem 1.5rem' }}>
-      <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-        <h2 style={{
-          fontFamily: 'Inter, sans-serif', fontSize: 'clamp(1.6rem, 2.5vw, 2.4rem)', fontWeight: 300, color: '#3a2e2b',
-          textAlign: 'center', margin: '0 0 3.5rem', lineHeight: 1.25,
-          opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(20px)',
-          transition: 'opacity 0.9s ease, transform 0.9s ease',
-        }}>{title}</h2>
-        <div className="fil-pillars" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2.5rem' }}>
-          {pillars.map((p, i) => (
-            <div key={i} style={{
-              borderTop: '1px solid rgba(193,169,154,0.5)', paddingTop: '1.5rem',
-              opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(24px)',
-              transition: `opacity 0.8s ease ${0.1 + i * 0.12}s, transform 0.8s ease ${0.1 + i * 0.12}s`,
-            }}>
-              <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.18em', color: '#c1a99a', margin: '0 0 0.9rem' }}>0{i + 1}</p>
-              <h3 style={{ fontFamily: 'Inter, sans-serif', fontSize: '1.15rem', fontWeight: 300, color: '#3a2e2b', margin: '0 0 0.9rem' }}>{p.title}</h3>
-              <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '13.5px', lineHeight: 1.8, color: '#5d4d42', margin: 0 }}>{p.body}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-      <style>{`
-        @media (max-width: 767px) {
-          .fil-pillars { grid-template-columns: 1fr !important; gap: 2rem !important; }
-        }
-      `}</style>
-    </section>
-  )
-}
-
-function Quote({ quote, by }: { quote: string; by: string }) {
-  const { ref, visible } = useVisible()
-  return (
-    <section ref={ref} style={{ background: '#e8d2c3', padding: '5.5rem 1.5rem' }}>
+    <section ref={ref} style={{ background: bg, padding: '6rem 1.5rem' }}>
       <div style={{
-        maxWidth: '720px', margin: '0 auto', textAlign: 'center',
+        maxWidth: '680px', margin: '0 auto', textAlign: 'center',
         opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(24px)',
         transition: 'opacity 0.9s ease, transform 0.9s ease',
       }}>
-        <p style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', fontSize: 'clamp(1.2rem, 2vw, 1.7rem)', lineHeight: 1.6, color: '#3a2e2b', margin: '0 0 1.5rem' }}>
-          “{quote}”
-        </p>
-        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.2em', color: '#5d4d42', margin: 0 }}>— {by.toUpperCase()}</p>
+        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.14em', fontWeight: 500, color: '#5d4d42', margin: '0 0 0.75rem' }}>{label}</p>
+        <h2 style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(1.6rem, 2.5vw, 2.4rem)', fontWeight: 300, color: '#3a2e2b', lineHeight: 1.25, margin: '0 0 1.75rem' }}>{title}</h2>
+        {p.map((x, i) => (
+          <p key={i} style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', lineHeight: 1.9, color: '#5d4d42', margin: '0 0 1.1rem' }}>{x}</p>
+        ))}
       </div>
     </section>
   )

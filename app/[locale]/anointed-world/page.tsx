@@ -21,7 +21,7 @@ interface EventItem {
   location: string
   title: string
   body: string[]
-  closing: string
+  closing?: string
   link?: string
 }
 
@@ -32,18 +32,6 @@ const CONTENT = {
     upcoming: 'Upcoming',
     learnMore: 'Learn more',
     events: [
-      {
-        date: '10 October 2026',
-        location: 'Rome, Italy',
-        title: 'Anointed at Connection Business',
-        body: [
-          "On October 10th, Sofia Meneghetti, Founder of Anointed, will take part in Connection Business in Rome — an event created to bring together entrepreneurs, professionals and people who believe in the power of meaningful connections.",
-          "For Anointed, being part of this event reflects one of the ideas at the heart of the brand: the right encounters can open new perspectives, create opportunities and sometimes change the direction of a journey.",
-          "During the event, Sofia will share part of her experience as an entrepreneur and founder, speaking about connection, vision and the importance of surrounding yourself with people who can challenge, inspire and encourage you to grow.",
-          "Connection Business is also an opportunity to meet Sofia in person, discover more about the world of Anointed and connect with a growing community built around fashion, purpose, entrepreneurship and meaningful relationships.",
-        ],
-        closing: 'Meet Sofia. Discover Anointed. Create new connections.',
-      },
       {
         date: '21 November 2026',
         location: 'Tuscany, Italy',
@@ -59,6 +47,22 @@ const CONTENT = {
         link: 'https://equipherconference.com/italy/',
       },
     ] as EventItem[],
+    past: "Past events",
+    pastEvents: [
+      {
+        date: "10 October 2026",
+        location: "Rome, Italy",
+        title: "ANOINTED at Connection Business",
+        body: [
+          "On October 10th, Sofia Meneghetti, Founder of ANOINTED, took the stage at Connection Business in Rome, an event that brought together entrepreneurs, professionals, and individuals who believe in the power of meaningful connections.",
+          "During her talk, Sofia shared her entrepreneurial journey and the story behind the creation of ANOINTED, highlighting how meaningful encounters, a clear vision, and the courage to take action can turn an idea into reality.",
+          "Drawing from her personal experience, she spoke about the importance of believing in a vision, even when the path ahead is not yet clear, and surrounding yourself with people who inspire, challenge, and encourage you to grow.",
+          "Her message was also an invitation to the younger generation: to believe in their potential, pursue their dreams, and have the courage to take the first step, even before having all the answers.",
+          "This philosophy is deeply connected to the vision behind ANOINTED, a brand created not only to express identity through fashion, but also to inspire people to recognize their worth, embrace their purpose, and believe in something greater.",
+          "For ANOINTED, Connection Business represented more than an opportunity to share its story. It was a moment to connect, inspire, and remind others that every meaningful journey begins with the courage to believe in what is possible.",
+        ],
+      },
+    ] as EventItem[],
   },
   it: {
     heroTitle: ['Dove il brand', 'prende vita.'],
@@ -66,18 +70,6 @@ const CONTENT = {
     upcoming: 'In programma',
     learnMore: 'Scopri di più',
     events: [
-      {
-        date: '10 ottobre 2026',
-        location: 'Roma, Italia',
-        title: 'Anointed al Connection Business',
-        body: [
-          "Il 10 ottobre, Sofia Meneghetti, Founder di Anointed, parteciperà al Connection Business di Roma — un evento nato per riunire imprenditori, professionisti e persone che credono nel potere delle connessioni autentiche.",
-          "Per Anointed, essere parte di questo evento riflette una delle idee al centro del brand: gli incontri giusti possono aprire nuove prospettive, creare opportunità e a volte cambiare la direzione di un percorso.",
-          "Durante l'evento, Sofia condividerà parte della sua esperienza come imprenditrice e fondatrice, parlando di connessione, visione e dell'importanza di circondarsi di persone capaci di sfidarti, ispirarti e spingerti a crescere.",
-          "Connection Business è anche un'occasione per incontrare Sofia di persona, scoprire più da vicino il mondo di Anointed e connettersi con una community in crescita costruita attorno a moda, scopo, imprenditorialità e relazioni autentiche.",
-        ],
-        closing: 'Incontra Sofia. Scopri Anointed. Crea nuove connessioni.',
-      },
       {
         date: '21 novembre 2026',
         location: 'Toscana, Italia',
@@ -91,6 +83,22 @@ const CONTENT = {
         ],
         closing: 'Vieni a salutarci, incontra Sofia ed entra nel mondo di Anointed.',
         link: 'https://equipherconference.com/italy/',
+      },
+    ] as EventItem[],
+    past: "Eventi passati",
+    pastEvents: [
+      {
+        date: "10 ottobre 2026",
+        location: "Roma, Italia",
+        title: "ANOINTED al Connection Business",
+        body: [
+          "Il 10 ottobre Sofia Meneghetti, Founder di ANOINTED, è salita sul palco di Connection Business a Roma, un evento che ha riunito imprenditori, professionisti e persone che credono nel potere delle connessioni autentiche.",
+          "Durante il suo intervento, Sofia ha condiviso il proprio percorso imprenditoriale e la storia dietro la nascita di ANOINTED, sottolineando come incontri significativi, una visione chiara e il coraggio di agire possano trasformare un'idea in realtà.",
+          "Attingendo alla propria esperienza personale, ha parlato dell'importanza di credere in una visione anche quando la strada davanti non è ancora chiara, e di circondarsi di persone che ispirano, sfidano e incoraggiano a crescere.",
+          "Il suo messaggio è stato anche un invito alle nuove generazioni: credere nel proprio potenziale, inseguire i propri sogni e avere il coraggio di fare il primo passo, anche prima di avere tutte le risposte.",
+          "Questa filosofia è profondamente legata alla visione di ANOINTED, un brand nato non solo per esprimere l'identità attraverso la moda, ma anche per ispirare le persone a riconoscere il proprio valore, abbracciare il proprio scopo e credere in qualcosa di più grande.",
+          "Per ANOINTED, Connection Business è stato più di un'occasione per raccontare la propria storia. È stato un momento per connettersi, ispirare e ricordare agli altri che ogni percorso significativo inizia con il coraggio di credere in ciò che è possibile.",
+        ],
       },
     ] as EventItem[],
   },
@@ -181,6 +189,15 @@ export default function AnointedWorldPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
             {t.events.map((ev, i) => <EventCard key={i} ev={ev} learnMore={t.learnMore} />)}
           </div>
+          <h2 style={{
+            fontFamily: 'Inter, sans-serif', fontSize: 'clamp(1.4rem, 2vw, 2rem)', fontWeight: 300,
+            color: '#3a2e2b', textAlign: 'center', margin: '5rem 0 3.5rem',
+          }}>
+            {t.past}
+          </h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
+            {t.pastEvents.map((ev, i) => <EventCard key={i} ev={ev} learnMore={t.learnMore} />)}
+          </div>
         </div>
       </section>
 
@@ -245,13 +262,13 @@ function EventCard({ ev, learnMore }: { ev: EventItem; learnMore: string }) {
         ))}
       </div>
 
-      <div style={{
+      {(ev.closing || ev.link) && <div style={{
         borderTop: '1px solid rgba(193,169,154,0.3)', paddingTop: '1.5rem',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem',
       }}>
-        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', fontStyle: 'italic', color: '#3a2e2b', margin: 0 }}>
+        {ev.closing && <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', fontStyle: 'italic', color: '#3a2e2b', margin: 0 }}>
           {ev.closing}
-        </p>
+        </p>}
         {ev.link && (
           <a href={ev.link} target="_blank" rel="noopener noreferrer" style={{
             fontFamily: 'Inter, sans-serif', fontSize: '10.5px', letterSpacing: '0.14em', fontWeight: 500,
@@ -265,7 +282,7 @@ function EventCard({ ev, learnMore }: { ev: EventItem; learnMore: string }) {
             {learnMore} →
           </a>
         )}
-      </div>
+      </div>}
     </div>
   )
 }

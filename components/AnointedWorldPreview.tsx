@@ -14,10 +14,10 @@ interface EventPreview {
 const TR = {
   en: {
     title: 'Anointed World',
-    subtitle: 'Where the brand comes to life — next on the calendar.',
+    subtitle: 'Where the brand comes to life.',
     more: 'More…',
     events: [
-      { date: '10 October 2026', location: 'Rome, Italy', title: 'Connection Business', teaser: 'Sofia Meneghetti joins entrepreneurs and founders for a day built around meaningful connections.' },
+      { date: '10 October 2026', location: 'Rome, Italy', title: 'Connection Business', teaser: 'Sofia Meneghetti took the stage in Rome to share the story behind ANOINTED.' },
       { date: '21 November 2026', location: 'Tuscany, Italy', title: 'EquipHer Italia — Casa Ruffino', teaser: 'A day for women, leadership and purpose — where the first idea of Anointed was born.' },
     ] as EventPreview[],
     nlTitle: 'Join the women who walk with purpose.',
@@ -28,10 +28,10 @@ const TR = {
   },
   it: {
     title: 'Anointed World',
-    subtitle: 'Dove il brand prende vita — il prossimo appuntamento.',
+    subtitle: 'Dove il brand prende vita.',
     more: 'Scopri di più…',
     events: [
-      { date: '10 ottobre 2026', location: 'Roma, Italia', title: 'Connection Business', teaser: 'Sofia Meneghetti incontra imprenditori e fondatori per una giornata dedicata alle connessioni autentiche.' },
+      { date: '10 ottobre 2026', location: 'Roma, Italia', title: 'Connection Business', teaser: 'Sofia Meneghetti è salita sul palco a Roma per raccontare la storia di ANOINTED.' },
       { date: '21 novembre 2026', location: 'Toscana, Italia', title: 'EquipHer Italia — Casa Ruffino', teaser: "Una giornata dedicata a donne, leadership e scopo — dove è nata la prima idea di Anointed." },
     ] as EventPreview[],
     nlTitle: 'Unisciti alle donne che camminano con scopo.',
