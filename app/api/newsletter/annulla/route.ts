@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase-admin'
 import { firmaValida } from '@/lib/unsubscribe'
+import { brevoDisiscrivi } from '@/lib/brevo'
 
 // Disiscrizione con un clic dal link nelle email: revoca il consenso marketing
 // e ferma anche i promemoria del carrello.
@@ -15,6 +16,7 @@ export async function GET(req: Request) {
   }
 
   await supabaseAdmin.from('newsletter_iscritti').delete().eq('email', email)
+  await brevoDisiscrivi(email)
   await supabaseAdmin.from('carrelli_abbandonati').update({ completato: true }).eq('email', email).eq('completato', false)
 
   return NextResponse.redirect(new URL(`/${locale}/newsletter-annullata`, url.origin))

@@ -1,5 +1,6 @@
 import { supabaseAdmin } from '@/lib/supabase-admin'
 import { NextResponse } from 'next/server'
+import { brevoIscrivi } from '@/lib/brevo'
 
 export async function POST(req: Request) {
   const { email, tipo, locale, consenso } = await req.json()
@@ -26,6 +27,9 @@ export async function POST(req: Request) {
     if (errProva) {
       await supabaseAdmin.from('newsletter_iscritti').upsert(base, { onConflict: 'email' })
     }
+
+    // Sincronizza con la lista Brevo (consenso già verificato sopra)
+    await brevoIscrivi(emailLower)
 
     // Invia l'email di benvenuto solo alla prima iscrizione (non ad ogni re-invio del form)
     if (!esistente) {
