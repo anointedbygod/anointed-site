@@ -20,6 +20,8 @@ export default function ProdottiPage() {
   const [tabs, setTabs] = useState<Tab[]>([])
   const [loading, setLoading] = useState(true)
   const [activeCat, setActiveCat] = useState(searchParams.get('cat') || '')
+  const [genere, setGenere] = useState<string>(searchParams.get('genere') === 'man' ? 'man' : 'woman')
+  const soon = COMING_SOON || genere !== 'woman'
 
   const allLabel = locale === 'it' ? 'Tutte le Collezioni' : 'All Collections'
   const allTabLabel = locale === 'it' ? 'Tutti' : 'All'
@@ -48,7 +50,7 @@ export default function ProdottiPage() {
     ? prodotti
     : prodotti.filter(p => p.sezioni?.slug === activeCat)
 
-  const activeLabel = activeCat ? (activeTab?.label || allLabel) : allLabel
+  const activeLabel = activeCat && !soon ? (activeTab?.label || allLabel) : allLabel
 
   return (
     <main style={{ background: '#f1eae4', minHeight: '100vh', paddingTop: '64px' }}>
@@ -56,13 +58,13 @@ export default function ProdottiPage() {
         <h1 style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(1.8rem, 3vw, 2.8rem)', fontWeight: 300, color: '#3a2e2b', margin: 0, letterSpacing: '0.04em' }}>{activeLabel}</h1>
         <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', marginTop: '1.25rem' }}>
           {GENERI.map(g => (
-            <span key={g.value} style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.18em', color: '#3a2e2b', borderBottom: '1px solid #3a2e2b', paddingBottom: '4px' }}>{g.label.toUpperCase()}</span>
+            <button key={g.value} onClick={() => { setGenere(g.value); setActiveCat('') }} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.18em', color: genere === g.value ? '#3a2e2b' : '#c1a99a', borderBottom: genere === g.value ? '1px solid #3a2e2b' : '1px solid transparent', paddingBottom: '4px', transition: 'color 0.2s, border-color 0.2s' }}>{g.label.toUpperCase()}</button>
           ))}
         </div>
       </div>
 
       <div style={{ padding: '0 1.5rem', maxWidth: '1200px', margin: '0 auto' }}>
-        {tabs.length > 1 && (
+        {!soon && tabs.length > 1 && (
           <div style={{ display: 'flex', gap: '0', overflowX: 'auto', borderBottom: '1px solid rgba(193,169,154,0.3)', scrollbarWidth: 'none', marginBottom: '3rem' }}>
             {tabs.map(tab => (
               <button key={tab.value} onClick={() => setActiveCat(tab.value)} style={{
@@ -80,13 +82,17 @@ export default function ProdottiPage() {
           </div>
         )}
 
-        {!loading && (
+        {!loading && !soon && (
           <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', color: '#c1a99a', letterSpacing: '0.1em', marginBottom: '2rem' }}>
             {filtered.length} {locale === 'it' ? 'prodotti' : 'products'}
           </p>
         )}
 
-        {loading ? (
+        {soon ? (
+          <div style={{ textAlign: 'center', padding: '6rem 1rem 8rem' }}>
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', letterSpacing: '0.24em', color: '#5d4d42' }}>COMING SOON</p>
+          </div>
+        ) : loading ? (
           <div style={{ textAlign: 'center', padding: '5rem', color: '#c1a99a', fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.16em' }}>LOADING...</div>
         ) : filtered.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '5rem' }}>

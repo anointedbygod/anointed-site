@@ -1,7 +1,13 @@
-// Interruttore globale: finché è true i capi sono "Coming soon" e l'acquisto è disattivato
-// (sia nell'interfaccia sia lato server, nell'API checkout). Metti false al lancio.
+// Interruttore globale: finché è true i capi e le categorie sono "COMING SOON":
+// nomi nascosti sia nell'interfaccia sia nelle API pubbliche, acquisto bloccato lato server.
+// Al lancio metti false.
 export const COMING_SOON = true
 
-// Sottocategorie di primo livello in Collections. Per aggiungere "Man": nuova voce qui
-// (e, quando ci saranno i prodotti, un campo "genere" sui prodotti per filtrare).
-export const GENERI = [{ value: 'woman', label: 'Woman' }] as const
+// Sottocategorie di primo livello in Collections (ognuna avrà le sue categorie e i suoi prodotti).
+// "Man" non è ancora lanciato: mostra sempre COMING SOON. Quando ci saranno i dati,
+// serve un campo "genere" su sezioni/prodotti nel database per filtrare.
+export const GENERI = [
+  { value: 'woman', label: 'Woman' },
+  { value: 'man', label: 'Man' },
+] as const
+export type Genere = (typeof GENERI)[number]['value']

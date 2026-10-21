@@ -1,4 +1,5 @@
 'use client'
+import { COMING_SOON } from '@/lib/config'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
@@ -35,7 +36,8 @@ export default function Footer() {
 
           <div>
             <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.18em', color: 'rgba(241,234,228,0.3)', margin: '0 0 1.25rem' }}>{t.collections.toUpperCase()}</p>
-            {sezioni.map(sez => (
+            {COMING_SOON && <span style={{ display: 'block', fontFamily: 'Inter, sans-serif', fontSize: '12px', letterSpacing: '0.1em', color: 'rgba(241,234,228,0.4)' }}>COMING SOON</span>}
+            {!COMING_SOON && sezioni.map(sez => (
               <Link key={sez.slug} href={`/${locale}/prodotti?cat=${sez.slug}`} style={{ display: 'block', fontFamily: 'Inter, sans-serif', fontSize: '12px', letterSpacing: '0.1em', color: 'rgba(241,234,228,0.55)', textDecoration: 'none', marginBottom: '0.6rem', transition: 'color 0.2s' }}
                 onMouseEnter={e => e.currentTarget.style.color = '#c1a99a'}
                 onMouseLeave={e => e.currentTarget.style.color = 'rgba(241,234,228,0.55)'}>

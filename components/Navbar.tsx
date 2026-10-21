@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { useCarrello } from '@/lib/carrello'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import AccountMenu from '@/components/AccountMenu'
+import GenereMenu from '@/components/GenereMenu'
 import { usePathname } from 'next/navigation'
 
 interface SezioneNav { nome: string; slug: string }
@@ -107,18 +108,7 @@ export default function Navbar({ forceOpaque = false, onCartClick = () => {} }: 
 
             {/* Dropdown desktop — solo sezioni attive dal DB */}
             <div style={{ position: 'absolute', top: 'calc(100% + 1rem)', left: 0, background: '#f1eae4', border: '1px solid rgba(193,169,154,0.4)', borderRadius: '2px', padding: '0.5rem 0', minWidth: '200px', opacity: collectionsOpen ? 1 : 0, pointerEvents: collectionsOpen ? 'all' : 'none', transform: collectionsOpen ? 'translateY(0)' : 'translateY(-8px)', transition: 'opacity 0.2s, transform 0.2s', boxShadow: '0 12px 32px rgba(58,46,43,0.08)' }}>
-              {sezioniDyn.length === 0 ? (
-                <span style={{ ...linkStyle, color: '#c1a99a', cursor: 'default' }}>
-                  {locale === 'it' ? 'In arrivo' : 'Coming soon'}
-                </span>
-              ) : sezioniDyn.map((sez, i) => (
-                <Link key={sez.slug} href={`/${locale}/prodotti?cat=${sez.slug}`} onClick={() => setCollectionsOpen(false)}
-                  style={{ ...linkStyle, borderBottom: i < sezioniDyn.length - 1 ? '1px solid rgba(193,169,154,0.15)' : 'none' }}
-                  onMouseEnter={e => e.currentTarget.style.color = '#c1a99a'}
-                  onMouseLeave={e => e.currentTarget.style.color = '#3a2e2b'}>
-                  {sez.nome.toUpperCase()}
-                </Link>
-              ))}
+              <GenereMenu locale={locale} sezioni={sezioniDyn} onNavigate={() => setCollectionsOpen(false)} variant="desktop" />
             </div>
           </div>
 
@@ -163,13 +153,7 @@ export default function Navbar({ forceOpaque = false, onCartClick = () => {} }: 
         {/* Mobile menu drawer */}
         <div style={{ overflow: 'hidden', maxHeight: mobileOpen ? '100vh' : '0', transition: 'max-height 0.4s cubic-bezier(0.16,1,0.3,1)', background: 'rgba(241,234,228,0.98)', backdropFilter: 'blur(12px)' }}>
           <div style={{ padding: '1rem 1.25rem 2rem' }}>
-            {/* Sezioni dinamiche dal DB */}
-            {sezioniDyn.map((sez) => (
-              <Link key={sez.slug} href={`/${locale}/prodotti?cat=${sez.slug}`} onClick={() => setMobileOpen(false)}
-                style={{ display: 'block', padding: '0.875rem 0', borderBottom: '1px solid rgba(193,169,154,0.2)', fontFamily: 'Inter, sans-serif', fontSize: '13px', letterSpacing: '0.16em', color: '#3a2e2b', textDecoration: 'none' }}>
-                {sez.nome.toUpperCase()}
-              </Link>
-            ))}
+            <GenereMenu locale={locale} sezioni={sezioniDyn} onNavigate={() => setMobileOpen(false)} variant="mobile" />
             {/* Storia */}
             <Link href={`/${locale}/storia`} onClick={() => setMobileOpen(false)}
               style={{ display: 'block', padding: '0.875rem 0', borderBottom: '1px solid rgba(193,169,154,0.2)', fontFamily: 'Inter, sans-serif', fontSize: '13px', letterSpacing: '0.16em', color: '#3a2e2b', textDecoration: 'none' }}>

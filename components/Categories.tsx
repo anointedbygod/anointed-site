@@ -3,6 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useRef, useEffect, useState, useCallback } from 'react'
 import { usePathname } from 'next/navigation'
+import { COMING_SOON, GENERI, type Genere } from '@/lib/config'
 
 const DYN_COLORS = [
   { bg: '#3a2e2b', monogram: '/monogram-beige.svg', light: false },
@@ -19,6 +20,7 @@ export default function Categories() {
   const [dragging, setDragging] = useState(false)
   const [items, setItems] = useState<CatItem[]>([])
   const [loaded, setLoaded] = useState(false)
+  const [genere, setGenere] = useState<Genere>('woman')
   const dragStart = useRef(0)
   const ref = useRef<HTMLElement>(null)
   const pathname = usePathname()
@@ -47,7 +49,10 @@ export default function Categories() {
     return () => obs.disconnect()
   }, [])
 
-  const N = items.length
+  // Woman: categorie dal DB; Man: non ancora lanciato, 3 card segnaposto
+  const shown: CatItem[] = genere === 'woman' ? items : [0, 1, 2].map(i => ({ slug: `cs-man-${i}`, nome: '', ...DYN_COLORS[i % DYN_COLORS.length] }))
+  const soon = COMING_SOON || genere !== 'woman'
+  const N = shown.length
   const prev = useCallback(() => setActive(a => ((a - 1) % N + N) % N), [N])
   const next = useCallback(() => setActive(a => (a + 1) % N), [N])
 
@@ -75,6 +80,13 @@ export default function Categories() {
       <h2 style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(1.4rem, 2vw, 2rem)', fontWeight: 300, color: '#3a2e2b', textAlign: 'center', marginBottom: '2.5rem', opacity: visible ? 1 : 0, transition: 'opacity 0.8s ease' }}>
         {label}
       </h2>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '1.75rem', margin: '-1.25rem 0 2rem', opacity: visible ? 1 : 0, transition: 'opacity 0.8s ease' }}>
+        {GENERI.map(g => (
+          <button key={g.value} onClick={() => { setGenere(g.value); setActive(0) }} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0 0 4px', fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.18em', color: genere === g.value ? '#3a2e2b' : '#c1a99a', borderBottom: genere === g.value ? '1px solid #3a2e2b' : '1px solid transparent', transition: 'color 0.2s, border-color 0.2s' }}>
+            {g.label.toUpperCase()}
+          </button>
+        ))}
+      </div>
 
       <div
         style={{ position: 'relative', height: '460px', perspective: '1000px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: dragging ? 'grabbing' : 'grab', userSelect: 'none', opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(24px)', transition: 'opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s' }}
@@ -84,16 +96,16 @@ export default function Categories() {
         onTouchStart={e => { dragStart.current = e.touches[0].clientX }}
         onTouchEnd={e => { const d = e.changedTouches[0].clientX - dragStart.current; if (Math.abs(d) > 40) d < 0 ? next() : prev() }}>
 
-        {items.map((cat, i) => {
+        {shown.map((cat, i) => {
           const isActive = i === active
           return (
-            <Link key={cat.slug} href={`/${locale}/prodotti?cat=${cat.slug}`}
-              onClick={e => { if (!isActive) { e.preventDefault(); setActive(i) } }}
+            <Link key={cat.slug} href={soon ? '#' : `/${locale}/prodotti?genere=${genere}&cat=${cat.slug}`}
+              onClick={e => { if (soon || !isActive) { e.preventDefault(); if (!isActive) setActive(i) } }}
               style={{ position: 'absolute', width: '280px', height: '380px', background: cat.bg, borderRadius: '4px', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'flex-end', padding: '1.25rem', textDecoration: 'none', transformStyle: 'preserve-3d', transition: 'transform 0.55s cubic-bezier(0.25,0.46,0.45,0.94), opacity 0.55s ease, filter 0.55s ease, box-shadow 0.55s ease', overflow: 'hidden', ...getStyle(i) }}>
               <Image src={cat.monogram} alt="" width={48} height={48} style={{ position: 'absolute', top: '14px', left: '14px', width: '40px', height: '40px', opacity: 0.22, pointerEvents: 'none' }} />
               <Image src={cat.monogram} alt="" width={120} height={120} style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '120px', height: '120px', opacity: isActive ? 0.08 : 0.05, pointerEvents: 'none', transition: 'opacity 0.3s' }} />
               <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.18em', fontWeight: 500, color: cat.light ? '#3a2e2b' : '#f1eae4', position: 'relative', zIndex: 1 }}>
-                {cat.nome.toUpperCase()}
+                {soon ? 'COMING SOON' : cat.nome.toUpperCase()}
               </span>
             </Link>
           )
@@ -103,7 +115,7 @@ export default function Categories() {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '2rem', marginTop: '1.5rem' }}>
         <button onClick={prev} style={{ background: 'none', border: '1px solid rgba(193,169,154,0.4)', borderRadius: '50%', width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#3a2e2b', transition: 'border-color 0.2s, color 0.2s', fontSize: '14px' }} onMouseEnter={e => { e.currentTarget.style.borderColor = '#c1a99a'; e.currentTarget.style.color = '#c1a99a' }} onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(193,169,154,0.4)'; e.currentTarget.style.color = '#3a2e2b' }}>←</button>
         <div style={{ display: 'flex', gap: '8px' }}>
-          {items.map((_, i) => <button key={i} onClick={() => setActive(i)} style={{ width: i === active ? '20px' : '6px', height: '6px', borderRadius: '3px', border: 'none', cursor: 'pointer', padding: 0, background: i === active ? '#3a2e2b' : 'rgba(193,169,154,0.35)', transition: 'all 0.3s ease' }} />)}
+          {shown.map((_, i) => <button key={i} onClick={() => setActive(i)} style={{ width: i === active ? '20px' : '6px', height: '6px', borderRadius: '3px', border: 'none', cursor: 'pointer', padding: 0, background: i === active ? '#3a2e2b' : 'rgba(193,169,154,0.35)', transition: 'all 0.3s ease' }} />)}
         </div>
         <button onClick={next} style={{ background: 'none', border: '1px solid rgba(193,169,154,0.4)', borderRadius: '50%', width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#3a2e2b', transition: 'border-color 0.2s, color 0.2s', fontSize: '14px' }} onMouseEnter={e => { e.currentTarget.style.borderColor = '#c1a99a'; e.currentTarget.style.color = '#c1a99a' }} onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(193,169,154,0.4)'; e.currentTarget.style.color = '#3a2e2b' }}>→</button>
       </div>
