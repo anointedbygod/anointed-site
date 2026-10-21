@@ -1,5 +1,5 @@
 'use client'
-import { COMING_SOON, GENERI } from '@/lib/config'
+import { COMING_SOON, GENERI_ATTIVI } from '@/lib/config'
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
@@ -20,7 +20,7 @@ export default function ProdottiPage() {
   const [tabs, setTabs] = useState<Tab[]>([])
   const [loading, setLoading] = useState(true)
   const [activeCat, setActiveCat] = useState(searchParams.get('cat') || '')
-  const [genere, setGenere] = useState<string>(searchParams.get('genere') === 'man' ? 'man' : 'woman')
+  const [genere, setGenere] = useState<string>(GENERI_ATTIVI.find(g => g.value === searchParams.get('genere'))?.value || 'woman')
   const soon = COMING_SOON || genere !== 'woman'
 
   const allLabel = locale === 'it' ? 'Tutte le Collezioni' : 'All Collections'
@@ -57,7 +57,7 @@ export default function ProdottiPage() {
       <div style={{ padding: '4rem 1.5rem 2rem', textAlign: 'center', maxWidth: '1200px', margin: '0 auto' }}>
         <h1 style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(1.8rem, 3vw, 2.8rem)', fontWeight: 300, color: '#3a2e2b', margin: 0, letterSpacing: '0.04em' }}>{activeLabel}</h1>
         <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', marginTop: '1.25rem' }}>
-          {GENERI.map(g => (
+          {GENERI_ATTIVI.map(g => (
             <button key={g.value} onClick={() => { setGenere(g.value); setActiveCat('') }} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.18em', color: genere === g.value ? '#3a2e2b' : '#c1a99a', borderBottom: genere === g.value ? '1px solid #3a2e2b' : '1px solid transparent', paddingBottom: '4px', transition: 'color 0.2s, border-color 0.2s' }}>{g.label.toUpperCase()}</button>
           ))}
         </div>

@@ -3,7 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useRef, useEffect, useState, useCallback } from 'react'
 import { usePathname } from 'next/navigation'
-import { COMING_SOON, GENERI, type Genere } from '@/lib/config'
+import { COMING_SOON, GENERI_ATTIVI, type Genere } from '@/lib/config'
 
 const DYN_COLORS = [
   { bg: '#3a2e2b', monogram: '/monogram-beige.svg', light: false },
@@ -80,13 +80,13 @@ export default function Categories() {
       <h2 style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(1.4rem, 2vw, 2rem)', fontWeight: 300, color: '#3a2e2b', textAlign: 'center', marginBottom: '2.5rem', opacity: visible ? 1 : 0, transition: 'opacity 0.8s ease' }}>
         {label}
       </h2>
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '1.75rem', margin: '-1.25rem 0 2rem', opacity: visible ? 1 : 0, transition: 'opacity 0.8s ease' }}>
-        {GENERI.map(g => (
+      {GENERI_ATTIVI.length > 1 && <div style={{ display: 'flex', justifyContent: 'center', gap: '1.75rem', margin: '-1.25rem 0 2rem', opacity: visible ? 1 : 0, transition: 'opacity 0.8s ease' }}>
+        {GENERI_ATTIVI.map(g => (
           <button key={g.value} onClick={() => { setGenere(g.value); setActive(0) }} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0 0 4px', fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.18em', color: genere === g.value ? '#3a2e2b' : '#c1a99a', borderBottom: genere === g.value ? '1px solid #3a2e2b' : '1px solid transparent', transition: 'color 0.2s, border-color 0.2s' }}>
             {g.label.toUpperCase()}
           </button>
         ))}
-      </div>
+      </div>}
 
       <div
         style={{ position: 'relative', height: '460px', perspective: '1000px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: dragging ? 'grabbing' : 'grab', userSelect: 'none', opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(24px)', transition: 'opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s' }}

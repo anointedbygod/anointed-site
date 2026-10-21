@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { COMING_SOON, GENERI } from '@/lib/config'
+import { COMING_SOON, GENERI_ATTIVI } from '@/lib/config'
 
 interface Sez { nome: string; slug: string }
 
@@ -19,7 +19,7 @@ export default function GenereMenu({ locale, sezioni, onNavigate, variant }: {
 
   return (
     <div>
-      {GENERI.map(g => {
+      {GENERI_ATTIVI.map(g => {
         const isOpen = open === g.value
         const soon = COMING_SOON || g.value !== 'woman'
         const rows: (Sez | null)[] = soon ? Array.from({ length: g.value === 'woman' ? Math.max(sezioni.length, 1) : 1 }, () => null) : sezioni
