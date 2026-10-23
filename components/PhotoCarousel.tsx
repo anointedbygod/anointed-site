@@ -16,12 +16,11 @@ export default function PhotoCarousel({ foto, prev, next, intervalMs = 5500 }: {
   const [i, setI] = useState(0)
   const [anim, setAnim] = useState(true)
   const [pausa, setPausa] = useState(false)
-  const [ridotto, setRidotto] = useState(false)
+  const [ridotto, setRidotto] = useState(() => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches)
   const touchX = useRef<number | null>(null)
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setRidotto(mq.matches)
     const f = () => setRidotto(mq.matches)
     mq.addEventListener('change', f)
     return () => mq.removeEventListener('change', f)
