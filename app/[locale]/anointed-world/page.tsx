@@ -246,9 +246,9 @@ function EventCard({ ev, learnMore }: { ev: EventItem; learnMore: string }) {
         position: 'absolute', top: 0, left: 0, right: 0, height: '1px',
         background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent)',
       }} />
-      <div className={ev.image ? 'aw-ev-grid' : undefined} style={ev.image ? { display: 'grid', gridTemplateColumns: 'minmax(0, 5fr) minmax(0, 7fr)', gap: 'clamp(1.5rem, 3vw, 2.75rem)', alignItems: 'start' } : undefined}>
+      <div style={{ display: 'flow-root' }}>
         {ev.image && (
-          <figure style={{ margin: 0 }}>
+          <figure className="aw-ev-fig" style={{ margin: '0 clamp(1.5rem, 3vw, 2.75rem) 1.25rem 0', float: 'left', width: 'min(40%, 340px)' }}>
             <Image src={ev.image} alt={ev.imageAlt || ''} width={1282} height={1800} sizes="(max-width: 767px) 90vw, 320px"
               style={{ width: '100%', height: 'auto', borderRadius: '10px', display: 'block' }} />
             {ev.caption && (
@@ -256,7 +256,7 @@ function EventCard({ ev, learnMore }: { ev: EventItem; learnMore: string }) {
             )}
           </figure>
         )}
-        <div style={{ minWidth: 0 }}>
+        <div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.9rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
         <span style={{
@@ -275,16 +275,16 @@ function EventCard({ ev, learnMore }: { ev: EventItem; learnMore: string }) {
         {ev.title}
       </h3>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem', marginBottom: '2rem' }}>
+      <div style={{ marginBottom: '2rem' }}>
         {ev.body.map((p, i) => (
-          <p key={i} style={{ fontFamily: 'Inter, sans-serif', fontSize: '13.5px', lineHeight: 1.85, color: '#5d4d42', margin: 0 }}>
+          <p key={i} style={{ fontFamily: 'Inter, sans-serif', fontSize: '13.5px', lineHeight: 1.85, color: '#5d4d42', margin: i === ev.body.length - 1 ? 0 : '0 0 1.1rem' }}>
             {p}
           </p>
         ))}
       </div>
 
       {(ev.closing || ev.link) && <div style={{
-        borderTop: '1px solid rgba(193,169,154,0.3)', paddingTop: '1.5rem',
+        borderTop: '1px solid rgba(193,169,154,0.3)', paddingTop: '1.5rem', clear: 'both',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem',
       }}>
         {ev.closing && <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', fontStyle: 'italic', color: '#3a2e2b', margin: 0 }}>
@@ -306,7 +306,7 @@ function EventCard({ ev, learnMore }: { ev: EventItem; learnMore: string }) {
       </div>}
         </div>
       </div>
-      <style>{`@media (max-width: 767px) { .aw-ev-grid { grid-template-columns: 1fr !important; } }`}</style>
+      <style>{`@media (max-width: 767px) { .aw-ev-fig { float: none !important; width: 100% !important; margin: 0 0 1.5rem !important; } }`}</style>
     </div>
   )
 }
