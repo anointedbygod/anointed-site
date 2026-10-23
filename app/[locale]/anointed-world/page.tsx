@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useLayoutEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
+import Image from 'next/image'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -22,6 +23,9 @@ interface EventItem {
   title: string
   body: string[]
   closing?: string
+  image?: string
+  imageAlt?: string
+  caption?: string
   link?: string
 }
 
@@ -53,6 +57,9 @@ const CONTENT = {
         date: "10 October 2026",
         location: "Rome, Italy",
         title: "ANOINTED at Connection Business",
+        image: '/images/about/connection-business.jpg',
+        imageAlt: 'Sofia Meneghetti speaking on stage at Connection Business in Rome',
+        caption: 'Connection Business, Rome · 10 October 2026',
         body: [
           "On October 10th, Sofia Meneghetti, Founder of ANOINTED, took the stage at Connection Business in Rome, an event that brought together entrepreneurs, professionals, and individuals who believe in the power of meaningful connections.",
           "During her talk, Sofia shared her entrepreneurial journey and the story behind the creation of ANOINTED, highlighting how meaningful encounters, a clear vision, and the courage to take action can turn an idea into reality.",
@@ -91,6 +98,9 @@ const CONTENT = {
         date: "10 ottobre 2026",
         location: "Roma, Italia",
         title: "ANOINTED al Connection Business",
+        image: '/images/about/connection-business.jpg',
+        imageAlt: 'Sofia Meneghetti sul palco di Connection Business a Roma',
+        caption: 'Connection Business, Roma · 10 ottobre 2026',
         body: [
           "Il 10 ottobre Sofia Meneghetti, Founder di ANOINTED, è salita sul palco di Connection Business a Roma, un evento che ha riunito imprenditori, professionisti e persone che credono nel potere delle connessioni autentiche.",
           "Durante il suo intervento, Sofia ha condiviso il proprio percorso imprenditoriale e la storia dietro la nascita di ANOINTED, sottolineando come incontri significativi, una visione chiara e il coraggio di agire possano trasformare un'idea in realtà.",
@@ -236,6 +246,17 @@ function EventCard({ ev, learnMore }: { ev: EventItem; learnMore: string }) {
         position: 'absolute', top: 0, left: 0, right: 0, height: '1px',
         background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent)',
       }} />
+      <div className={ev.image ? 'aw-ev-grid' : undefined} style={ev.image ? { display: 'grid', gridTemplateColumns: 'minmax(0, 5fr) minmax(0, 7fr)', gap: 'clamp(1.5rem, 3vw, 2.75rem)', alignItems: 'start' } : undefined}>
+        {ev.image && (
+          <figure style={{ margin: 0 }}>
+            <Image src={ev.image} alt={ev.imageAlt || ''} width={1282} height={1800} sizes="(max-width: 767px) 90vw, 320px"
+              style={{ width: '100%', height: 'auto', borderRadius: '10px', display: 'block' }} />
+            {ev.caption && (
+              <figcaption style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.08em', color: '#5d4d42', margin: '0.75rem 0 0' }}>{ev.caption}</figcaption>
+            )}
+          </figure>
+        )}
+        <div style={{ minWidth: 0 }}>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.9rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
         <span style={{
@@ -283,6 +304,9 @@ function EventCard({ ev, learnMore }: { ev: EventItem; learnMore: string }) {
           </a>
         )}
       </div>}
+        </div>
+      </div>
+      <style>{`@media (max-width: 767px) { .aw-ev-grid { grid-template-columns: 1fr !important; } }`}</style>
     </div>
   )
 }
