@@ -8,8 +8,8 @@ export interface Foto { src: string; alt: string; position?: string }
 // Carosello discreto: scorre da solo (si ferma al passaggio del mouse, con il focus e a scheda
 // nascosta; niente autoplay se l'utente preferisce meno animazioni), frecce sottili che appaiono
 // al passaggio, puntini piccoli, swipe su touch. Scorrimento continuo con clone della prima foto.
-export default function PhotoCarousel({ foto, prev, next, intervalMs = 5500 }: {
-  foto: Foto[]; prev: string; next: string; intervalMs?: number
+export default function PhotoCarousel({ foto, prev, next, intervalMs = 5500, ratio = '4 / 3', sizes = '(max-width: 767px) 90vw, 760px' }: {
+  foto: Foto[]; prev: string; next: string; intervalMs?: number; ratio?: string; sizes?: string
 }) {
   const n = foto.length
   const slides = [...foto, foto[0]]
@@ -60,8 +60,8 @@ export default function PhotoCarousel({ foto, prev, next, intervalMs = 5500 }: {
         onTransitionEnd={() => { if (i === n) { setAnim(false); setI(0) } }}
         style={{ display: 'flex', transform: `translateX(-${i * 100}%)`, transition: anim ? 'transform 0.7s cubic-bezier(0.22,0.8,0.24,1)' : 'none' }}>
         {slides.map((f, k) => (
-          <div key={k} aria-hidden={k !== attivo && !(k === n && attivo === 0)} style={{ position: 'relative', flex: '0 0 100%', aspectRatio: '4 / 3' }}>
-            <Image src={f.src} alt={k === n ? '' : f.alt} fill sizes="(max-width: 767px) 90vw, 760px"
+          <div key={k} aria-hidden={k !== attivo && !(k === n && attivo === 0)} style={{ position: 'relative', flex: '0 0 100%', aspectRatio: ratio }}>
+            <Image src={f.src} alt={k === n ? '' : f.alt} fill sizes={sizes}
               style={{ objectFit: 'cover', objectPosition: f.position || '50% 50%' }} />
           </div>
         ))}
