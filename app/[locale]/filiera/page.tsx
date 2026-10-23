@@ -3,6 +3,8 @@
 import { useRef, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import Image from 'next/image'
+import PhotoCarousel from '@/components/PhotoCarousel'
 
 function useVisible(threshold = 0.15) {
   const [visible, setVisible] = useState(false)
@@ -46,6 +48,12 @@ const CONTENT = {
       { value: 'Cashmere', label: 'luxury yarns spun in Italy' },
     ],
     photoMill: 'MILL PHOTO',
+    slides: [
+      { src: '/images/about/cariaggi-cashmere.jpg', alt: 'Raw cashmere fibre', label: 'CASHMERE', logo: true },
+      { src: '/images/about/cariaggi-seta.jpg', alt: 'Silk fibres and a silk cocoon', label: 'SILK', logo: false },
+    ],
+    prevPhoto: 'Previous photo',
+    nextPhoto: 'Next photo',
     blocks: [
       { label: '02 — COMO', title: 'The Art of Silk', bg: '#f1eae4', p: [
         'Located in Northern Italy, Como is one of the world\'s most renowned silk-producing districts, with a centuries-old tradition of textile excellence.',
@@ -92,6 +100,12 @@ const CONTENT = {
       { value: 'Cashmere', label: 'filati di lusso lavorati in Italia' },
     ],
     photoMill: 'FOTO DEL LANIFICIO',
+    slides: [
+      { src: '/images/about/cariaggi-cashmere.jpg', alt: 'Fibra di cashmere grezza', label: 'CASHMERE', logo: true },
+      { src: '/images/about/cariaggi-seta.jpg', alt: 'Fibre di seta e un bozzolo', label: 'SETA', logo: false },
+    ],
+    prevPhoto: 'Foto precedente',
+    nextPhoto: 'Foto successiva',
     blocks: [
       { label: '02 — COMO', title: "L'Arte della Seta", bg: '#f1eae4', p: [
         'Situata nel Nord Italia, Como è uno dei distretti serici più rinomati al mondo, con una tradizione tessile secolare di eccellenza.',
@@ -189,13 +203,18 @@ function Mill({ t }: { t: typeof CONTENT['en'] }) {
   return (
     <section ref={ref} style={{ background: '#3a2e2b', padding: '6rem 1.5rem' }}>
       <div className="fil-grid" style={{ maxWidth: '1100px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5rem', alignItems: 'start' }}>
-        <div style={{
-          aspectRatio: '4/5', background: 'rgba(241,234,228,0.05)', border: '1px solid rgba(241,234,228,0.1)',
-          borderRadius: '2px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+        <div className="fil-photo" style={{
+          position: 'sticky', top: '96px',
           opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(30px)',
           transition: 'opacity 0.9s ease, transform 0.9s ease',
         }}>
-          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '9px', letterSpacing: '0.18em', color: 'rgba(241,234,228,0.25)' }}>{t.photoMill}</p>
+          <PhotoCarousel
+            tone="light" ratio="715 / 520" sizes="(max-width: 767px) 90vw, 520px"
+            prev={t.prevPhoto} next={t.nextPhoto}
+            foto={t.slides.map(sl => ({
+              src: sl.src, alt: sl.alt,
+              overlay: <EtichettaFoto testo={sl.label} logo={sl.logo} />,
+            }))} />
         </div>
         <div style={{
           opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(30px)',
@@ -224,6 +243,7 @@ function Mill({ t }: { t: typeof CONTENT['en'] }) {
       <style>{`
         @media (max-width: 767px) {
           .fil-grid { grid-template-columns: 1fr !important; gap: 2.5rem !important; }
+          .fil-photo { position: static !important; }
         }
       `}</style>
     </section>
@@ -246,5 +266,19 @@ function TextBlock({ label, title, p, bg }: { label: string; title: string; p: s
         ))}
       </div>
     </section>
+  )
+}
+
+// Etichetta sulla foto: nome del materiale nel font del marchio (Dallas) e, dove corretto, il logo Cariaggi in piccolo.
+function EtichettaFoto({ testo, logo }: { testo: string; logo: boolean }) {
+  return (
+    <div style={{
+      position: 'absolute', left: 0, right: 0, bottom: 0, padding: '1.6rem 1.25rem 1rem', pointerEvents: 'none',
+      display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between',
+      background: 'linear-gradient(0deg, rgba(241,234,228,0.7) 0%, rgba(241,234,228,0) 100%)',
+    }}>
+      <span style={{ fontFamily: 'Dallas, Inter, sans-serif', fontWeight: 700, fontSize: 'clamp(13px, 1.5vw, 17px)', letterSpacing: '0.2em', color: '#3a2e2b', lineHeight: 1 }}>{testo}</span>
+      {logo && <Image src="/images/about/cariaggi-logo.png" alt="Cariaggi" width={365} height={65} style={{ height: '15px', width: 'auto', opacity: 0.9 }} />}
+    </div>
   )
 }
