@@ -3,6 +3,7 @@
 import { useRef, useEffect, useLayoutEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import Image from 'next/image'
+import PhotoCarousel, { type Foto } from '@/components/PhotoCarousel'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -26,6 +27,7 @@ interface EventItem {
   image?: string
   imageAlt?: string
   caption?: string
+  gallery?: Foto[]
   link?: string
 }
 
@@ -49,6 +51,12 @@ const CONTENT = {
         ],
         closing: 'Come say hello, meet Sofia and step into the world of Anointed.',
         link: 'https://equipherconference.com/italy/',
+        gallery: [
+          { src: '/images/about/casa-ruffino-1.jpg', alt: 'A room at Casa Ruffino with two paper lamps and a window overlooking the garden and cypress trees' },
+          { src: '/images/about/casa-ruffino-2.jpg', alt: 'A guest relaxing on a lounger by the pool at Casa Ruffino, with vineyards in the background', position: '50% 62%' },
+          { src: '/images/about/casa-ruffino-3.jpg', alt: 'The pool and Italian garden at Casa Ruffino, surrounded by vineyards' },
+          { src: '/images/about/casa-ruffino-4.jpg', alt: 'Evening dinner in the courtyard of Casa Ruffino, lit by candles and string lights', position: '50% 62%' },
+        ],
       },
     ] as EventItem[],
     past: "Past events",
@@ -90,6 +98,12 @@ const CONTENT = {
         ],
         closing: 'Vieni a salutarci, incontra Sofia ed entra nel mondo di Anointed.',
         link: 'https://equipherconference.com/italy/',
+        gallery: [
+          { src: '/images/about/casa-ruffino-1.jpg', alt: 'Una stanza di Casa Ruffino con due lampade di carta e una finestra sul giardino e sui cipressi' },
+          { src: '/images/about/casa-ruffino-2.jpg', alt: 'Un\'ospite su una sdraio a bordo piscina a Casa Ruffino, con le vigne sullo sfondo', position: '50% 62%' },
+          { src: '/images/about/casa-ruffino-3.jpg', alt: 'La piscina e il giardino all\'italiana di Casa Ruffino, circondati dalle vigne' },
+          { src: '/images/about/casa-ruffino-4.jpg', alt: 'Cena serale nella corte di Casa Ruffino, illuminata da candele e luci', position: '50% 62%' },
+        ],
       },
     ] as EventItem[],
     past: "Eventi passati",
@@ -216,6 +230,9 @@ export default function AnointedWorldPage() {
 }
 
 function EventCard({ ev, learnMore }: { ev: EventItem; learnMore: string }) {
+  const isIt = usePathname()?.startsWith('/it')
+  const prevLabel = isIt ? 'Foto precedente' : 'Previous photo'
+  const nextLabel = isIt ? 'Foto successiva' : 'Next photo'
   const { ref, visible } = useVisible()
   const [hover, setHover] = useState(false)
 
@@ -246,6 +263,11 @@ function EventCard({ ev, learnMore }: { ev: EventItem; learnMore: string }) {
         position: 'absolute', top: 0, left: 0, right: 0, height: '1px',
         background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent)',
       }} />
+      {ev.gallery && (
+        <div style={{ marginBottom: 'clamp(1.5rem, 3vw, 2.25rem)' }}>
+          <PhotoCarousel foto={ev.gallery} prev={prevLabel} next={nextLabel} />
+        </div>
+      )}
       <div style={{ display: 'flow-root' }}>
         {ev.image && (
           <figure className="aw-ev-fig" style={{ margin: '0 clamp(1.5rem, 3vw, 2.75rem) 1.25rem 0', float: 'left', width: 'min(40%, 340px)' }}>
