@@ -153,7 +153,7 @@ export default function FilieraPage() {
           }
           .fil-hero > h1, .fil-hero > p { position: relative; z-index: 2; }
           @media (min-width: 768px) {
-            .fil-hero-photo { background: url('/images/about/hero-filiera.jpg') center/cover; }
+            .fil-hero-photo { background: url('/images/about/hero-filiera.jpg') center 4%/cover; }
           }
         `}</style>
         <h1 style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(2rem, 5vw, 3.8rem)', fontWeight: 300, color: '#f1eae4', lineHeight: 1.15, margin: '0 0 1.5rem', maxWidth: '720px' }}>
