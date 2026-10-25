@@ -8,7 +8,7 @@ import NewsletterPopup from '@/components/NewsletterPopup'
 import CartDrawer from '@/components/CartDrawer'
 import { useCarrello } from '@/lib/carrello'
 
-const OPAQUE_PATHS = ['/prodotti', '/storia', '/privacy', '/resi', '/contatti', '/checkout', '/ordini', '/account']
+const OPAQUE_PATHS = ['/prodotti', '/privacy', '/resi', '/contatti', '/checkout', '/ordini', '/account']
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const { drawerOpen, apriDrawer, chiudiDrawer } = useCarrello()
