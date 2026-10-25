@@ -50,6 +50,7 @@ const CONTENT = {
     slides: [
       { src: '/images/about/cariaggi-cashmere.jpg', alt: 'Raw cashmere fibre', label: 'CASHMERE', logo: true },
     ],
+    silkAlt: 'Silk fibres and a silk cocoon',
     prevPhoto: 'Previous photo',
     nextPhoto: 'Next photo',
     blocks: [
@@ -101,6 +102,7 @@ const CONTENT = {
     slides: [
       { src: '/images/about/cariaggi-cashmere.jpg', alt: 'Fibra di cashmere grezza', label: 'CASHMERE', logo: true },
     ],
+    silkAlt: 'Fibre di seta e un bozzolo',
     prevPhoto: 'Foto precedente',
     nextPhoto: 'Foto successiva',
     blocks: [
@@ -152,7 +154,7 @@ export default function FilieraPage() {
 
       <Intro body={t.introBody} />
       <Mill t={t} />
-      {t.blocks.map((b, i) => <TextBlock key={i} {...b} />)}
+      {t.blocks.map((b, i) => <TextBlock key={i} {...b} foto={i === 0 ? { src: '/images/about/cariaggi-seta.jpg', alt: t.silkAlt } : undefined} />)}
 
       {/* CTA finale */}
       <section style={{ padding: '6rem 1.5rem', textAlign: 'center', background: '#f1eae4' }}>
@@ -249,21 +251,46 @@ function Mill({ t }: { t: typeof CONTENT['en'] }) {
   )
 }
 
-function TextBlock({ label, title, p, bg }: { label: string; title: string; p: string[]; bg: string }) {
+function TextBlock({ label, title, p, bg, foto }: { label: string; title: string; p: string[]; bg: string; foto?: { src: string; alt: string } }) {
   const { ref, visible } = useVisible()
+  const anim = {
+    opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(24px)',
+    transition: 'opacity 0.9s ease, transform 0.9s ease',
+  } as const
+  const testo = (
+    <>
+      <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.14em', fontWeight: 500, color: '#5d4d42', margin: '0 0 0.75rem' }}>{label}</p>
+      <h2 style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(1.6rem, 2.5vw, 2.4rem)', fontWeight: 300, color: '#3a2e2b', lineHeight: 1.25, margin: '0 0 1.75rem' }}>{title}</h2>
+      {p.map((x, i) => (
+        <p key={i} style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', lineHeight: 1.9, color: '#5d4d42', margin: '0 0 1.1rem' }}>{x}</p>
+      ))}
+    </>
+  )
+  if (!foto) {
+    return (
+      <section ref={ref} style={{ background: bg, padding: '6rem 1.5rem' }}>
+        <div style={{ maxWidth: '680px', margin: '0 auto', textAlign: 'center', ...anim }}>{testo}</div>
+      </section>
+    )
+  }
+  // Con foto: foto a destra, testo a sinistra che prosegue sotto la foto; su mobile la foto va dopo il testo
   return (
     <section ref={ref} style={{ background: bg, padding: '6rem 1.5rem' }}>
-      <div style={{
-        maxWidth: '680px', margin: '0 auto', textAlign: 'center',
-        opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(24px)',
-        transition: 'opacity 0.9s ease, transform 0.9s ease',
-      }}>
-        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.14em', fontWeight: 500, color: '#5d4d42', margin: '0 0 0.75rem' }}>{label}</p>
-        <h2 style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(1.6rem, 2.5vw, 2.4rem)', fontWeight: 300, color: '#3a2e2b', lineHeight: 1.25, margin: '0 0 1.75rem' }}>{title}</h2>
-        {p.map((x, i) => (
-          <p key={i} style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', lineHeight: 1.9, color: '#5d4d42', margin: '0 0 1.1rem' }}>{x}</p>
-        ))}
+      <div className="fil-wrap2" style={{ maxWidth: '1100px', margin: '0 auto', display: 'flow-root', ...anim }}>
+        <div className="fil-photo2" style={{ float: 'right', width: 'min(45%, 480px)', margin: '0 0 1.5rem clamp(1.5rem, 3vw, 3rem)' }}>
+          <div style={{ position: 'relative', aspectRatio: '715 / 520', overflow: 'hidden' }}>
+            <Image src={foto.src} alt={foto.alt} fill sizes="(max-width: 767px) 90vw, 480px" style={{ objectFit: 'cover' }} />
+          </div>
+        </div>
+        <div className="fil-text2">{testo}</div>
       </div>
+      <style>{`
+        @media (max-width: 767px) {
+          .fil-wrap2 { display: flex !important; flex-direction: column; }
+          .fil-text2 { order: 1; }
+          .fil-photo2 { order: 2; float: none !important; width: 100% !important; margin: 0.5rem 0 0 !important; }
+        }
+      `}</style>
     </section>
   )
 }
