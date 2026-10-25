@@ -143,7 +143,7 @@ export default function InstagramShowcase() {
               }}>
                 {/* schermata del profilo Instagram reale */}
                 <div role="img" aria-label="Instagram @anointedworld.official" style={{
-                  flex: 1, marginTop: '24px', background: "url('/images/instagram/profilo.jpg') center top/cover #fff",
+                  flex: 1, marginTop: '24px', background: "url('/images/instagram/profilo-v2.jpg') center top/cover #fff",
                 }} />
 
                 {/* dark scrim + CTA, overlaid on the phone's own screen */}
