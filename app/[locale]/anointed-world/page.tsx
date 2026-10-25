@@ -161,14 +161,15 @@ export default function AnointedWorldPage() {
       {/* HERO */}
       <section ref={heroSectionRef} style={{
         minHeight: '85vh',
-        position: 'relative', overflow: 'hidden',
+        position: 'relative', overflow: 'hidden', background: '#140e0c',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         flexDirection: 'column', textAlign: 'center', padding: '0 1.5rem',
         paddingTop: '64px',
       }}>
         <div ref={heroPhotoRef} style={{
-          position: 'absolute', inset: 0, zIndex: 0,
-          background: "url('/images/about/stage.jpg') center 22%/cover",
+          position: 'absolute', top: '96px', left: 0, right: 0, bottom: 0, zIndex: 0,
+          background: "url('/images/about/stage.jpg') center 0%/cover",
+          WebkitMaskImage: 'linear-gradient(180deg, transparent 0%, #000 14%)', maskImage: 'linear-gradient(180deg, transparent 0%, #000 14%)',
           animation: 'awKenBurns 26s ease-in-out infinite alternate',
         }} />
         <div style={{
