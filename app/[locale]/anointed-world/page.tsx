@@ -167,9 +167,9 @@ export default function AnointedWorldPage() {
         paddingTop: '64px',
       }}>
         <div ref={heroPhotoRef} style={{
-          position: 'absolute', top: '96px', left: 0, right: 0, bottom: 0, zIndex: 0,
-          background: "url('/images/about/stage.jpg') center 0%/cover",
-          WebkitMaskImage: 'linear-gradient(180deg, transparent 0%, #000 14%)', maskImage: 'linear-gradient(180deg, transparent 0%, #000 14%)',
+          position: 'absolute', top: '72px', left: 0, right: 0, bottom: 0, zIndex: 0,
+          background: "url('/images/about/stage.jpg') center 17%/cover",
+          WebkitMaskImage: 'linear-gradient(180deg, transparent 0%, #000 10%)', maskImage: 'linear-gradient(180deg, transparent 0%, #000 10%)',
           animation: 'awKenBurns 26s ease-in-out infinite alternate',
         }} />
         <div style={{
