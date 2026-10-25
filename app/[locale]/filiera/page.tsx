@@ -4,7 +4,6 @@ import { useRef, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import Image from 'next/image'
-import PhotoCarousel from '@/components/PhotoCarousel'
 
 function useVisible(threshold = 0.15) {
   const [visible, setVisible] = useState(false)
@@ -50,7 +49,6 @@ const CONTENT = {
     photoMill: 'MILL PHOTO',
     slides: [
       { src: '/images/about/cariaggi-cashmere.jpg', alt: 'Raw cashmere fibre', label: 'CASHMERE', logo: true },
-      { src: '/images/about/cariaggi-seta.jpg', alt: 'Silk fibres and a silk cocoon', label: 'SILK', logo: false },
     ],
     prevPhoto: 'Previous photo',
     nextPhoto: 'Next photo',
@@ -102,7 +100,6 @@ const CONTENT = {
     photoMill: 'FOTO DEL LANIFICIO',
     slides: [
       { src: '/images/about/cariaggi-cashmere.jpg', alt: 'Fibra di cashmere grezza', label: 'CASHMERE', logo: true },
-      { src: '/images/about/cariaggi-seta.jpg', alt: 'Fibre di seta e un bozzolo', label: 'SETA', logo: false },
     ],
     prevPhoto: 'Foto precedente',
     nextPhoto: 'Foto successiva',
@@ -208,13 +205,10 @@ function Mill({ t }: { t: typeof CONTENT['en'] }) {
           opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(30px)',
           transition: 'opacity 0.9s ease, transform 0.9s ease',
         }}>
-          <PhotoCarousel
-            tone="light" frecceSempre ratio="715 / 520" sizes="(max-width: 767px) 90vw, 480px"
-            prev={t.prevPhoto} next={t.nextPhoto}
-            foto={t.slides.map(sl => ({
-              src: sl.src, alt: sl.alt,
-              overlay: <EtichettaFoto testo={sl.label} logo={sl.logo} />,
-            }))} />
+          <div style={{ position: 'relative', aspectRatio: '715 / 520', overflow: 'hidden' }}>
+            <Image src={t.slides[0].src} alt={t.slides[0].alt} fill sizes="(max-width: 767px) 90vw, 480px" style={{ objectFit: 'cover' }} />
+            <LogoCariaggi />
+          </div>
         </div>
         <div className="fil-text" style={{
           opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(30px)',
@@ -275,15 +269,14 @@ function TextBlock({ label, title, p, bg }: { label: string; title: string; p: s
 }
 
 // Etichetta sulla foto: nome del materiale nel font del marchio (Dallas) e, dove corretto, il logo Cariaggi in piccolo.
-function EtichettaFoto({ testo, logo }: { testo: string; logo: boolean }) {
+function LogoCariaggi() {
   return (
     <div style={{
       position: 'absolute', left: 0, right: 0, bottom: 0, padding: '1.6rem 1.25rem 1rem', pointerEvents: 'none',
-      display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between',
+      display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-end',
       background: 'linear-gradient(0deg, rgba(241,234,228,0.7) 0%, rgba(241,234,228,0) 100%)',
     }}>
-      <span style={{ fontFamily: 'Dallas, Inter, sans-serif', fontWeight: 700, fontSize: 'clamp(13px, 1.5vw, 17px)', letterSpacing: '0.2em', color: '#3a2e2b', lineHeight: 1 }}>{testo}</span>
-      {logo && <Image src="/images/about/cariaggi-logo.png" alt="Cariaggi" width={365} height={65} style={{ height: '15px', width: 'auto', opacity: 0.9 }} />}
+      <Image src="/images/about/cariaggi-logo.png" alt="Cariaggi" width={365} height={65} style={{ height: '15px', width: 'auto', opacity: 0.9 }} />
     </div>
   )
 }
