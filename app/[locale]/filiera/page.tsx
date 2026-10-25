@@ -202,21 +202,21 @@ function Mill({ t }: { t: typeof CONTENT['en'] }) {
   const { ref, visible } = useVisible()
   return (
     <section ref={ref} style={{ background: '#3a2e2b', padding: '6rem 1.5rem' }}>
-      <div className="fil-grid" style={{ maxWidth: '1100px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5rem', alignItems: 'start' }}>
+      <div className="fil-wrap" style={{ maxWidth: '1100px', margin: '0 auto', display: 'flow-root' }}>
         <div className="fil-photo" style={{
-          position: 'sticky', top: '96px',
+          float: 'left', width: 'min(45%, 480px)', margin: '0 clamp(1.5rem, 3vw, 3rem) 1.5rem 0',
           opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(30px)',
           transition: 'opacity 0.9s ease, transform 0.9s ease',
         }}>
           <PhotoCarousel
-            tone="light" ratio="715 / 520" sizes="(max-width: 767px) 90vw, 520px"
+            tone="light" ratio="715 / 520" sizes="(max-width: 767px) 90vw, 480px"
             prev={t.prevPhoto} next={t.nextPhoto}
             foto={t.slides.map(sl => ({
               src: sl.src, alt: sl.alt,
               overlay: <EtichettaFoto testo={sl.label} logo={sl.logo} />,
             }))} />
         </div>
-        <div style={{
+        <div className="fil-text" style={{
           opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(30px)',
           transition: 'opacity 0.9s ease 0.2s, transform 0.9s ease 0.2s',
         }}>
@@ -226,24 +226,29 @@ function Mill({ t }: { t: typeof CONTENT['en'] }) {
             <div key={i} style={{ marginBottom: '1.75rem' }}>
               <h3 style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.14em', fontWeight: 500, color: '#c1a99a', margin: '0 0 0.9rem' }}>{b.h.toUpperCase()}</h3>
               {b.p.map((p, j) => (
-                <p key={j} style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', lineHeight: 1.85, color: 'rgba(241,234,228,0.65)', margin: '0 0 0.9rem', maxWidth: '460px' }}>{p}</p>
+                <p key={j} style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', lineHeight: 1.85, color: 'rgba(241,234,228,0.65)', margin: '0 0 0.9rem' }}>{p}</p>
               ))}
             </div>
           ))}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem', marginTop: '2rem' }}>
-            {t.facts.map((f, i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'baseline', gap: '1rem', borderTop: '1px solid rgba(241,234,228,0.1)', paddingTop: '1rem' }}>
-                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '1.3rem', fontWeight: 300, color: '#f1eae4', minWidth: '9rem' }}>{f.value}</span>
-                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.1em', color: '#c1a99a' }}>{f.label}</span>
-              </div>
-            ))}
-          </div>
+        </div>
+        <div className="fil-facts" style={{
+          clear: 'both', display: 'flex', flexDirection: 'column', gap: '1.1rem', paddingTop: '1rem',
+          opacity: visible ? 1 : 0, transition: 'opacity 0.9s ease 0.3s',
+        }}>
+          {t.facts.map((f, i) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'baseline', gap: '1rem', borderTop: '1px solid rgba(241,234,228,0.1)', paddingTop: '1rem' }}>
+              <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '1.3rem', fontWeight: 300, color: '#f1eae4', minWidth: '9rem' }}>{f.value}</span>
+              <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.1em', color: '#c1a99a' }}>{f.label}</span>
+            </div>
+          ))}
         </div>
       </div>
       <style>{`
         @media (max-width: 767px) {
-          .fil-grid { grid-template-columns: 1fr !important; gap: 2.5rem !important; }
-          .fil-photo { position: static !important; }
+          .fil-wrap { display: flex !important; flex-direction: column; }
+          .fil-text { order: 1; }
+          .fil-photo { order: 2; float: none !important; width: 100% !important; margin: 0.5rem 0 2rem !important; }
+          .fil-facts { order: 3; }
         }
       `}</style>
     </section>
