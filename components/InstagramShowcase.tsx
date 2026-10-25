@@ -29,18 +29,6 @@ const TR = {
   },
 }
 
-const GRID = [
-  '/images/instagram/g1_door.jpg',
-  '/images/instagram/g2_box.jpg',
-  '/images/instagram/g3_jacket.jpg',
-  '/images/instagram/g4_quote1.jpg',
-  '/images/instagram/g5_ribbon.jpg',
-  '/images/instagram/g6_quote2.jpg',
-  '/images/instagram/g7_trousers.jpg',
-  '/images/instagram/g8_boxopen.jpg',
-  '/images/instagram/g9_coffee.jpg',
-]
-
 export default function InstagramShowcase() {
   const pathname = usePathname()
   const locale = (pathname?.startsWith('/it') ? 'it' : 'en') as 'en' | 'it'
@@ -153,43 +141,10 @@ export default function InstagramShowcase() {
                 width: '100%', height: '100%', borderRadius: '38px', overflow: 'hidden',
                 background: '#f1eae4', display: 'flex', flexDirection: 'column', position: 'relative',
               }}>
-                {/* IG header */}
-                <div style={{ padding: '30px 16px 10px', display: 'flex', flexDirection: 'column', gap: '10px', background: '#fff' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div style={{
-                      width: '52px', height: '52px', borderRadius: '50%', flexShrink: 0,
-                      background: 'linear-gradient(135deg, #3a2e2b, #c1a99a)',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      border: '2px solid #f1eae4',
-                    }}>
-                      <span style={{ fontFamily: 'Georgia, serif', fontSize: '18px', color: '#f1eae4', letterSpacing: '0.05em' }}>A</span>
-                    </div>
-                    <div style={{ flex: 1, display: 'flex', justifyContent: 'space-around', textAlign: 'center' }}>
-                      <div>
-                        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 600, color: '#3a2e2b', margin: 0 }}>{t.posts}</p>
-                        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '9.5px', color: '#8a7a6e', margin: 0 }}>posts</p>
-                      </div>
-                      <div>
-                        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 600, color: '#3a2e2b', margin: 0 }}>{t.followers}</p>
-                        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '9.5px', color: '#8a7a6e', margin: 0 }}>followers</p>
-                      </div>
-                      <div>
-                        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 600, color: '#3a2e2b', margin: 0 }}>{t.following}</p>
-                        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '9.5px', color: '#8a7a6e', margin: 0 }}>following</p>
-                      </div>
-                    </div>
-                  </div>
-                  <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', fontWeight: 600, letterSpacing: '0.04em', color: '#3a2e2b', margin: 0 }}>{t.handle}</p>
-                </div>
-                {/* grid */}
-                <div style={{
-                  flex: 1, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2px',
-                  background: '#fff', overflowY: 'auto',
-                }}>
-                  {GRID.map((src, i) => (
-                    <div key={i} style={{ aspectRatio: '1/1', background: `url(${src}) center/cover` }} />
-                  ))}
-                </div>
+                {/* schermata del profilo Instagram reale */}
+                <div role="img" aria-label="Instagram @anointedworld.official" style={{
+                  flex: 1, background: "url('/images/instagram/profilo.jpg') center top/cover #fff",
+                }} />
 
                 {/* dark scrim + CTA, overlaid on the phone's own screen */}
                 <div ref={scrimRef} style={{
