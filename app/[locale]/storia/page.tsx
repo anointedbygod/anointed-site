@@ -131,9 +131,15 @@ export default function StoriaPage() {
       }}>
         <div className="sto-hero-photo" aria-hidden="true" />
         <div className="sto-hero-shade" aria-hidden="true" />
+        <div className="sto-hero-blur" aria-hidden="true" />
         <style>{`
           .sto-hero-photo { position: absolute; inset: 0; z-index: 0; background: url('/images/about/hero-storia-mobile.jpg') center 38%/cover; }
           .sto-hero-shade { position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgba(20,14,12,0.75) 0%, rgba(20,14,12,0.6) 25%, rgba(20,14,12,0.6) 100%); }
+          .sto-hero-blur {
+            position: absolute; top: 0; left: 0; right: 0; height: 130px; z-index: 1; pointer-events: none;
+            -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+            -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 45%, transparent 100%); mask-image: linear-gradient(180deg, #000 0%, #000 45%, transparent 100%);
+          }
           .sto-hero > h1, .sto-hero > p { position: relative; z-index: 2; }
           @media (min-width: 768px) {
             .sto-hero-photo { background: url('/images/about/hero-storia.jpg') center/cover; }
