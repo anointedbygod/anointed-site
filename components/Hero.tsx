@@ -33,11 +33,7 @@ export default function Hero() {
       position: 'relative', height: '100vh', minHeight: '600px',
       overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center',
     }}>
-      <div style={{
-        position: 'absolute', inset: 0,
-        background: 'url(/images/about/hero.jpg) center 78%/cover',
-        zIndex: 0,
-      }} />
+      <div className="hero-bg" style={{ position: 'absolute', inset: 0, zIndex: 0 }} />
       <div style={{
         position: 'absolute', inset: 0,
         background: 'linear-gradient(180deg, rgba(20,14,12,0.35) 0%, rgba(20,14,12,0.15) 35%, rgba(20,14,12,0.1) 55%, rgba(20,14,12,0.55) 100%)',
@@ -89,6 +85,8 @@ export default function Hero() {
       </div>
 
       <style>{`
+        .hero-bg { background: url(/images/about/hero-desktop.jpg) center 40%/cover; }
+        @media (max-width: 767px) { .hero-bg { background: url(/images/about/hero-mobile.jpg) center 35%/cover; } }
         @keyframes scrollLine {
           0% { height: 0%; transform: translateY(0); }
           50% { height: 100%; transform: translateY(0); }
