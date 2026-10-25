@@ -146,13 +146,12 @@ export default function FilieraPage() {
           .fil-hero-photo, .fil-hero-shade { display: none; }
           @media (min-width: 768px) {
             .fil-hero-photo {
-              display: block; position: absolute; top: 72px; left: 0; right: 0; bottom: 0; z-index: 0;
+              display: block; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0;
               background: url('/images/about/hero-filiera.jpg') center/cover;
-              -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 10%); mask-image: linear-gradient(180deg, transparent 0%, #000 10%);
             }
             .fil-hero-shade {
-              display: block; position: absolute; top: 72px; left: 0; right: 0; bottom: 0; z-index: 1;
-              background: linear-gradient(180deg, rgba(20,14,12,0.62) 0%, rgba(20,14,12,0.62) 100%);
+              display: block; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 1;
+              background: linear-gradient(180deg, rgba(20,14,12,0.75) 0%, rgba(20,14,12,0.6) 25%, rgba(20,14,12,0.6) 100%);
             }
             .fil-hero > h1, .fil-hero > p { position: relative; z-index: 2; }
           }
