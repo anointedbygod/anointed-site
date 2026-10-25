@@ -66,7 +66,7 @@ export default function InstagramShowcase() {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: brownSection || trackRef.current,
-          start: 'bottom 60%',
+          start: 'bottom 78%',
           endTrigger: trackRef.current,
           end: 'bottom bottom',
           scrub: 0.3,
@@ -139,11 +139,11 @@ export default function InstagramShowcase() {
               }} />
               <div style={{
                 width: '100%', height: '100%', borderRadius: '38px', overflow: 'hidden',
-                background: '#f1eae4', display: 'flex', flexDirection: 'column', position: 'relative',
+                background: '#fff', display: 'flex', flexDirection: 'column', position: 'relative',
               }}>
                 {/* schermata del profilo Instagram reale */}
                 <div role="img" aria-label="Instagram @anointedworld.official" style={{
-                  flex: 1, background: "url('/images/instagram/profilo.jpg') center top/cover #fff",
+                  flex: 1, marginTop: '24px', background: "url('/images/instagram/profilo.jpg') center top/cover #fff",
                 }} />
 
                 {/* dark scrim + CTA, overlaid on the phone's own screen */}
