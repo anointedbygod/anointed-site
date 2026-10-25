@@ -142,7 +142,7 @@ export default function StoriaPage() {
           }
           .sto-hero > h1, .sto-hero > p { position: relative; z-index: 2; }
           @media (min-width: 768px) {
-            .sto-hero-photo { background: url('/images/about/hero-storia.jpg') center/cover; }
+            .sto-hero-photo { background: url('/images/about/hero-storia.jpg') center 4%/cover; }
           }
         `}</style>
         <h1 style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(2rem, 5vw, 4rem)', fontWeight: 300, color: '#f1eae4', lineHeight: 1.15, margin: '0 0 1.5rem', maxWidth: '700px' }}>
