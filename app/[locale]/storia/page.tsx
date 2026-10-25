@@ -122,13 +122,30 @@ export default function StoriaPage() {
     <main style={{ background: '#f1eae4' }}>
 
       {/* HERO */}
-      <section style={{
+      <section className="sto-hero" style={{ position: 'relative', overflow: 'hidden',
         height: '80vh', minHeight: '500px',
         background: 'linear-gradient(160deg, #3a2e2b 0%, #5d4d42 100%)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         flexDirection: 'column', textAlign: 'center', padding: '0 1.5rem',
         paddingTop: '64px',
       }}>
+        <div className="sto-hero-photo" aria-hidden="true" />
+        <div className="sto-hero-shade" aria-hidden="true" />
+        <style>{`
+          .sto-hero-photo, .sto-hero-shade { display: none; }
+          @media (min-width: 768px) {
+            .sto-hero-photo {
+              display: block; position: absolute; top: 72px; left: 0; right: 0; bottom: 0; z-index: 0;
+              background: url('/images/about/hero-storia.jpg') center/cover;
+              -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 10%); mask-image: linear-gradient(180deg, transparent 0%, #000 10%);
+            }
+            .sto-hero-shade {
+              display: block; position: absolute; top: 72px; left: 0; right: 0; bottom: 0; z-index: 1;
+              background: linear-gradient(180deg, rgba(20,14,12,0.62) 0%, rgba(20,14,12,0.62) 100%);
+            }
+            .sto-hero > h1, .sto-hero > p { position: relative; z-index: 2; }
+          }
+        `}</style>
         <h1 style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(2rem, 5vw, 4rem)', fontWeight: 300, color: '#f1eae4', lineHeight: 1.15, margin: '0 0 1.5rem', maxWidth: '700px' }}>
           {t.heroTitle1}<br />
           <em style={{ fontStyle: 'italic', color: '#c1a99a' }}>{t.heroTitle2}</em>

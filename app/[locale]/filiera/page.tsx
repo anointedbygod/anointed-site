@@ -134,12 +134,29 @@ export default function FilieraPage() {
     <main style={{ background: '#f1eae4' }}>
 
       {/* HERO */}
-      <section style={{
+      <section className="fil-hero" style={{ position: 'relative', overflow: 'hidden',
         height: '70vh', minHeight: '460px',
         background: 'linear-gradient(160deg, #3a2e2b 0%, #5d4d42 100%)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         flexDirection: 'column', textAlign: 'center', padding: '0 1.5rem', paddingTop: '64px',
       }}>
+        <div className="fil-hero-photo" aria-hidden="true" />
+        <div className="fil-hero-shade" aria-hidden="true" />
+        <style>{`
+          .fil-hero-photo, .fil-hero-shade { display: none; }
+          @media (min-width: 768px) {
+            .fil-hero-photo {
+              display: block; position: absolute; top: 72px; left: 0; right: 0; bottom: 0; z-index: 0;
+              background: url('/images/about/hero-filiera.jpg') center/cover;
+              -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 10%); mask-image: linear-gradient(180deg, transparent 0%, #000 10%);
+            }
+            .fil-hero-shade {
+              display: block; position: absolute; top: 72px; left: 0; right: 0; bottom: 0; z-index: 1;
+              background: linear-gradient(180deg, rgba(20,14,12,0.62) 0%, rgba(20,14,12,0.62) 100%);
+            }
+            .fil-hero > h1, .fil-hero > p { position: relative; z-index: 2; }
+          }
+        `}</style>
         <h1 style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(2rem, 5vw, 3.8rem)', fontWeight: 300, color: '#f1eae4', lineHeight: 1.15, margin: '0 0 1.5rem', maxWidth: '720px' }}>
           {t.heroTitle1}<br />
           <em style={{ fontStyle: 'italic', color: '#c1a99a' }}>{t.heroTitle2}</em>
