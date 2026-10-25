@@ -57,8 +57,10 @@ export default function InstagramShowcase() {
 
   useLayoutEffect(() => {
     gsap.registerPlugin(ScrollTrigger)
+    // Safari iOS: la barra degli indirizzi che compare/sparisce cambia solo l'altezza, non deve ricalcolare l'animazione (causava scatti)
+    ScrollTrigger.config({ ignoreMobileResize: true })
     const ctx = gsap.context(() => {
-      gsap.set(fixedRef.current, { opacity: 0 })
+      gsap.set(fixedRef.current, { opacity: 0, visibility: 'hidden' })
       gsap.set(phoneWrapRef.current, { scale: 0.22, y: 90 })
       gsap.set(labelRef.current, { opacity: 0, x: 60 })
       gsap.set(scrimRef.current, { opacity: 0 })
@@ -79,7 +81,9 @@ export default function InstagramShowcase() {
           start: 'bottom 90%',
           endTrigger: trackRef.current,
           end: 'bottom bottom',
-          scrub: 0.6,
+          scrub: 0.3,
+          // lo strato a tutto schermo esiste solo mentre la sezione e' attiva: mai sopra Anointed World / footer, anche con scroll veloce
+          onToggle: self => gsap.set(fixedRef.current, { visibility: self.isActive ? 'visible' : 'hidden' }),
         },
       })
 
