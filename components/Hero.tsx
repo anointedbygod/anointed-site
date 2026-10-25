@@ -85,7 +85,7 @@ export default function Hero() {
       </div>
 
       <style>{`
-        .hero-bg { background: url(/images/about/hero-desktop.jpg) center 40%/cover; }
+        .hero-bg { background: url(/images/about/hero-desktop.jpg) center 40%/cover; filter: brightness(0.78) contrast(1.04) saturate(0.95); }
         @media (max-width: 767px) { .hero-bg { background: url(/images/about/hero-mobile.jpg) center 35%/cover; } }
         @keyframes scrollLine {
           0% { height: 0%; transform: translateY(0); }
