@@ -161,20 +161,24 @@ export default function AnointedWorldPage() {
       {/* HERO */}
       <section ref={heroSectionRef} style={{
         minHeight: '85vh',
-        position: 'relative', overflow: 'hidden', background: '#140e0c',
+        position: 'relative', overflow: 'hidden',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         flexDirection: 'column', textAlign: 'center', padding: '0 1.5rem',
         paddingTop: '64px',
       }}>
         <div ref={heroPhotoRef} style={{
-          position: 'absolute', top: '72px', left: 0, right: 0, bottom: 0, zIndex: 0,
-          background: "url('/images/about/stage.jpg') center 17%/cover",
-          WebkitMaskImage: 'linear-gradient(180deg, transparent 0%, #000 10%)', maskImage: 'linear-gradient(180deg, transparent 0%, #000 10%)',
+          position: 'absolute', inset: 0, zIndex: 0,
+          background: "url('/images/about/stage.jpg') center 10%/cover",
           animation: 'awKenBurns 26s ease-in-out infinite alternate',
         }} />
         <div style={{
           position: 'absolute', inset: 0, zIndex: 1,
-          background: 'linear-gradient(180deg, rgba(20,14,12,0.55) 0%, rgba(20,14,12,0.35) 45%, rgba(20,14,12,0.75) 100%)',
+          background: 'linear-gradient(180deg, rgba(20,14,12,0.7) 0%, rgba(20,14,12,0.35) 45%, rgba(20,14,12,0.75) 100%)',
+        }} />
+        <div aria-hidden="true" style={{
+          position: 'absolute', top: 0, left: 0, right: 0, height: '130px', zIndex: 1, pointerEvents: 'none',
+          WebkitBackdropFilter: 'blur(14px)', backdropFilter: 'blur(14px)',
+          WebkitMaskImage: 'linear-gradient(180deg, #000 0%, #000 45%, transparent 100%)', maskImage: 'linear-gradient(180deg, #000 0%, #000 45%, transparent 100%)',
         }} />
         <style>{`
           @keyframes awKenBurns {
