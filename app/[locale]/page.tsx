@@ -4,7 +4,7 @@ import BrandStory from '@/components/BrandStory'
 import BestSellers from '@/components/BestSellers'
 import EditorialBanner from '@/components/EditorialBanner'
 import InstagramShowcase from '@/components/InstagramShowcase'
-import AnointedWorldPreview from '@/components/AnointedWorldPreview'
+import AnointedWorldPreview, { NewsletterHome } from '@/components/AnointedWorldPreview'
 
 export default function Home() {
   return (
@@ -16,6 +16,7 @@ export default function Home() {
       <EditorialBanner />
       <AnointedWorldPreview />
       <InstagramShowcase />
+      <NewsletterHome />
     </main>
   )
 }
