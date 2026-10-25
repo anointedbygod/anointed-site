@@ -8,8 +8,8 @@ export interface Foto { src: string; alt: string; position?: string; overlay?: R
 // Carosello discreto: scorre da solo (si ferma al passaggio del mouse, con il focus e a scheda
 // nascosta; niente autoplay se l'utente preferisce meno animazioni), frecce sottili che appaiono
 // al passaggio, puntini piccoli, swipe su touch. Scorrimento continuo con clone della prima foto.
-export default function PhotoCarousel({ foto, prev, next, intervalMs = 5500, ratio = '4 / 3', sizes = '(max-width: 767px) 90vw, 760px', tone = 'dark' }: {
-  foto: Foto[]; prev: string; next: string; intervalMs?: number; ratio?: string; sizes?: string; tone?: 'dark' | 'light'
+export default function PhotoCarousel({ foto, prev, next, intervalMs = 5500, ratio = '4 / 3', sizes = '(max-width: 767px) 90vw, 760px', tone = 'dark', frecceSempre = false }: {
+  foto: Foto[]; prev: string; next: string; intervalMs?: number; ratio?: string; sizes?: string; tone?: 'dark' | 'light'; frecceSempre?: boolean
 }) {
   // tone='light' per foto chiare: frecce e puntini scuri
   const chiaro = tone === 'light'
@@ -72,10 +72,10 @@ export default function PhotoCarousel({ foto, prev, next, intervalMs = 5500, rat
 
       {n > 1 && (
         <>
-          <button type="button" className="pc-arrow" aria-label={prev} onClick={indietro} style={{ ...frecciaStile, left: '12px' }}>
+          <button type="button" className={frecceSempre ? 'pc-arrow pc-arrow-on' : 'pc-arrow'} aria-label={prev} onClick={indietro} style={{ ...frecciaStile, left: '12px' }}>
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" /></svg>
           </button>
-          <button type="button" className="pc-arrow" aria-label={next} onClick={avanti} style={{ ...frecciaStile, right: '12px' }}>
+          <button type="button" className={frecceSempre ? 'pc-arrow pc-arrow-on' : 'pc-arrow'} aria-label={next} onClick={avanti} style={{ ...frecciaStile, right: '12px' }}>
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 2l5 5-5 5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" /></svg>
           </button>
           <div style={{ position: 'absolute', bottom: '12px', left: 0, right: 0, display: 'flex', justifyContent: 'center', gap: '6px' }}>
@@ -89,6 +89,7 @@ export default function PhotoCarousel({ foto, prev, next, intervalMs = 5500, rat
       <style>{`
         .pc-arrow { opacity: 0; transition: opacity 0.25s, background 0.25s; }
         .pc:hover .pc-arrow, .pc:focus-within .pc-arrow { opacity: 1; }
+        .pc-arrow-on { opacity: 0.9 !important; }
         .pc-arrow:hover { background: rgba(241,234,228,0.95) !important; }
         .pc-arrow { box-shadow: 0 1px 8px rgba(58,46,43,0.18); }
         @media (hover: none) { .pc-arrow { opacity: 0.8; } }

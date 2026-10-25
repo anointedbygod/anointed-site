@@ -209,7 +209,7 @@ function Mill({ t }: { t: typeof CONTENT['en'] }) {
           transition: 'opacity 0.9s ease, transform 0.9s ease',
         }}>
           <PhotoCarousel
-            tone="light" ratio="715 / 520" sizes="(max-width: 767px) 90vw, 480px"
+            tone="light" frecceSempre ratio="715 / 520" sizes="(max-width: 767px) 90vw, 480px"
             prev={t.prevPhoto} next={t.nextPhoto}
             foto={t.slides.map(sl => ({
               src: sl.src, alt: sl.alt,
@@ -223,7 +223,7 @@ function Mill({ t }: { t: typeof CONTENT['en'] }) {
           <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.14em', fontWeight: 500, color: '#c1a99a', margin: '0 0 0.75rem' }}>{t.millLabel}</p>
           <h2 style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(1.6rem, 2.5vw, 2.4rem)', fontWeight: 300, color: '#f1eae4', margin: '0 0 1.75rem', lineHeight: 1.2 }}>{t.millTitle}</h2>
           {t.millBlocks.map((b, i) => (
-            <div key={i} style={{ marginBottom: '1.75rem' }}>
+            <div key={i} style={{ marginBottom: '1.75rem', clear: i > 0 ? 'both' : undefined }}>
               <h3 style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.14em', fontWeight: 500, color: '#c1a99a', margin: '0 0 0.9rem' }}>{b.h.toUpperCase()}</h3>
               {b.p.map((p, j) => (
                 <p key={j} style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', lineHeight: 1.85, color: 'rgba(241,234,228,0.65)', margin: '0 0 0.9rem' }}>{p}</p>
