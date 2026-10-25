@@ -61,12 +61,12 @@ export default function InstagramShowcase() {
       // start moved from 85% to 90% so the entrance kicks off a touch
       // sooner (less scroll needed after the brown section's bottom
       // appears) per Sofia's "parta di poco poco prima" note.
-      const brownSection = document.getElementById('editorial-banner')
+      const brownSection = document.getElementById('anointed-world-preview')
 
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: brownSection || trackRef.current,
-          start: 'bottom 90%',
+          start: 'bottom 60%',
           endTrigger: trackRef.current,
           end: 'bottom bottom',
           scrub: 0.3,

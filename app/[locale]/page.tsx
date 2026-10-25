@@ -14,8 +14,8 @@ export default function Home() {
       <BrandStory />
       <BestSellers />
       <EditorialBanner />
-      <InstagramShowcase />
       <AnointedWorldPreview />
+      <InstagramShowcase />
     </main>
   )
 }

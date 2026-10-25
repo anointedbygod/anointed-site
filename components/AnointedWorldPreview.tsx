@@ -108,7 +108,7 @@ export default function AnointedWorldPreview() {
   }, [])
 
   return (
-    <section ref={ref} style={{ background: '#f1eae4' }}>
+    <section id="anointed-world-preview" ref={ref} style={{ background: '#f1eae4' }}>
       <div style={{ position: 'relative', padding: '6rem 1.5rem 4.5rem', overflow: 'hidden' }}>
         <div style={{
           position: 'absolute', top: '5%', left: '50%', width: '560px', height: '480px',
