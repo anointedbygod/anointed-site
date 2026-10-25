@@ -143,17 +143,11 @@ export default function FilieraPage() {
         <div className="fil-hero-photo" aria-hidden="true" />
         <div className="fil-hero-shade" aria-hidden="true" />
         <style>{`
-          .fil-hero-photo, .fil-hero-shade { display: none; }
+          .fil-hero-photo { position: absolute; inset: 0; z-index: 0; background: url('/images/about/hero-filiera-mobile.jpg') center 42%/cover; }
+          .fil-hero-shade { position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgba(20,14,12,0.75) 0%, rgba(20,14,12,0.6) 25%, rgba(20,14,12,0.6) 100%); }
+          .fil-hero > h1, .fil-hero > p { position: relative; z-index: 2; }
           @media (min-width: 768px) {
-            .fil-hero-photo {
-              display: block; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0;
-              background: url('/images/about/hero-filiera.jpg') center/cover;
-            }
-            .fil-hero-shade {
-              display: block; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 1;
-              background: linear-gradient(180deg, rgba(20,14,12,0.75) 0%, rgba(20,14,12,0.6) 25%, rgba(20,14,12,0.6) 100%);
-            }
-            .fil-hero > h1, .fil-hero > p { position: relative; z-index: 2; }
+            .fil-hero-photo { background: url('/images/about/hero-filiera.jpg') center/cover; }
           }
         `}</style>
         <h1 style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(2rem, 5vw, 3.8rem)', fontWeight: 300, color: '#f1eae4', lineHeight: 1.15, margin: '0 0 1.5rem', maxWidth: '720px' }}>
