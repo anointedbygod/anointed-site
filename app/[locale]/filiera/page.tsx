@@ -140,9 +140,6 @@ export default function FilieraPage() {
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         flexDirection: 'column', textAlign: 'center', padding: '0 1.5rem', paddingTop: '64px',
       }}>
-        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.22em', color: '#c1a99a', margin: '0 0 1.25rem' }}>
-          — {t.eyebrow} —
-        </p>
         <h1 style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(2rem, 5vw, 3.8rem)', fontWeight: 300, color: '#f1eae4', lineHeight: 1.15, margin: '0 0 1.5rem', maxWidth: '720px' }}>
           {t.heroTitle1}<br />
           <em style={{ fontStyle: 'italic', color: '#c1a99a' }}>{t.heroTitle2}</em>
@@ -216,7 +213,6 @@ function Mill({ t }: { t: typeof CONTENT['en'] }) {
           opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(30px)',
           transition: 'opacity 0.9s ease 0.2s, transform 0.9s ease 0.2s',
         }}>
-          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.14em', fontWeight: 500, color: '#c1a99a', margin: '0 0 0.75rem' }}>{t.millLabel}</p>
           <h2 style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(1.6rem, 2.5vw, 2.4rem)', fontWeight: 300, color: '#f1eae4', margin: '0 0 1.75rem', lineHeight: 1.2 }}>{t.millTitle}</h2>
           {t.millBlocks.map((b, i) => (
             <div key={i} style={{ marginBottom: '1.75rem', clear: i > 0 ? 'both' : undefined }}>
@@ -251,7 +247,7 @@ function Mill({ t }: { t: typeof CONTENT['en'] }) {
   )
 }
 
-function TextBlock({ label, title, p, bg, foto }: { label: string; title: string; p: string[]; bg: string; foto?: { src: string; alt: string } }) {
+function TextBlock({ title, p, bg, foto }: { label?: string; title: string; p: string[]; bg: string; foto?: { src: string; alt: string } }) {
   const { ref, visible } = useVisible()
   const anim = {
     opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(24px)',
@@ -259,7 +255,6 @@ function TextBlock({ label, title, p, bg, foto }: { label: string; title: string
   } as const
   const testo = (
     <>
-      <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.14em', fontWeight: 500, color: '#5d4d42', margin: '0 0 0.75rem' }}>{label}</p>
       <h2 style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(1.6rem, 2.5vw, 2.4rem)', fontWeight: 300, color: '#3a2e2b', lineHeight: 1.25, margin: '0 0 1.75rem' }}>{title}</h2>
       {p.map((x, i) => (
         <p key={i} style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', lineHeight: 1.9, color: '#5d4d42', margin: '0 0 1.1rem' }}>{x}</p>
