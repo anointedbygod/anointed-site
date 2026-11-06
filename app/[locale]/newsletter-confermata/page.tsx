@@ -28,6 +28,10 @@ function Contenuto() {
             <p style={{ fontFamily: 'monospace', fontSize: '1.9rem', fontWeight: 700, letterSpacing: '0.1em', color: '#f1eae4', margin: 0 }}>{codice}</p>
           </div>
         )}
+        {!errore && evento && codice && /^EQUIPHER-\d{3,4}$/.test(codice) && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={`/api/qr?c=${codice}`} width={180} height={180} alt={`QR ${codice}`} style={{ display: 'block', margin: '0 auto 2rem', borderRadius: 4 }} />
+        )}
         <Link href={`/${locale}`} style={{ color: '#3a2e2b', fontSize: '12px', letterSpacing: '0.14em' }}>{isIT ? 'TORNA AL SITO' : 'BACK TO THE SITE'}</Link>
       </div>
     </main>

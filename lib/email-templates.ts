@@ -378,6 +378,9 @@ ${testata(L.tag)}
         <p style="font-family:${FONT};font-size:10px;letter-spacing:0.2em;color:#c1a99a;margin:0 0 10px;">${L.label}</p>
         <p style="font-family:'Courier New',Courier,monospace;font-size:30px;font-weight:700;letter-spacing:0.12em;color:#f1eae4;margin:0;">${codice}</p>
       </div>
+      <table align="center" cellpadding="0" cellspacing="0" style="margin:0 auto 28px;"><tr>
+        <td style="background:#ffffff;border-radius:4px;padding:10px;"><img src="${SITE}/api/qr?c=${codice}" width="180" height="180" alt="QR ${codice}" style="display:block;width:180px;height:180px;border:0;"></td>
+      </tr></table>
       <p style="font-family:${FONT};font-size:12px;line-height:1.8;color:#5d4d42;margin:0 0 20px;">${L.note}</p>
       <p style="font-family:${FONT};font-size:12px;line-height:1.8;color:#8a7a70;margin:0;">${L.outro}</p>
     </td>
