@@ -186,6 +186,7 @@ export default function CheckoutPage() {
           spedizione: zonaSelezionata ? { zona: zonaSelezionata.nome, costo: costoSpedizione } : null,
           totaleFinale,
           terminiAccettati: true,
+          lingua: locale,
         }),
       })
       const { url } = await res.json()

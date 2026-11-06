@@ -26,7 +26,7 @@ export async function GET(req: Request) {
     try {
       // Ricontrolla il consenso adesso: se nel frattempo si e' disiscritta/o, non si invia
       const { data: consenso } = await supabaseAdmin
-        .from('newsletter_iscritti').select('email').eq('email', String(carrello.email).toLowerCase()).maybeSingle()
+        .from('newsletter_iscritti').select('email, consenso_lingua').eq('email', String(carrello.email).toLowerCase()).maybeSingle()
       if (!consenso) {
         await supabaseAdmin.from('carrelli_abbandonati').update({ email_inviata: true }).eq('id', carrello.id)
         continue
@@ -41,6 +41,7 @@ export async function GET(req: Request) {
           prodotti: carrello.articoli.map((a: any) => ({ nome: a.prodottoNome, prezzo: a.prezzo * a.quantita })),
           totale: carrello.totale,
           carrelloId: carrello.id,
+          locale: consenso.consenso_lingua === 'it' ? 'it' : 'en',
         }),
       })
       await supabaseAdmin.from('carrelli_abbandonati').update({ email_inviata: true }).eq('id', carrello.id)

@@ -97,6 +97,7 @@ export async function POST(req: Request) {
             })),
             totale: ordine.totale,
             indirizzo: ordine.indirizzo_spedizione,
+            locale: ordine.indirizzo_spedizione?.lingua === 'it' ? 'it' : 'en',
           }),
         })
       } catch (err) {

@@ -47,13 +47,16 @@ export function emailConfermaOrdine({
   prodotti,
   totale,
   indirizzo,
+  locale = 'en',
 }: {
   nome: string
   ordineId: string
   prodotti: { nome: string; taglia: string; colore: string; quantita: number; prezzo: number }[]
   totale: number
   indirizzo: { indirizzo: string; citta: string; cap: string; paese: string }
+  locale?: 'en' | 'it'
 }) {
+  const it = locale === 'it'
   return `
 <!DOCTYPE html>
 <html>
@@ -69,38 +72,38 @@ export function emailConfermaOrdine({
   <!-- Body -->
   <tr>
     <td style="padding:48px 40px;">
-      <p style="font-family:${FONT};font-size:10px;letter-spacing:0.2em;color:#c1a99a;margin:0 0 16px;">— ORDER CONFIRMED —</p>
-      <h1 style="font-family:${FONT};font-size:28px;font-weight:400;color:#3a2e2b;margin:0 0 16px;line-height:1.3;">Thank you, ${nome}.</h1>
+      <p style="font-family:${FONT};font-size:10px;letter-spacing:0.2em;color:#c1a99a;margin:0 0 16px;">— ${it ? 'ORDINE CONFERMATO' : 'ORDER CONFIRMED'} —</p>
+      <h1 style="font-family:${FONT};font-size:28px;font-weight:400;color:#3a2e2b;margin:0 0 16px;line-height:1.3;">${it ? 'Grazie' : 'Thank you'}, ${nome}.</h1>
       <p style="font-family:${FONT};font-size:14px;line-height:1.8;color:#5d4d42;margin:0 0 32px;">
-        Your order has been received. We will notify you when it ships.
+        ${it ? 'Abbiamo ricevuto il tuo ordine. Ti avviseremo quando verrà spedito.' : 'Your order has been received. We will notify you when it ships.'}
       </p>
 
       <!-- Ordine ID -->
       <div style="background:#e8d2c3;border-radius:4px;padding:16px 20px;margin-bottom:32px;">
-        <p style="font-family:${FONT};font-size:11px;letter-spacing:0.14em;color:#c1a99a;margin:0 0 4px;">ORDER NUMBER</p>
+        <p style="font-family:${FONT};font-size:11px;letter-spacing:0.14em;color:#c1a99a;margin:0 0 4px;">${it ? 'NUMERO ORDINE' : 'ORDER NUMBER'}</p>
         <p style="font-family:monospace;font-size:14px;color:#3a2e2b;margin:0;">#${ordineId.slice(0, 8).toUpperCase()}</p>
       </div>
 
       <!-- Prodotti -->
-      <p style="font-family:${FONT};font-size:11px;letter-spacing:0.14em;color:#c1a99a;margin:0 0 16px;">YOUR ITEMS</p>
+      <p style="font-family:${FONT};font-size:11px;letter-spacing:0.14em;color:#c1a99a;margin:0 0 16px;">${it ? 'I TUOI ARTICOLI' : 'YOUR ITEMS'}</p>
       ${prodotti.map(p => `
       <div style="border-top:1px solid rgba(193,169,154,0.3);padding:16px 0;display:flex;justify-content:space-between;">
         <div>
           <p style="font-family:${FONT};font-size:14px;color:#3a2e2b;margin:0 0 4px;">${p.nome}</p>
-          <p style="font-family:${FONT};font-size:12px;color:#c1a99a;margin:0;">${p.taglia} · ${p.colore} · Qtà ${p.quantita}</p>
+          <p style="font-family:${FONT};font-size:12px;color:#c1a99a;margin:0;">${p.taglia} · ${p.colore} · ${it ? 'Qtà' : 'Qty'} ${p.quantita}</p>
         </div>
         <p style="font-family:${FONT};font-size:14px;color:#3a2e2b;margin:0;">€ ${(p.prezzo * p.quantita).toFixed(2)}</p>
       </div>
       `).join('')}
       <div style="border-top:1px solid rgba(193,169,154,0.3);padding-top:16px;text-align:right;margin-bottom:32px;">
         ${(() => { const sub = prodotti.reduce((a, p) => a + p.prezzo * p.quantita, 0); const diff = Math.round((totale - sub) * 100) / 100
-          return diff === 0 ? '' : `<p style="font-family:${FONT};font-size:13px;color:#5d4d42;margin:0 0 6px;">${diff > 0 ? 'Shipping · Spedizione' : 'Discount · Sconto'}: ${diff > 0 ? '' : '− '}€ ${Math.abs(diff).toFixed(2)}</p>` })()}
-        <p style="font-family:${FONT};font-size:16px;font-weight:600;color:#3a2e2b;margin:0;">Totale · Total: € ${totale.toFixed(2)}</p>
-        <p style="font-family:${FONT};font-size:11px;color:#8a7a70;margin:4px 0 0;">IVA inclusa · VAT included</p>
+          return diff === 0 ? '' : `<p style="font-family:${FONT};font-size:13px;color:#5d4d42;margin:0 0 6px;">${diff > 0 ? (it ? 'Spedizione' : 'Shipping') : (it ? 'Sconto' : 'Discount')}: ${diff > 0 ? '' : '− '}€ ${Math.abs(diff).toFixed(2)}</p>` })()}
+        <p style="font-family:${FONT};font-size:16px;font-weight:600;color:#3a2e2b;margin:0;">${it ? 'Totale' : 'Total'}: € ${totale.toFixed(2)}</p>
+        <p style="font-family:${FONT};font-size:11px;color:#8a7a70;margin:4px 0 0;">${it ? 'IVA inclusa' : 'VAT included'}</p>
       </div>
 
       <!-- Indirizzo -->
-      <p style="font-family:${FONT};font-size:11px;letter-spacing:0.14em;color:#c1a99a;margin:0 0 12px;">SHIPPING ADDRESS</p>
+      <p style="font-family:${FONT};font-size:11px;letter-spacing:0.14em;color:#c1a99a;margin:0 0 12px;">${it ? 'INDIRIZZO DI SPEDIZIONE' : 'SHIPPING ADDRESS'}</p>
       <p style="font-family:${FONT};font-size:14px;line-height:1.8;color:#5d4d42;margin:0 0 40px;">
         ${indirizzo.indirizzo}<br>
         ${indirizzo.cap} ${indirizzo.citta}<br>
@@ -108,25 +111,24 @@ export function emailConfermaOrdine({
       </p>
 
       <p style="font-family:${FONT};font-size:13px;line-height:1.8;color:#5d4d42;margin:0 0 32px;">
-        For any questions, contact us at <a href="mailto:info@anointed.it" style="color:#3a2e2b;">info@anointed.it</a>
+        ${it ? 'Per qualsiasi domanda scrivici a' : 'For any questions, contact us at'} <a href="mailto:info@anointed.it" style="color:#3a2e2b;">info@anointed.it</a>
       </p>
 
       <!-- Informazioni obbligatorie (art. 49 e 51 Codice del Consumo) -->
       <div style="border-top:1px solid rgba(193,169,154,0.3);padding-top:20px;">
-        <p style="font-family:${FONT};font-size:11px;letter-spacing:0.14em;color:#c1a99a;margin:0 0 10px;">RIGHT OF WITHDRAWAL · DIRITTO DI RECESSO</p>
-        <p style="font-family:${FONT};font-size:12px;line-height:1.7;color:#5d4d42;margin:0 0 10px;">
-          You may withdraw from this purchase within 14 days of receiving the goods, without giving any reason. Write to ${AZIENDA.email} or ${AZIENDA.pec}; model form and procedure: <a href="https://www.anointed.it/en/resi" style="color:#3a2e2b;">Returns &amp; Refunds</a>. Return shipping costs are borne by the customer. Legal guarantee of conformity: 2 years from delivery. Full terms: <a href="https://www.anointed.it/en/condizioni" style="color:#3a2e2b;">Terms of Sale</a>.
-        </p>
-        <p style="font-family:${FONT};font-size:12px;line-height:1.7;color:#5d4d42;margin:0 0 10px;">
+        <p style="font-family:${FONT};font-size:11px;letter-spacing:0.14em;color:#c1a99a;margin:0 0 10px;">${it ? 'DIRITTO DI RECESSO' : 'RIGHT OF WITHDRAWAL'}</p>
+        ${it ? `        <p style="font-family:${FONT};font-size:12px;line-height:1.7;color:#5d4d42;margin:0 0 10px;">
           Puoi recedere dall'acquisto entro 14 giorni dal ricevimento della merce, senza dover fornire alcuna motivazione. Scrivi a ${AZIENDA.email} o ${AZIENDA.pec}; modulo tipo e procedura: <a href="https://www.anointed.it/it/resi" style="color:#3a2e2b;">Resi e Rimborsi</a>. Le spese di restituzione sono a carico del cliente. Garanzia legale di conformità: 2 anni dalla consegna. Condizioni complete: <a href="https://www.anointed.it/it/condizioni" style="color:#3a2e2b;">Condizioni di Vendita</a>.
-        </p>
+        </p>` : `        <p style="font-family:${FONT};font-size:12px;line-height:1.7;color:#5d4d42;margin:0 0 10px;">
+          You may withdraw from this purchase within 14 days of receiving the goods, without giving any reason. Write to ${AZIENDA.email} or ${AZIENDA.pec}; model form and procedure: <a href="https://www.anointed.it/en/resi" style="color:#3a2e2b;">Returns &amp; Refunds</a>. Return shipping costs are borne by the customer. Legal guarantee of conformity: 2 years from delivery. Full terms: <a href="https://www.anointed.it/en/condizioni" style="color:#3a2e2b;">Terms of Sale</a>.
+        </p>`}
         <p style="font-family:${FONT};font-size:11px;line-height:1.7;color:#8a7a70;margin:0;">${datiVenditore().join(' · ')}</p>
       </div>
     </td>
   </tr>
 
   <!-- Footer -->
-  ${piede({})}
+  ${piede({ locale })}
 
 </table>
 </td></tr>
@@ -267,14 +269,16 @@ export function emailCarrelloAbbandonato({
   totale,
   carrelloId,
   unsubUrl,
+  locale = 'en',
 }: {
   nome: string
   prodotti: { nome: string; prezzo: number; immagine?: string }[]
   totale: number
   carrelloId: string
   unsubUrl?: string
+  locale?: 'en' | 'it'
 }) {
-  const locale = 'en'
+  const it = locale === 'it'
   return `
 <!DOCTYPE html>
 <html>
@@ -288,10 +292,10 @@ export function emailCarrelloAbbandonato({
 
   <tr>
     <td style="padding:48px 40px;">
-      <p style="font-family:${FONT};font-size:10px;letter-spacing:0.2em;color:#c1a99a;margin:0 0 16px;">— YOU FORGOT SOMETHING —</p>
-      <h1 style="font-family:${FONT};font-size:28px;font-weight:400;color:#3a2e2b;margin:0 0 16px;line-height:1.3;">${nome}, your cart is waiting.</h1>
+      <p style="font-family:${FONT};font-size:10px;letter-spacing:0.2em;color:#c1a99a;margin:0 0 16px;">— ${it ? 'HAI DIMENTICATO QUALCOSA' : 'YOU FORGOT SOMETHING'} —</p>
+      <h1 style="font-family:${FONT};font-size:28px;font-weight:400;color:#3a2e2b;margin:0 0 16px;line-height:1.3;">${nome}, ${it ? 'il tuo carrello ti aspetta.' : 'your cart is waiting.'}</h1>
       <p style="font-family:${FONT};font-size:14px;line-height:1.8;color:#5d4d42;margin:0 0 32px;">
-        You left some items in your cart. Complete your order before they sell out.
+        ${it ? 'Hai lasciato alcuni articoli nel carrello. Completa il tuo ordine prima che finiscano.' : 'You left some items in your cart. Complete your order before they sell out.'}
       </p>
 
       ${prodotti.map(p => `
@@ -302,18 +306,18 @@ export function emailCarrelloAbbandonato({
       `).join('')}
 
       <div style="border-top:1px solid rgba(193,169,154,0.3);padding:16px 0 32px;text-align:right;">
-        <p style="font-family:${FONT};font-size:16px;font-weight:600;color:#3a2e2b;margin:0;">Totale: € ${totale.toFixed(2)}</p>
+        <p style="font-family:${FONT};font-size:16px;font-weight:600;color:#3a2e2b;margin:0;">${it ? 'Totale' : 'Total'}: € ${totale.toFixed(2)}</p>
       </div>
 
       <div style="text-align:center;">
-        <a href="https://anointed.it/recupera-carrello?id=${carrelloId}" style="display:inline-block;background:#3a2e2b;color:#f1eae4;font-family:${FONT};font-size:11px;letter-spacing:0.16em;text-decoration:none;padding:14px 32px;border-radius:2px;">
-          COMPLETE YOUR ORDER
+        <a href="${SITE}/${locale}/recupera-carrello?id=${carrelloId}" style="display:inline-block;background:#3a2e2b;color:#f1eae4;font-family:${FONT};font-size:11px;letter-spacing:0.16em;text-decoration:none;padding:14px 32px;border-radius:2px;">
+          ${it ? 'COMPLETA IL TUO ORDINE' : 'COMPLETE YOUR ORDER'}
         </a>
       </div>
     </td>
   </tr>
 
-  ${piede({ locale: 'en', unsubUrl })}
+  ${piede({ locale, unsubUrl })}
 
 </table>
 </td></tr>
@@ -323,10 +327,11 @@ export function emailCarrelloAbbandonato({
   `
 }
 
-export function emailOrdineSpedito({ nome, ordineId, trackingUrl }: { nome: string; ordineId: string; trackingUrl: string }) {
+export function emailOrdineSpedito({ nome, ordineId, trackingUrl, locale = 'en' }: { nome: string; ordineId: string; trackingUrl: string; locale?: 'en' | 'it' }) {
+  const it = locale === 'it'
   const num = ordineId.slice(0, 8).toUpperCase()
-  const p = `font-family:${FONT};font-size:14px;line-height:1.8;color:#5d4d42;margin:0 0 8px;`
-  return `<!DOCTYPE html><html><head><meta charset="utf-8">${HEAD_EXTRA}<meta name="viewport" content="width=device-width"></head><body style="margin:0;padding:0;background:#e8d2c3;"><table width="100%" cellpadding="0" cellspacing="0" style="background:#e8d2c3;padding:40px 20px;"><tr><td><table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;margin:0 auto;background:#f1eae4;border-radius:4px;overflow:hidden;">${testata('CHOSEN. SET APART. APPOINTED.')}<tr><td style="padding:48px 40px;text-align:center;"><p style="font-family:${FONT};font-size:10px;letter-spacing:0.2em;color:#c1a99a;margin:0 0 16px;">— ORDINE SPEDITO · ORDER SHIPPED —</p><h1 style="font-family:${FONT};font-size:28px;font-weight:400;color:#3a2e2b;margin:0 0 24px;">${nome}, il tuo ordine è in arrivo.</h1><p style="${p}">Il tuo ordine <strong>#${num}</strong> è stato spedito. Puoi seguire il pacco in tempo reale con il pulsante qui sotto.</p><p style="${p}margin-bottom:32px;color:#8a7a70;">Your order <strong>#${num}</strong> has been shipped. You can track your package in real time with the button below.</p><a href="${trackingUrl}" style="display:inline-block;background:#3a2e2b;color:#f1eae4;font-family:${FONT};font-size:11px;letter-spacing:0.16em;text-decoration:none;padding:16px 40px;border-radius:2px;">SEGUI LA SPEDIZIONE · TRACK YOUR ORDER →</a><p style="font-family:${FONT};font-size:12px;color:#8a7a70;margin:40px 0 0;">Per qualsiasi domanda scrivici a · For any questions, contact us at <a href="mailto:info@anointed.it" style="color:#3a2e2b;">info@anointed.it</a></p></td></tr>${piede({ locale: 'it' })}</table></td></tr></table></body></html>`
+  const p = `font-family:${FONT};font-size:14px;line-height:1.8;color:#5d4d42;margin:0 0 32px;`
+  return `<!DOCTYPE html><html><head><meta charset="utf-8">${HEAD_EXTRA}<meta name="viewport" content="width=device-width"></head><body style="margin:0;padding:0;background:#e8d2c3;"><table width="100%" cellpadding="0" cellspacing="0" style="background:#e8d2c3;padding:40px 20px;"><tr><td><table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;margin:0 auto;background:#f1eae4;border-radius:4px;overflow:hidden;">${testata('CHOSEN. SET APART. APPOINTED.')}<tr><td style="padding:48px 40px;text-align:center;"><p style="font-family:${FONT};font-size:10px;letter-spacing:0.2em;color:#c1a99a;margin:0 0 16px;">— ${it ? 'ORDINE SPEDITO' : 'ORDER SHIPPED'} —</p><h1 style="font-family:${FONT};font-size:28px;font-weight:400;color:#3a2e2b;margin:0 0 24px;">${it ? `${nome}, il tuo ordine è in arrivo.` : `On its way to you, ${nome}.`}</h1><p style="${p}">${it ? `Il tuo ordine <strong>#${num}</strong> è stato spedito. Puoi seguire il pacco in tempo reale con il pulsante qui sotto.` : `Your order <strong>#${num}</strong> has been shipped. You can track your package in real time with the button below.`}</p><a href="${trackingUrl}" style="display:inline-block;background:#3a2e2b;color:#f1eae4;font-family:${FONT};font-size:11px;letter-spacing:0.16em;text-decoration:none;padding:16px 40px;border-radius:2px;">${it ? 'SEGUI LA SPEDIZIONE' : 'TRACK YOUR ORDER'} →</a><p style="font-family:${FONT};font-size:12px;color:#8a7a70;margin:40px 0 0;">${it ? 'Per qualsiasi domanda scrivici a' : 'For any questions, contact us at'} <a href="mailto:info@anointed.it" style="color:#3a2e2b;">info@anointed.it</a></p></td></tr>${piede({ locale })}</table></td></tr></table></body></html>`
 }
 
 // Email di conferma iscrizione newsletter (doppio consenso)

@@ -6,6 +6,7 @@ import { emailConfermaOrdine, emailBenvenutoNewsletter, emailCarrelloAbbandonato
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 const FROM = 'ANOINTED <noreply@anointed.it>'
+const lingua = (v: unknown): 'en' | 'it' => (v === 'it' ? 'it' : 'en')
 const headerDisiscrizione = (url: string) => ({ 'List-Unsubscribe': `<${url}>`, 'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click' })
 
 export async function POST(req: Request) {
@@ -18,11 +19,12 @@ export async function POST(req: Request) {
     switch (tipo) {
       case 'conferma_ordine': {
         const { email, nome, ordineId, prodotti, totale, indirizzo } = body
+        const loc = lingua(body.locale)
         await resend.emails.send({
           from: FROM,
           to: email,
-          subject: `Ordine confermato #${ordineId.slice(0, 8).toUpperCase()} — ANOINTED`,
-          html: emailConfermaOrdine({ nome, ordineId, prodotti, totale, indirizzo }),
+          subject: `${loc === 'it' ? 'Ordine confermato' : 'Order confirmed'} #${ordineId.slice(0, 8).toUpperCase()} — ANOINTED`,
+          html: emailConfermaOrdine({ nome, ordineId, prodotti, totale, indirizzo, locale: loc }),
         })
         break
       }
@@ -40,22 +42,24 @@ export async function POST(req: Request) {
       }
       case 'carrello_abbandonato': {
         const { email, nome, prodotti, totale, carrelloId } = body
+        const loc = lingua(body.locale)
         await resend.emails.send({
           from: FROM,
           to: email,
-          subject: `${nome}, your cart is waiting — ANOINTED`,
-          html: emailCarrelloAbbandonato({ nome, prodotti, totale, carrelloId, unsubUrl: urlDisiscrizione(email, 'en') }),
-          headers: headerDisiscrizione(urlDisiscrizione(email, 'en')),
+          subject: loc === 'it' ? `${nome}, il tuo carrello ti aspetta — ANOINTED` : `${nome}, your cart is waiting — ANOINTED`,
+          html: emailCarrelloAbbandonato({ nome, prodotti, totale, carrelloId, unsubUrl: urlDisiscrizione(email, loc), locale: loc }),
+          headers: headerDisiscrizione(urlDisiscrizione(email, loc)),
         })
         break
       }
       case 'ordine_spedito': {
         const { email, nome, ordineId, trackingUrl } = body
+        const loc = lingua(body.locale)
         await resend.emails.send({
           from: FROM,
           to: email,
-          subject: `Il tuo ordine è in arrivo — ANOINTED`,
-          html: emailOrdineSpedito({ nome, ordineId, trackingUrl }),
+          subject: loc === 'it' ? 'Il tuo ordine è in arrivo — ANOINTED' : 'Your order is on its way — ANOINTED',
+          html: emailOrdineSpedito({ nome, ordineId, trackingUrl, locale: loc }),
         })
         break
       }
