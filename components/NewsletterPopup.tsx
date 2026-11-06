@@ -120,7 +120,7 @@ export default function NewsletterPopup() {
   }
 
   // Sulla pagina dell'evento (QR) il modulo e' gia' la pagina stessa: niente popup
-  if (!visible || pathname.includes('/equipher')) return null
+  if (!visible || (pathname.includes('/equipher') || pathname.includes('/newsletter-confermata'))) return null
 
   return (
     <>
