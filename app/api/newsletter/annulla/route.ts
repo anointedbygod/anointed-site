@@ -21,3 +21,8 @@ export async function GET(req: Request) {
 
   return NextResponse.redirect(new URL(`/${locale}/newsletter-annullata`, url.origin))
 }
+
+// Disiscrizione "one-click" richiesta dai client di posta (List-Unsubscribe-Post): stesso link, metodo POST
+export async function POST(req: Request) {
+  return GET(req)
+}

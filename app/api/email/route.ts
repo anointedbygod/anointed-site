@@ -6,6 +6,7 @@ import { emailConfermaOrdine, emailBenvenutoNewsletter, emailCarrelloAbbandonato
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 const FROM = 'ANOINTED <noreply@anointed.it>'
+const headerDisiscrizione = (url: string) => ({ 'List-Unsubscribe': `<${url}>`, 'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click' })
 
 export async function POST(req: Request) {
   // Solo chiamate interne (webhook Stripe, cron): impedisce a chiunque di spedire email dal dominio
@@ -33,6 +34,7 @@ export async function POST(req: Request) {
           to: email,
           subject: isIt ? `Sei scelta — il tuo codice sconto Anointed` : `You are chosen — your Anointed discount code`,
           html: emailBenvenutoNewsletter({ email, codice, locale: isIt ? 'it' : 'en', unsubUrl: urlDisiscrizione(email, isIt ? 'it' : 'en') }),
+          headers: headerDisiscrizione(urlDisiscrizione(email, isIt ? 'it' : 'en')),
         })
         break
       }
@@ -43,6 +45,7 @@ export async function POST(req: Request) {
           to: email,
           subject: `${nome}, your cart is waiting — ANOINTED`,
           html: emailCarrelloAbbandonato({ nome, prodotti, totale, carrelloId, unsubUrl: urlDisiscrizione(email, 'en') }),
+          headers: headerDisiscrizione(urlDisiscrizione(email, 'en')),
         })
         break
       }

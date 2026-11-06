@@ -30,7 +30,8 @@ function piede({ locale = 'en', unsubUrl }: { locale?: 'en' | 'it'; unsubUrl?: s
   <tr>
     <td style="background:#3a2e2b;padding:32px 40px;text-align:center;">
       ${unsubUrl ? `<p style="${t}margin:0 0 16px;">${it ? 'Ricevi questa email perché ti sei iscritta alla newsletter di ANOINTED.' : 'You receive this email because you subscribed to ANOINTED.'} <a href="${unsubUrl}" style="color:#a8998f;text-decoration:underline;">${it ? "Annulla l'iscrizione" : 'Unsubscribe'}</a></p>` : ''}
-      <p style="${t}margin:0 0 20px;"><a href="${SITE}" style="${t}">${datiVenditore().join(' · ')}</a></p>
+      <p style="${t}margin:0 0 12px;"><a href="${SITE}/${it ? 'it' : 'en'}/privacy" style="${t}text-decoration:underline;">Privacy Policy</a> &nbsp;·&nbsp; <a href="${SITE}/${it ? 'it' : 'en'}/condizioni" style="${t}text-decoration:underline;">${it ? 'Termini e condizioni' : 'Terms of Sale'}</a> &nbsp;·&nbsp; <a href="${SITE}/${it ? 'it' : 'en'}/resi" style="${t}text-decoration:underline;">${it ? 'Resi e rimborsi' : 'Returns &amp; Refunds'}</a></p>
+      <p style="${t}margin:0 0 20px;">${datiVenditore().join(' · ')}</p>
       <p style="${t}margin:0 0 8px;">${it ? 'Progetto finanziato da' : 'Project funded by'}</p>
       <table align="center" cellpadding="0" cellspacing="0" style="margin:0 auto 20px;"><tr>
         <td style="background:#ffffff;border-radius:3px;padding:6px 14px;"><img src="${SITE}/invitalia.png" width="55" height="34" alt="Invitalia" style="display:block;width:55px;height:34px;border:0;"></td>
@@ -92,7 +93,10 @@ export function emailConfermaOrdine({
       </div>
       `).join('')}
       <div style="border-top:1px solid rgba(193,169,154,0.3);padding-top:16px;text-align:right;margin-bottom:32px;">
-        <p style="font-family:${FONT};font-size:16px;font-weight:600;color:#3a2e2b;margin:0;">Totale: € ${totale.toFixed(2)}</p>
+        ${(() => { const sub = prodotti.reduce((a, p) => a + p.prezzo * p.quantita, 0); const diff = Math.round((totale - sub) * 100) / 100
+          return diff === 0 ? '' : `<p style="font-family:${FONT};font-size:13px;color:#5d4d42;margin:0 0 6px;">${diff > 0 ? 'Shipping · Spedizione' : 'Discount · Sconto'}: ${diff > 0 ? '' : '− '}€ ${Math.abs(diff).toFixed(2)}</p>` })()}
+        <p style="font-family:${FONT};font-size:16px;font-weight:600;color:#3a2e2b;margin:0;">Totale · Total: € ${totale.toFixed(2)}</p>
+        <p style="font-family:${FONT};font-size:11px;color:#8a7a70;margin:4px 0 0;">IVA inclusa · VAT included</p>
       </div>
 
       <!-- Indirizzo -->
@@ -320,7 +324,9 @@ export function emailCarrelloAbbandonato({
 }
 
 export function emailOrdineSpedito({ nome, ordineId, trackingUrl }: { nome: string; ordineId: string; trackingUrl: string }) {
-  return `<!DOCTYPE html><html><head><meta charset="utf-8">${HEAD_EXTRA}</head><body style="margin:0;padding:0;background:#e8d2c3;"><table width="100%" cellpadding="0" cellspacing="0" style="background:#e8d2c3;padding:40px 20px;"><tr><td><table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;margin:0 auto;background:#f1eae4;border-radius:4px;overflow:hidden;">${testata('CHOSEN. SET APART. APPOINTED.')}<tr><td style="padding:48px 40px;text-align:center;"><p style="font-family:${FONT};font-size:10px;letter-spacing:0.2em;color:#c1a99a;margin:0 0 16px;">— ORDER SHIPPED —</p><h1 style="font-family:${FONT};font-size:28px;font-weight:400;color:#3a2e2b;margin:0 0 16px;">On its way to you, ${nome}.</h1><p style="font-family:${FONT};font-size:14px;line-height:1.8;color:#5d4d42;margin:0 0 8px;">Il tuo ordine <strong>#${ordineId.slice(0,8).toUpperCase()}</strong> has been shipped.</p><p style="font-family:${FONT};font-size:14px;line-height:1.8;color:#5d4d42;margin:0 0 40px;">You can track your package in real time by clicking the button below.</p><a href="${trackingUrl}" style="display:inline-block;background:#3a2e2b;color:#f1eae4;font-family:${FONT};font-size:11px;letter-spacing:0.16em;text-decoration:none;padding:16px 40px;border-radius:2px;">TRACK YOUR ORDER →</a><p style="font-family:${FONT};font-size:12px;color:#c1a99a;margin:40px 0 0;">For any questions, contact us at <a href="mailto:info@anointed.it" style="color:#3a2e2b;">info@anointed.it</a></p></td></tr>${piede({})}</table></td></tr></table></body></html>`
+  const num = ordineId.slice(0, 8).toUpperCase()
+  const p = `font-family:${FONT};font-size:14px;line-height:1.8;color:#5d4d42;margin:0 0 8px;`
+  return `<!DOCTYPE html><html><head><meta charset="utf-8">${HEAD_EXTRA}<meta name="viewport" content="width=device-width"></head><body style="margin:0;padding:0;background:#e8d2c3;"><table width="100%" cellpadding="0" cellspacing="0" style="background:#e8d2c3;padding:40px 20px;"><tr><td><table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;margin:0 auto;background:#f1eae4;border-radius:4px;overflow:hidden;">${testata('CHOSEN. SET APART. APPOINTED.')}<tr><td style="padding:48px 40px;text-align:center;"><p style="font-family:${FONT};font-size:10px;letter-spacing:0.2em;color:#c1a99a;margin:0 0 16px;">— ORDINE SPEDITO · ORDER SHIPPED —</p><h1 style="font-family:${FONT};font-size:28px;font-weight:400;color:#3a2e2b;margin:0 0 24px;">${nome}, il tuo ordine è in arrivo.</h1><p style="${p}">Il tuo ordine <strong>#${num}</strong> è stato spedito. Puoi seguire il pacco in tempo reale con il pulsante qui sotto.</p><p style="${p}margin-bottom:32px;color:#8a7a70;">Your order <strong>#${num}</strong> has been shipped. You can track your package in real time with the button below.</p><a href="${trackingUrl}" style="display:inline-block;background:#3a2e2b;color:#f1eae4;font-family:${FONT};font-size:11px;letter-spacing:0.16em;text-decoration:none;padding:16px 40px;border-radius:2px;">SEGUI LA SPEDIZIONE · TRACK YOUR ORDER →</a><p style="font-family:${FONT};font-size:12px;color:#8a7a70;margin:40px 0 0;">Per qualsiasi domanda scrivici a · For any questions, contact us at <a href="mailto:info@anointed.it" style="color:#3a2e2b;">info@anointed.it</a></p></td></tr>${piede({ locale: 'it' })}</table></td></tr></table></body></html>`
 }
 
 // Email di conferma iscrizione newsletter (doppio consenso)
@@ -359,8 +365,8 @@ export function emailConfermaNewsletter({ locale = 'en', confirmUrl }: { locale?
 export function emailPassEvento({ codice, locale = 'it', unsubUrl }: { codice: string; locale?: 'en' | 'it'; unsubUrl?: string }) {
   const it = locale === 'it'
   const L = it
-    ? { tag: 'EQUIPHER ITALIA · 21 NOVEMBRE 2026', heading: 'Il tuo codice.', body: 'Grazie per esserti iscritta alla newsletter di ANOINTED. Mostra questa email allo stand ANOINTED durante EquipHer, a Casa Ruffino, per avere il 10% sui tuoi acquisti.', label: 'IL TUO CODICE', note: 'Il codice è personale, vale una sola volta e solo allo stand: non è utilizzabile sul sito.', outro: 'Dopo l\'evento ti scriveremo per l\'apertura ufficiale dello shop.' }
-    : { tag: 'EQUIPHER ITALIA · 21 NOVEMBER 2026', heading: 'Your code.', body: 'Thank you for subscribing to the ANOINTED newsletter. Show this email at the ANOINTED stand during EquipHer, at Casa Ruffino, to get 10% off your purchases.', label: 'YOUR CODE', note: 'The code is personal, valid once and only at the stand: it cannot be used on the website.', outro: 'After the event we will write to you for the official opening of the shop.' }
+    ? { tag: 'EQUIPHER ITALIA · 21 NOVEMBRE 2026', heading: 'Il tuo codice.', body: 'Grazie per esserti iscritta alla newsletter di ANOINTED. Mostra questa email allo stand ANOINTED durante EquipHer, a Casa Ruffino, per avere il 10% sui tuoi acquisti.', label: 'IL TUO CODICE', note: 'Il codice è personale e vale una sola volta, solo allo stand ANOINTED il 21 novembre 2026: 10% sugli acquisti effettuati all\'evento, non cumulabile con altre promozioni e non utilizzabile sul sito.', outro: 'Dopo l\'evento ti scriveremo per l\'apertura ufficiale dello shop.' }
+    : { tag: 'EQUIPHER ITALIA · 21 NOVEMBER 2026', heading: 'Your code.', body: 'Thank you for subscribing to the ANOINTED newsletter. Show this email at the ANOINTED stand during EquipHer, at Casa Ruffino, to get 10% off your purchases.', label: 'YOUR CODE', note: 'The code is personal and valid once, only at the ANOINTED stand on 21 November 2026: 10% off purchases made at the event, not combinable with other promotions and not usable on the website.', outro: 'After the event we will write to you for the official opening of the shop.' }
   return `
 <!DOCTYPE html>
 <html>

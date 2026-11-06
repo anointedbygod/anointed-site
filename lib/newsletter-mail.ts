@@ -8,8 +8,10 @@ const FROM = 'ANOINTED <noreply@anointed.it>'
 let client: Resend | null = null
 const resend = () => (client ??= new Resend(process.env.RESEND_API_KEY))
 
-async function invia(to: string, subject: string, html: string) {
-  const r = await resend().emails.send({ from: FROM, to, subject, html })
+async function invia(to: string, subject: string, html: string, unsubUrl?: string) {
+  // Disiscrizione con un clic (RFC 8058): richiesta da Gmail/Yahoo per gli invii di massa
+  const headers = unsubUrl ? { 'List-Unsubscribe': `<${unsubUrl}>`, 'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click' } : undefined
+  const r = await resend().emails.send({ from: FROM, to, subject, html, ...(headers ? { headers } : {}) })
   if (r.error) throw new Error(`Resend: ${r.error.message}`)
 }
 
@@ -26,6 +28,7 @@ export async function inviaBenvenuto(email: string, codice: string, locale: 'en'
     email,
     locale === 'it' ? 'Sei scelta — il tuo codice sconto Anointed' : 'You are chosen — your Anointed discount code',
     emailBenvenutoNewsletter({ email, codice, locale, unsubUrl: urlDisiscrizione(email, locale) }),
+    urlDisiscrizione(email, locale),
   )
 }
 
@@ -34,5 +37,6 @@ export async function inviaPassEvento(email: string, codice: string, locale: 'en
     email,
     locale === 'it' ? `Il tuo codice EquipHer — ${codice}` : `Your EquipHer code — ${codice}`,
     emailPassEvento({ codice, locale, unsubUrl: urlDisiscrizione(email, locale) }),
+    urlDisiscrizione(email, locale),
   )
 }
