@@ -27,14 +27,15 @@ export async function POST(req: Request) {
   if (body?.consenso !== true) return NextResponse.json({ error: 'Consenso mancante' }, { status: 400 })
 
   const locale = body?.locale === 'it' ? 'it' : 'en'
-  const fonte: Fonte = body?.tipo === 'checkout' ? 'checkout' : body?.tipo === 'newsletter' ? 'newsletter' : 'popup'
+  const fonte: Fonte = body?.tipo === 'checkout' ? 'checkout' : body?.tipo === 'newsletter' ? 'newsletter' : body?.tipo === 'equipher' ? 'equipher' : 'popup'
   const ip = (req.headers.get('x-forwarded-for') || 'unknown').split(',')[0].trim()
   if (limitato(ip, email)) return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
 
   try {
     const { data: esistente } = await supabaseAdmin.from('newsletter_iscritti').select('email').eq('email', email).maybeSingle()
     // Già iscritta: nessuna nuova email (evita invii ripetuti a un indirizzo altrui)
-    if (esistente) return NextResponse.json({ success: true, gia: true })
+    // (per il pass dell'evento si procede comunque: anche chi era gia' iscritta puo' ricevere il suo codice)
+    if (esistente && fonte !== 'equipher') return NextResponse.json({ success: true, gia: true })
 
     await inviaConferma(email, locale, fonte)
     return NextResponse.json({ success: true })

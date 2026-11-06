@@ -349,3 +349,39 @@ export function emailConfermaNewsletter({ locale = 'en', confirmUrl }: { locale?
 </html>
   `
 }
+
+// Pass EquipHer: prova visiva da mostrare allo stand (NON e' un codice sconto utilizzabile sul sito)
+export function emailPassEvento({ codice, locale = 'it', unsubUrl }: { codice: string; locale?: 'en' | 'it'; unsubUrl?: string }) {
+  const it = locale === 'it'
+  const L = it
+    ? { tag: 'EQUIPHER ITALIA · 21 NOVEMBRE 2026', heading: 'Il tuo codice.', body: 'Grazie per esserti iscritta alla newsletter di ANOINTED. Mostra questa email allo stand ANOINTED durante EquipHer, a Casa Ruffino, per avere il 10% sui tuoi acquisti.', label: 'IL TUO CODICE', note: 'Il codice è personale, vale una sola volta e solo allo stand: non è utilizzabile sul sito.', outro: 'Dopo l\'evento ti scriveremo per l\'apertura ufficiale dello shop.' }
+    : { tag: 'EQUIPHER ITALIA · 21 NOVEMBER 2026', heading: 'Your code.', body: 'Thank you for subscribing to the ANOINTED newsletter. Show this email at the ANOINTED stand during EquipHer, at Casa Ruffino, to get 10% off your purchases.', label: 'YOUR CODE', note: 'The code is personal, valid once and only at the stand: it cannot be used on the website.', outro: 'After the event we will write to you for the official opening of the shop.' }
+  return `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width"></head>
+<body style="margin:0;padding:0;background:#e8d2c3;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#e8d2c3;padding:40px 20px;">
+<tr><td>
+<table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;margin:0 auto;background:#f1eae4;border-radius:4px;overflow:hidden;">
+${testata(L.tag)}
+  <tr>
+    <td style="padding:48px 40px;text-align:center;">
+      <h1 style="font-family:${FONT};font-size:28px;font-style:italic;font-weight:400;color:#3a2e2b;margin:0 0 24px;">${L.heading}</h1>
+      <p style="font-family:${FONT};font-size:14px;line-height:1.85;color:#5d4d42;margin:0 0 32px;">${L.body}</p>
+      <div style="background:#3a2e2b;border-radius:4px;padding:28px 20px;margin:0 0 28px;">
+        <p style="font-family:${FONT};font-size:10px;letter-spacing:0.2em;color:#c1a99a;margin:0 0 10px;">${L.label}</p>
+        <p style="font-family:'Courier New',Courier,monospace;font-size:30px;font-weight:700;letter-spacing:0.12em;color:#f1eae4;margin:0;">${codice}</p>
+      </div>
+      <p style="font-family:${FONT};font-size:12px;line-height:1.8;color:#5d4d42;margin:0 0 20px;">${L.note}</p>
+      <p style="font-family:${FONT};font-size:12px;line-height:1.8;color:#8a7a70;margin:0;">${L.outro}</p>
+    </td>
+  </tr>
+${piede({ locale, unsubUrl })}
+</table>
+</td></tr>
+</table>
+</body>
+</html>
+  `
+}

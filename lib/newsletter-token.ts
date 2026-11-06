@@ -4,7 +4,7 @@ import { createHmac, timingSafeEqual } from 'crypto'
 // Nessuna scrittura nel database finché l'utente non clicca: un indirizzo inventato
 // non riceve mai il codice sconto e non entra nella lista.
 const SCADENZA_MS = 7 * 24 * 60 * 60 * 1000
-export type Fonte = 'popup' | 'checkout' | 'newsletter'
+export type Fonte = 'popup' | 'checkout' | 'newsletter' | 'equipher'
 
 function firma(email: string, ts: number, lingua: string, fonte: string) {
   const secret = process.env.CRON_SECRET

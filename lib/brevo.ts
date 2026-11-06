@@ -20,11 +20,14 @@ async function chiama(key: string, path: string, method: string, body: unknown) 
 }
 
 // Iscrive (o riattiva) il contatto nella lista: da chiamare SOLO dopo il consenso esplicito.
-export async function brevoIscrivi(email: string) {
+// evento: aggiunge anche alla lista dedicata (BREVO_LIST_EQUIPHER, opzionale) per scrivere solo a chi era all'evento.
+export async function brevoIscrivi(email: string, evento = false) {
   const c = config()
   if (!c) return
+  const extra = Number(process.env.BREVO_LIST_EQUIPHER)
+  const listIds = evento && Number.isInteger(extra) && extra > 0 ? [c.list, extra] : [c.list]
   try {
-    await chiama(c.key, '/contacts', 'POST', { email, listIds: [c.list], updateEnabled: true, emailBlacklisted: false })
+    await chiama(c.key, '/contacts', 'POST', { email, listIds, updateEnabled: true, emailBlacklisted: false })
   } catch (err) {
     console.error('Brevo iscrizione fallita:', err)
   }

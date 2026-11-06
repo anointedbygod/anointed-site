@@ -1,7 +1,7 @@
 import { Resend } from 'resend'
 import { urlConferma, type Fonte } from '@/lib/newsletter-token'
 import { urlDisiscrizione } from '@/lib/unsubscribe'
-import { emailConfermaNewsletter, emailBenvenutoNewsletter } from '@/lib/email-templates'
+import { emailConfermaNewsletter, emailBenvenutoNewsletter, emailPassEvento } from '@/lib/email-templates'
 
 // Invio diretto da server (senza passare da /api/email, che accetta solo chiamate interne autenticate).
 const FROM = 'ANOINTED <noreply@anointed.it>'
@@ -26,5 +26,13 @@ export async function inviaBenvenuto(email: string, codice: string, locale: 'en'
     email,
     locale === 'it' ? 'Sei scelta — il tuo codice sconto Anointed' : 'You are chosen — your Anointed discount code',
     emailBenvenutoNewsletter({ email, codice, locale, unsubUrl: urlDisiscrizione(email, locale) }),
+  )
+}
+
+export async function inviaPassEvento(email: string, codice: string, locale: 'en' | 'it') {
+  await invia(
+    email,
+    locale === 'it' ? `Il tuo codice EquipHer — ${codice}` : `Your EquipHer code — ${codice}`,
+    emailPassEvento({ codice, locale, unsubUrl: urlDisiscrizione(email, locale) }),
   )
 }
