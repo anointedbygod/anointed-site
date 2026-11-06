@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 // Scanner staff EquipHer: PIN -> fotocamera -> VALIDATO / NEGATO. Pensato per telefono.
-type Esito = { esito: 'validato' | 'negato'; motivo?: 'gia_usato' | 'non_valido'; codice: string; usato_at?: string | null }
+type Esito = { esito: 'validato' | 'negato'; motivo?: 'gia_usato' | 'non_valido'; codice: string; usato_at?: string | null; email?: string }
 type Riga = { codice: string; email: string; usato_at: string | null }
 type Registro = { totale: number; usati: number; lista: Riga[] }
 
@@ -145,7 +145,7 @@ export default function StaffPage() {
         <h1 style={{ fontSize: 28, fontWeight: 300, letterSpacing: '0.22em', color: C.scuro, margin: '0 0 2.5rem' }}>ANOINTED</h1>
         <input
           type="password" inputMode="numeric" pattern="[0-9]*" maxLength={6} autoFocus autoComplete="off"
-          value={pin} placeholder="PIN a 6 cifre" disabled={invio}
+          value={pin} aria-label="PIN" disabled={invio}
           onChange={e => { const v = e.target.value.replace(/\D/g, '').slice(0, 6); setPin(v); setErrPin(''); if (v.length === 6) accedi(v) }}
           style={{ fontFamily: FONT, fontSize: 24, textAlign: 'center', letterSpacing: '0.5em', width: '100%', maxWidth: 280, padding: '1rem', border: `1px solid ${C.linea}`, borderRadius: 6, background: 'white', color: C.scuro, outline: 'none', boxSizing: 'border-box' }}
         />
@@ -234,6 +234,7 @@ export default function StaffPage() {
           <div style={{ fontSize: 64, lineHeight: 1 }}>{esito.esito === 'validato' ? '✓' : '✕'}</div>
           <h2 style={{ fontSize: 34, fontWeight: 300, letterSpacing: '0.22em', margin: '0.4rem 0 0' }}>{esito.esito === 'validato' ? 'VALIDATO' : 'NEGATO'}</h2>
           <p style={{ fontFamily: 'monospace', fontSize: 20, letterSpacing: '0.1em', margin: '0.6rem 0 0', opacity: 0.95 }}>{esito.codice}</p>
+          {esito.email && <p style={{ fontSize: 15, margin: '0.2rem 0 0', opacity: 0.95, wordBreak: 'break-all' }}>{esito.email}</p>}
           <p style={{ fontSize: 15, lineHeight: 1.6, margin: '0.4rem 0 0', opacity: 0.95 }}>
             {esito.esito === 'validato'
               ? '10% da applicare. Pass timbrato.'

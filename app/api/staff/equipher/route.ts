@@ -38,12 +38,12 @@ export async function POST(req: Request) {
   const adesso = new Date().toISOString()
   const { data, error } = await supabaseAdmin
     .from('newsletter_iscritti').update({ codice_evento_usato_at: adesso })
-    .eq('codice_evento', codice).is('codice_evento_usato_at', null).select('codice_evento')
+    .eq('codice_evento', codice).is('codice_evento_usato_at', null).select('codice_evento, email')
   if (error) return NextResponse.json({ error: 'errore database' }, { status: 500 })
-  if (data && data.length > 0) return NextResponse.json({ esito: 'validato', codice, usato_at: adesso })
+  if (data && data.length > 0) return NextResponse.json({ esito: 'validato', codice, usato_at: adesso, email: data[0].email })
 
   const { data: esiste } = await supabaseAdmin
-    .from('newsletter_iscritti').select('codice_evento_usato_at').eq('codice_evento', codice).maybeSingle()
+    .from('newsletter_iscritti').select('codice_evento_usato_at, email').eq('codice_evento', codice).maybeSingle()
   if (!esiste) return NextResponse.json({ esito: 'negato', motivo: 'non_valido', codice })
-  return NextResponse.json({ esito: 'negato', motivo: 'gia_usato', codice, usato_at: esiste.codice_evento_usato_at })
+  return NextResponse.json({ esito: 'negato', motivo: 'gia_usato', codice, usato_at: esiste.codice_evento_usato_at, email: esiste.email })
 }
