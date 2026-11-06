@@ -5,7 +5,11 @@ import { AZIENDA, datiVenditore } from '@/lib/azienda'
 // ── Elementi condivisi da tutte le email ─────────────────────────────────────
 // Font: i client di posta (Gmail in testa) non caricano font personalizzati, quindi testo con
 // uno stack di sistema; il marchio ANOINTED e' un'immagine (PNG), che si vede identica ovunque.
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://anointed.it'
+// Immagini sempre dal sito pubblico: un client di posta non puo' raggiungere localhost.
+const SITE = 'https://anointed.it'
+
+// Evita che iOS/Gmail trasformino indirizzo, telefono, date ed email in link blu sottolineati
+const HEAD_EXTRA = `<meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"><meta name="x-apple-disable-message-reformatting"><style>a[x-apple-data-detectors]{color:inherit!important;text-decoration:none!important;font-size:inherit!important;font-family:inherit!important;font-weight:inherit!important;line-height:inherit!important}</style>`
 const FONT = "'Helvetica Neue',Helvetica,Arial,sans-serif"
 
 function testata(tagline?: string) {
@@ -18,19 +22,20 @@ function testata(tagline?: string) {
   </tr>`
 }
 
-// Piede: dati del venditore e finanziamento, come nel footer del sito (+ disiscrizione se serve)
+// Piede: dati del venditore e finanziamento, come nel footer del sito. Testo semplice, un solo colore.
 function piede({ locale = 'en', unsubUrl }: { locale?: 'en' | 'it'; unsubUrl?: string } = {}) {
   const it = locale === 'it'
+  const t = `font-family:${FONT};font-size:11px;line-height:1.7;color:#a8998f;text-decoration:none;`
   return `
   <tr>
     <td style="background:#3a2e2b;padding:32px 40px;text-align:center;">
-      ${unsubUrl ? `<p style="font-family:${FONT};font-size:11px;line-height:1.7;color:#b9aca2;margin:0 0 16px;">${it ? 'Ricevi questa email perché ti sei iscritta alla newsletter di ANOINTED.' : 'You receive this email because you subscribed to ANOINTED.'} <a href="${unsubUrl}" style="color:#c1a99a;">${it ? "Annulla l'iscrizione" : 'Unsubscribe'}</a></p>` : ''}
-      <p style="font-family:${FONT};font-size:10px;line-height:1.8;letter-spacing:0.06em;color:#a8998f;margin:0 0 20px;">${datiVenditore().join(' · ')}</p>
-      <p style="font-family:${FONT};font-size:9px;letter-spacing:0.14em;color:#a8998f;margin:0 0 8px;">${it ? 'PROGETTO FINANZIATO DA' : 'PROJECT FUNDED BY'}</p>
+      ${unsubUrl ? `<p style="${t}margin:0 0 16px;">${it ? 'Ricevi questa email perché ti sei iscritta alla newsletter di ANOINTED.' : 'You receive this email because you subscribed to ANOINTED.'} <a href="${unsubUrl}" style="color:#a8998f;text-decoration:underline;">${it ? "Annulla l'iscrizione" : 'Unsubscribe'}</a></p>` : ''}
+      <p style="${t}margin:0 0 20px;"><a href="${SITE}" style="${t}">${datiVenditore().join(' · ')}</a></p>
+      <p style="${t}margin:0 0 8px;">${it ? 'Progetto finanziato da' : 'Project funded by'}</p>
       <table align="center" cellpadding="0" cellspacing="0" style="margin:0 auto 20px;"><tr>
         <td style="background:#ffffff;border-radius:3px;padding:6px 14px;"><img src="${SITE}/invitalia.png" width="55" height="34" alt="Invitalia" style="display:block;width:55px;height:34px;border:0;"></td>
       </tr></table>
-      <p style="font-family:${FONT};font-size:10px;color:#a8998f;margin:0;">${it ? '© 2026 Anointed. Tutti i diritti riservati.' : '© 2026 Anointed. All rights reserved.'}</p>
+      <p style="${t}margin:0;">${it ? '© 2026 Anointed. Tutti i diritti riservati.' : '© 2026 Anointed. All rights reserved.'}</p>
     </td>
   </tr>`
 }
@@ -51,7 +56,7 @@ export function emailConfermaOrdine({
   return `
 <!DOCTYPE html>
 <html>
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width"></head>
+<head><meta charset="utf-8">${HEAD_EXTRA}<meta name="viewport" content="width=device-width"></head>
 <body style="margin:0;padding:0;background:#e8d2c3;">
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#e8d2c3;padding:40px 20px;">
 <tr><td>
@@ -187,7 +192,7 @@ export function emailBenvenutoNewsletter({ email, codice = 'WELCOME10', locale =
   return `
 <!DOCTYPE html>
 <html>
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width"></head>
+<head><meta charset="utf-8">${HEAD_EXTRA}<meta name="viewport" content="width=device-width"></head>
 <body style="margin:0;padding:0;background:#e8d2c3;">
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#e8d2c3;padding:40px 20px;">
 <tr><td>
@@ -269,7 +274,7 @@ export function emailCarrelloAbbandonato({
   return `
 <!DOCTYPE html>
 <html>
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width"></head>
+<head><meta charset="utf-8">${HEAD_EXTRA}<meta name="viewport" content="width=device-width"></head>
 <body style="margin:0;padding:0;background:#e8d2c3;">
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#e8d2c3;padding:40px 20px;">
 <tr><td>
@@ -315,7 +320,7 @@ export function emailCarrelloAbbandonato({
 }
 
 export function emailOrdineSpedito({ nome, ordineId, trackingUrl }: { nome: string; ordineId: string; trackingUrl: string }) {
-  return `<!DOCTYPE html><html><head><meta charset="utf-8"></head><body style="margin:0;padding:0;background:#e8d2c3;"><table width="100%" cellpadding="0" cellspacing="0" style="background:#e8d2c3;padding:40px 20px;"><tr><td><table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;margin:0 auto;background:#f1eae4;border-radius:4px;overflow:hidden;">${testata('CHOSEN. SET APART. APPOINTED.')}<tr><td style="padding:48px 40px;text-align:center;"><p style="font-family:${FONT};font-size:10px;letter-spacing:0.2em;color:#c1a99a;margin:0 0 16px;">— ORDER SHIPPED —</p><h1 style="font-family:${FONT};font-size:28px;font-weight:400;color:#3a2e2b;margin:0 0 16px;">On its way to you, ${nome}.</h1><p style="font-family:${FONT};font-size:14px;line-height:1.8;color:#5d4d42;margin:0 0 8px;">Il tuo ordine <strong>#${ordineId.slice(0,8).toUpperCase()}</strong> has been shipped.</p><p style="font-family:${FONT};font-size:14px;line-height:1.8;color:#5d4d42;margin:0 0 40px;">You can track your package in real time by clicking the button below.</p><a href="${trackingUrl}" style="display:inline-block;background:#3a2e2b;color:#f1eae4;font-family:${FONT};font-size:11px;letter-spacing:0.16em;text-decoration:none;padding:16px 40px;border-radius:2px;">TRACK YOUR ORDER →</a><p style="font-family:${FONT};font-size:12px;color:#c1a99a;margin:40px 0 0;">For any questions, contact us at <a href="mailto:info@anointed.it" style="color:#3a2e2b;">info@anointed.it</a></p></td></tr>${piede({})}</table></td></tr></table></body></html>`
+  return `<!DOCTYPE html><html><head><meta charset="utf-8">${HEAD_EXTRA}</head><body style="margin:0;padding:0;background:#e8d2c3;"><table width="100%" cellpadding="0" cellspacing="0" style="background:#e8d2c3;padding:40px 20px;"><tr><td><table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;margin:0 auto;background:#f1eae4;border-radius:4px;overflow:hidden;">${testata('CHOSEN. SET APART. APPOINTED.')}<tr><td style="padding:48px 40px;text-align:center;"><p style="font-family:${FONT};font-size:10px;letter-spacing:0.2em;color:#c1a99a;margin:0 0 16px;">— ORDER SHIPPED —</p><h1 style="font-family:${FONT};font-size:28px;font-weight:400;color:#3a2e2b;margin:0 0 16px;">On its way to you, ${nome}.</h1><p style="font-family:${FONT};font-size:14px;line-height:1.8;color:#5d4d42;margin:0 0 8px;">Il tuo ordine <strong>#${ordineId.slice(0,8).toUpperCase()}</strong> has been shipped.</p><p style="font-family:${FONT};font-size:14px;line-height:1.8;color:#5d4d42;margin:0 0 40px;">You can track your package in real time by clicking the button below.</p><a href="${trackingUrl}" style="display:inline-block;background:#3a2e2b;color:#f1eae4;font-family:${FONT};font-size:11px;letter-spacing:0.16em;text-decoration:none;padding:16px 40px;border-radius:2px;">TRACK YOUR ORDER →</a><p style="font-family:${FONT};font-size:12px;color:#c1a99a;margin:40px 0 0;">For any questions, contact us at <a href="mailto:info@anointed.it" style="color:#3a2e2b;">info@anointed.it</a></p></td></tr>${piede({})}</table></td></tr></table></body></html>`
 }
 
 // Email di conferma iscrizione newsletter (doppio consenso)
@@ -327,7 +332,7 @@ export function emailConfermaNewsletter({ locale = 'en', confirmUrl }: { locale?
   return `
 <!DOCTYPE html>
 <html>
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width"></head>
+<head><meta charset="utf-8">${HEAD_EXTRA}<meta name="viewport" content="width=device-width"></head>
 <body style="margin:0;padding:0;background:#e8d2c3;">
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#e8d2c3;padding:40px 20px;">
 <tr><td>
@@ -359,7 +364,7 @@ export function emailPassEvento({ codice, locale = 'it', unsubUrl }: { codice: s
   return `
 <!DOCTYPE html>
 <html>
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width"></head>
+<head><meta charset="utf-8">${HEAD_EXTRA}<meta name="viewport" content="width=device-width"></head>
 <body style="margin:0;padding:0;background:#e8d2c3;">
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#e8d2c3;padding:40px 20px;">
 <tr><td>

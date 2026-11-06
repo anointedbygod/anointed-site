@@ -119,7 +119,8 @@ export default function NewsletterPopup() {
     thanksCta:  locale === 'it' ? 'INIZIA A FARE SHOPPING' : 'START SHOPPING',
   }
 
-  if (!visible) return null
+  // Sulla pagina dell'evento (QR) il modulo e' gia' la pagina stessa: niente popup
+  if (!visible || pathname.includes('/equipher')) return null
 
   return (
     <>
