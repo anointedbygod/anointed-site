@@ -139,8 +139,10 @@ export default function AccountLogin() {
             <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', color: '#c1a99a', textAlign: 'center', marginTop: '1.25rem', margin: '1.25rem 0 0' }}>
               <button onClick={async () => {
                 if (!email) { setError(locale === 'it' ? 'Inserisci la tua email prima.' : 'Enter your email first.'); return }
-                await supabase.auth.resetPasswordForEmail(email)
-                setSuccess(locale === 'it' ? 'Email di reset inviata.' : 'Reset email sent.')
+                await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${window.location.origin}/${locale}/account/nuova-password` })
+                // Messaggio identico che l'account esista o no: non si rivela chi è registrato
+                setError('')
+                setSuccess(locale === 'it' ? 'Se l\'email è registrata, riceverai un link per scegliere una nuova password (vale 1 ora).' : 'If this email is registered, you will receive a link to choose a new password (valid for 1 hour).')
               }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#c1a99a', fontFamily: 'Inter, sans-serif', fontSize: '11px', textDecoration: 'underline' }}>
                 {t.forgotPw}
               </button>
