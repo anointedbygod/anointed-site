@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase-admin'
 import { autorizzato, normalizzaCodice } from '@/lib/staff-auth'
+import { origineValida } from '@/lib/rate-limit'
 
 // Verifica/timbro dei pass EquipHer dallo stand. Richiede il cookie staff (PIN).
 const nonAutorizzato = () => NextResponse.json({ error: 'non autorizzato' }, { status: 401 })
@@ -24,6 +25,7 @@ export async function GET(req: Request) {
 // POST { codice, annulla }   -> toglie il timbro (per un errore)
 export async function POST(req: Request) {
   if (!autorizzato(req)) return nonAutorizzato()
+  if (!origineValida(req)) return NextResponse.json({ error: 'Origine non valida' }, { status: 403 })
   const body = await req.json().catch(() => ({}))
   const codice = normalizzaCodice(body?.codice)
   if (!/^EQUIPHER-\d{3,4}$/.test(codice)) return NextResponse.json({ esito: 'negato', motivo: 'non_valido', codice })

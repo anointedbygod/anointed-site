@@ -49,7 +49,7 @@ export default function AccountMenu({ textColor }: { textColor: string }) {
 
     if (mode === 'login') {
       const { error } = await supabase.auth.signInWithPassword({ email, password })
-      if (error) { setError(locale === 'it' ? 'Credenziali non valide.' : 'Invalid credentials.'); setAuthLoading(false); return }
+      if (error) { fetch('/api/auth/fallito', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email }) }).catch(() => {}); setError(locale === 'it' ? 'Credenziali non valide.' : 'Invalid credentials.'); setAuthLoading(false); return }
       setOpen(false)
       setEmail(''); setPassword('')
     } else {

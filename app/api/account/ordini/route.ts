@@ -9,7 +9,8 @@ export async function GET(req: Request) {
 
   let query = supabaseAdmin.from('ordini').select('*, righe_ordine(*)')
   // Gli ordini fatti da ospite si collegano per email solo se l'email dell'account è verificata
-  if (user.email && user.email_confirmed_at) {
+  // L'email finisce in un filtro PostgREST: la si usa solo se non contiene caratteri speciali del filtro
+  if (user.email && user.email_confirmed_at && /^[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+$/.test(user.email)) {
     query = query.or(`user_id.eq.${user.id},email_cliente.eq.${user.email}`)
   } else {
     query = query.eq('user_id', user.id)

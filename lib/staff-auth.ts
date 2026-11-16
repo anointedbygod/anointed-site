@@ -40,11 +40,14 @@ export function bloccato(ip: string) {
   const t = tentativi.get(ip)
   return !!t && t.fino > Date.now()
 }
+/** Registra un PIN errato; restituisce true quando scatta il blocco (5 errori di fila). */
 export function registraErrore(ip: string) {
   const t = tentativi.get(ip) || { n: 0, fino: 0 }
   t.n += 1
-  if (t.n >= 5) { t.fino = Date.now() + 10 * 60 * 1000; t.n = 0 }
+  const scattato = t.n >= 5
+  if (scattato) { t.fino = Date.now() + 10 * 60 * 1000; t.n = 0 }
   tentativi.set(ip, t)
+  return scattato
 }
 export function azzera(ip: string) { tentativi.delete(ip) }
 

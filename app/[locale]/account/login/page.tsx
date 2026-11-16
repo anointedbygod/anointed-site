@@ -45,7 +45,7 @@ export default function AccountLogin() {
 
     if (mode === 'login') {
       const { error } = await supabase.auth.signInWithPassword({ email, password })
-      if (error) { setError(locale === 'it' ? 'Credenziali non valide.' : 'Invalid credentials.'); setLoading(false); return }
+      if (error) { fetch('/api/auth/fallito', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email }) }).catch(() => {}); setError(locale === 'it' ? 'Credenziali non valide.' : 'Invalid credentials.'); setLoading(false); return }
       window.location.href = `/${locale}/account`
     } else {
       const { error } = await supabase.auth.signUp({ email, password, options: { data: { full_name: nome } } })

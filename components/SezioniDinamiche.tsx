@@ -16,7 +16,6 @@ export default function SezioniDinamiche() {
     fetch('/api/sezioni')
       .then(r => r.json())
       .then(data => {
-        console.log('SEZIONI:', data)
         if (Array.isArray(data)) {
           setSezioni(data.filter(s => s.sezioni_prodotti?.length > 0))
         }
@@ -24,8 +23,6 @@ export default function SezioniDinamiche() {
       })
       .catch(err => { console.error('SEZIONI ERROR:', err); setLoaded(true) })
   }, [])
-
-  console.log('RENDER sezioni:', sezioni.length, 'loaded:', loaded)
 
   if (!loaded) return null
   if (sezioni.length === 0) return <div style={{padding:'2rem',color:'red'}}>Nessuna sezione con prodotti</div>
