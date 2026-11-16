@@ -1,0 +1,13 @@
+# GitHub controlla ogni settimana le dipendenze e apre una PR quando serve un aggiornamento.
+# Gli aggiornamenti di sicurezza arrivano subito (attivare "Dependabot security updates" nelle impostazioni del repo).
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    groups:
+      minori-e-patch:
+        update-types: [minor, patch]
