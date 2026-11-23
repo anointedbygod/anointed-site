@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { copertina, ETICHETTE_TIPO, ETICHETTE_UI, type VoceWorld } from '@/lib/anointed-world'
+import { copertina, ETICHETTE_UI, type VoceWorld } from '@/lib/anointed-world'
 
-// Scheda compatta di Anointed World: foto verticale, tipo, data, titolo, una riga di anteprima.
+// Scheda compatta di Anointed World: foto verticale, titolo, una riga di anteprima.
 // Tutta la scheda porta alla pagina dell'articolo.
 export default function WorldCard({ v, locale, priority = false }: { v: VoceWorld; locale: 'it' | 'en'; priority?: boolean }) {
   const t = v[locale]
@@ -11,10 +11,8 @@ export default function WorldCard({ v, locale, priority = false }: { v: VoceWorl
     <Link href={`/${locale}/anointed-world/${v.slug}`} className="wc-card">
       <div className="wc-img">
         {img && <Image src={img} alt={t.imageAlt || t.gallery?.[0]?.alt || t.title} fill sizes="(max-width: 767px) 90vw, (max-width: 1100px) 45vw, 340px" style={{ objectFit: 'cover', objectPosition: v.coverPosition || 'center 25%' }} priority={priority} />}
-        <span className="wc-tipo">{ETICHETTE_TIPO[locale][v.tipo]}</span>
       </div>
       <div className="wc-body">
-        <p className="wc-meta">{t.date} · {t.location}</p>
         <h3 className="wc-title">{t.title}</h3>
         <p className="wc-teaser">{t.teaser}</p>
         <span className="wc-cta">{ETICHETTE_UI[locale].leggi} →</span>

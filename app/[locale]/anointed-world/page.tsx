@@ -94,7 +94,6 @@ export default function AnointedWorldPage() {
           {/* IN EVIDENZA */}
           {evidenza && (
             <section style={{ marginBottom: '5rem' }}>
-              <p className="aw-eyebrow">{ui.evidenza}</p>
               <InEvidenza v={evidenza} locale={locale} />
             </section>
           )}
@@ -154,9 +153,6 @@ function InEvidenza({ v, locale }: { v: VoceWorld; locale: 'it' | 'en' }) {
         {img && <Image src={img} alt={t.imageAlt || t.gallery?.[0]?.alt || t.title} fill sizes="(max-width: 767px) 92vw, 520px" style={{ objectFit: 'cover', objectPosition: v.coverPosition || 'center 25%' }} priority />}
       </div>
       <div className="aw-ev-body">
-        <p className="wc-meta" style={{ marginBottom: '1rem' }}>
-          <span className="aw-pill">{t.date}</span> {t.location} · {ETICHETTE_TIPO[locale][v.tipo]}
-        </p>
         <h3 style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(1.4rem, 2.4vw, 2rem)', fontWeight: 300, lineHeight: 1.25, color: '#3a2e2b', margin: '0 0 1.1rem' }}>{t.title}</h3>
         <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', lineHeight: 1.85, color: '#5d4d42', margin: '0 0 1.75rem' }}>{t.teaser}</p>
         <span className="aw-btn">{ETICHETTE_UI[locale].leggi} →</span>

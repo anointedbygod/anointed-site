@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import PhotoCarousel from '@/components/PhotoCarousel'
 import WorldCard, { WORLD_CARD_CSS } from '@/components/world/WorldCard'
-import { VOCI_WORLD, trovaVoce, altreVoci, copertina, ETICHETTE_TIPO, ETICHETTE_UI } from '@/lib/anointed-world'
+import { VOCI_WORLD, trovaVoce, altreVoci, copertina, ETICHETTE_UI } from '@/lib/anointed-world'
 
 type Params = { params: Promise<{ locale: string; slug: string }> }
 
@@ -47,7 +47,6 @@ export default async function ArticoloWorld({ params }: Params) {
       <section className="ar-head">
         <div className="ar-head-text">
           <Link href={`/${l}/anointed-world`} className="ar-back">← {ui.torna}</Link>
-          <p className="ar-meta"><span className="ar-pill">{t.date}</span>{t.location} · {ETICHETTE_TIPO[l][v.tipo]}</p>
           <h1>{t.title}</h1>
           <p className="ar-teaser">{t.teaser}</p>
         </div>

@@ -198,17 +198,6 @@ function EventCard({ ev, delay }: { ev: EventPreview; delay: number }) {
         transform: visible ? (hover ? 'translateY(-4px)' : 'translateY(0)') : 'translateY(24px)',
         transition: `opacity 0.7s ease ${delay}s, transform 0.5s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s ease, border-color 0.4s ease, background 0.4s ease`,
       }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
-        <span style={{
-          fontFamily: 'Inter, sans-serif', fontSize: '10.5px', letterSpacing: '0.1em', fontWeight: 500,
-          color: '#3a2e2b', background: 'rgba(193,169,154,0.28)', border: '1px solid rgba(193,169,154,0.4)',
-          padding: '0.35rem 0.8rem', borderRadius: '100px',
-        }}>
-          {ev.date}
-        </span>
-        <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', color: '#5d4d42' }}>{ev.location}</span>
-        {ev.tipo && <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '9.5px', letterSpacing: '0.16em', textTransform: 'uppercase', color: '#8a7a70', flexBasis: '100%' }}>{ev.tipo}</span>}
-      </div>
       <h3 style={{ fontFamily: 'Inter, sans-serif', fontSize: '1.15rem', fontWeight: 300, color: '#3a2e2b', margin: 0 }}>{ev.title}</h3>
       <div style={{ height: '1px', width: hover ? '48px' : '24px', background: 'linear-gradient(90deg, #c1a99a, transparent)', transition: 'width 0.4s ease' }} />
       <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '13.5px', lineHeight: 1.8, color: '#5d4d42', margin: 0 }}>{ev.teaser}</p>
