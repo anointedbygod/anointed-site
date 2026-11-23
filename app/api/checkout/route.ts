@@ -5,7 +5,9 @@ import { getUserFromRequest } from '@/lib/auth'
 import { validaCodiceSconto } from '@/lib/sconti'
 import { NextResponse } from 'next/server'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
+// Creato alla prima richiesta: se la chiave manca (es. anteprime) la build non si rompe
+let _stripe: Stripe | null = null
+const getStripe = () => (_stripe ??= new Stripe(process.env.STRIPE_SECRET_KEY!))
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 const bad = (error: string, status = 400) => NextResponse.json({ error }, { status })
@@ -140,7 +142,7 @@ export async function POST(req: Request) {
     }
 
     if (scontoValidato && importoSconto > 0) {
-      const coupon = await stripe.coupons.create({
+      const coupon = await getStripe().coupons.create({
         name: scontoValidato.codice,
         amount_off: Math.round(importoSconto * 100),
         currency: 'eur',
@@ -149,7 +151,7 @@ export async function POST(req: Request) {
       sessionParams.discounts = [{ coupon: coupon.id }]
     }
 
-    const session = await stripe.checkout.sessions.create(sessionParams)
+    const session = await getStripe().checkout.sessions.create(sessionParams)
     await supabaseAdmin.from('ordini').update({ stripe_session_id: session.id }).eq('id', ordine.id)
 
     return NextResponse.json({ url: session.url })

@@ -2,7 +2,9 @@ import Stripe from 'stripe'
 import { supabaseAdmin } from '@/lib/supabase-admin'
 import { NextResponse } from 'next/server'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
+// Creato alla prima richiesta: se la chiave manca (es. anteprime) la build non si rompe
+let _stripe: Stripe | null = null
+const getStripe = () => (_stripe ??= new Stripe(process.env.STRIPE_SECRET_KEY!))
 
 export async function POST(req: Request) {
   const body = await req.text()
@@ -10,7 +12,7 @@ export async function POST(req: Request) {
 
   let event: Stripe.Event
   try {
-    event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET!)
+    event = getStripe().webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET!)
   } catch (err) {
     return NextResponse.json({ error: 'Webhook error' }, { status: 400 })
   }
