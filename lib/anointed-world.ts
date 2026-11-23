@@ -25,8 +25,10 @@ export interface VoceWorld {
   iso: string            // data dell'evento o della pubblicazione (AAAA-MM-GG)
   tipo: TipoWorld
   image?: string
+  coverPosition?: string  // inquadratura della copertina, es. 'center 10%' per mostrare il volto
   link?: string
   logo?: { src: string; alt: string }
+  inEvidenza?: boolean   // mettere true per forzare la scheda grande in alto
   it: TestoWorld
   en: TestoWorld
 }
@@ -53,11 +55,12 @@ export const VOCI_WORLD: VoceWorld[] = [
     slug: 'pamela-palagi-the-anointed-woman',
     iso: '2026-11-05',
     tipo: 'collaborazione',
+    coverPosition: 'center 12%',
     link: 'https://nonsolokina.com/',
     logo: { src: '/images/world/nonsolokina-logo.png', alt: 'Nonsolokina' },
     it: {
       date: 'Novembre 2026',
-      location: 'Collaborazione artistica',
+      location: 'Nonsolokina',
       title: 'Pamela Palagi: quando l’arte incontra l’identità femminile',
       teaser: 'L’artista Pamela Palagi ha dato forma a The ANOINTED Woman, un’illustrazione originale realizzata per il brand.',
       body: [
@@ -76,7 +79,7 @@ export const VOCI_WORLD: VoceWorld[] = [
     },
     en: {
       date: 'November 2026',
-      location: 'Art collaboration',
+      location: 'Nonsolokina',
       title: 'Pamela Palagi: where art meets female identity',
       teaser: 'Artist Pamela Palagi gave shape to The ANOINTED Woman, an original illustration created for the brand.',
       body: [
@@ -186,4 +189,34 @@ export function dividiVoci(voci: VoceWorld[] = VOCI_WORLD) {
 export function ultimeVoci(n = 3) {
   const { inProgramma, passate } = dividiVoci()
   return [...inProgramma, ...passate].slice(0, n)
+}
+
+// ── Utilità per l'indice e le pagine articolo ──
+
+export const ETICHETTE_UI = {
+  it: { evidenza: 'In evidenza', inArrivo: 'In arrivo', archivio: 'Eventi e collaborazioni', tutti: 'Tutti', leggi: 'Leggi', mostraAltri: 'Mostra altri', altri: 'Altri momenti', torna: 'Torna ad Anointed World', anno: 'Anno' },
+  en: { evidenza: 'Featured', inArrivo: 'Upcoming', archivio: 'Events & collaborations', tutti: 'All', leggi: 'Read', mostraAltri: 'Show more', altri: 'More moments', torna: 'Back to Anointed World', anno: 'Year' },
+}
+
+/** Immagine di copertina: quella dedicata, altrimenti la prima della galleria. */
+export function copertina(v: VoceWorld, locale: 'it' | 'en') {
+  return v.image || v[locale].gallery?.[0]?.src || ''
+}
+
+export function trovaVoce(slug: string) {
+  return VOCI_WORLD.find(v => v.slug === slug)
+}
+
+/** In evidenza: quella scelta a mano, altrimenti il prossimo evento, altrimenti l'ultimo contenuto. */
+export function voceInEvidenza(voci: VoceWorld[] = VOCI_WORLD) {
+  const { inProgramma, passate } = dividiVoci(voci)
+  return voci.find(v => v.inEvidenza) || inProgramma[0] || passate[0]
+}
+
+/** Altri contenuti per la pagina articolo: prima dello stesso tipo, poi i più recenti. */
+export function altreVoci(slug: string, n = 3) {
+  const v = trovaVoce(slug)
+  const resto = [...VOCI_WORLD].filter(x => x.slug !== slug).sort((a, b) => b.iso.localeCompare(a.iso))
+  const stesso = resto.filter(x => x.tipo === v?.tipo)
+  return [...stesso, ...resto.filter(x => !stesso.includes(x))].slice(0, n)
 }

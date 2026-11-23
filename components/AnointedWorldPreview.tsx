@@ -11,6 +11,7 @@ interface EventPreview {
   title: string
   teaser: string
   tipo?: string
+  href?: string
 }
 
 const TR = {
@@ -94,7 +95,7 @@ export default function AnointedWorldPreview() {
   const [voci, setVoci] = useState(() => ultimeVoci(3))
   // eslint-disable-next-line react-hooks/set-state-in-effect -- ricalcola con la data del browser (la home e' generata al deploy)
   useEffect(() => { setVoci(ultimeVoci(3)) }, [])
-  const events: EventPreview[] = voci.map(v => ({ date: v[locale].date, location: v[locale].location, title: v[locale].title, teaser: v[locale].teaser, tipo: ETICHETTE_TIPO[locale][v.tipo] }))
+  const events: EventPreview[] = voci.map(v => ({ date: v[locale].date, location: v[locale].location, title: v[locale].title, teaser: v[locale].teaser, tipo: ETICHETTE_TIPO[locale][v.tipo], href: `/${locale}/anointed-world/${v.slug}` }))
 
   useEffect(() => {
     const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setSectionVisible(true) }, { threshold: 0.1 })
@@ -176,8 +177,9 @@ function EventCard({ ev, delay }: { ev: EventPreview; delay: number }) {
   const [hover, setHover] = useState(false)
 
   return (
-    <div
-      ref={ref}
+    <Link
+      href={ev.href || '#'}
+      ref={ref as unknown as React.Ref<HTMLAnchorElement>}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       style={{
@@ -191,7 +193,7 @@ function EventCard({ ev, delay }: { ev: EventPreview; delay: number }) {
         boxShadow: hover
           ? '0 30px 70px rgba(58,46,43,0.18), inset 0 1px 0 rgba(255,255,255,0.6)'
           : '0 14px 40px rgba(58,46,43,0.08), inset 0 1px 0 rgba(255,255,255,0.35)',
-        display: 'flex', flexDirection: 'column', gap: '1.1rem',
+        display: 'flex', flexDirection: 'column', gap: '1.1rem', textDecoration: 'none',
         opacity: visible ? 1 : 0,
         transform: visible ? (hover ? 'translateY(-4px)' : 'translateY(0)') : 'translateY(24px)',
         transition: `opacity 0.7s ease ${delay}s, transform 0.5s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s ease, border-color 0.4s ease, background 0.4s ease`,
@@ -210,7 +212,7 @@ function EventCard({ ev, delay }: { ev: EventPreview; delay: number }) {
       <h3 style={{ fontFamily: 'Inter, sans-serif', fontSize: '1.15rem', fontWeight: 300, color: '#3a2e2b', margin: 0 }}>{ev.title}</h3>
       <div style={{ height: '1px', width: hover ? '48px' : '24px', background: 'linear-gradient(90deg, #c1a99a, transparent)', transition: 'width 0.4s ease' }} />
       <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '13.5px', lineHeight: 1.8, color: '#5d4d42', margin: 0 }}>{ev.teaser}</p>
-    </div>
+    </Link>
   )
 }
 
