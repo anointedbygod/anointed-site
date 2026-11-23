@@ -2,6 +2,7 @@ import { supabaseAdmin } from '@/lib/supabase-admin'
 import { NextResponse } from 'next/server'
 import { inviaConferma } from '@/lib/newsletter-mail'
 import type { Fonte } from '@/lib/newsletter-token'
+import { EVENTO_EQUIPHER_ATTIVO } from '@/lib/config'
 
 // Doppio consenso: qui NON si iscrive nessuno e NON si dà nessun codice.
 // Si controlla il consenso esplicito e si invia un'email con il link di conferma;
@@ -27,7 +28,7 @@ export async function POST(req: Request) {
   if (body?.consenso !== true) return NextResponse.json({ error: 'Consenso mancante' }, { status: 400 })
 
   const locale = body?.locale === 'it' ? 'it' : 'en'
-  const fonte: Fonte = body?.tipo === 'checkout' ? 'checkout' : body?.tipo === 'newsletter' ? 'newsletter' : body?.tipo === 'equipher' ? 'equipher' : 'popup'
+  const fonte: Fonte = body?.tipo === 'checkout' ? 'checkout' : body?.tipo === 'newsletter' ? 'newsletter' : (body?.tipo === 'equipher' && EVENTO_EQUIPHER_ATTIVO) ? 'equipher' : 'popup'
   const ip = (req.headers.get('x-forwarded-for') || 'unknown').split(',')[0].trim()
   if (limitato(ip, email)) return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
 

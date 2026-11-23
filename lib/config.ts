@@ -3,6 +3,9 @@
 // Al lancio metti false.
 export const COMING_SOON = true
 
+// Evento EquipHer (21/11/2026) concluso: pagina QR e scanner staff spenti. Metti true per riattivarli.
+export const EVENTO_EQUIPHER_ATTIVO = false
+
 // Sottocategorie di primo livello in Collections (ognuna avrà le sue categorie e i suoi prodotti).
 // "Man" non è ancora lanciato: mostra sempre COMING SOON. Quando ci saranno i dati,
 // serve un campo "genere" su sezioni/prodotti nel database per filtrare.

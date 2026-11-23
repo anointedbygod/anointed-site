@@ -1,9 +1,11 @@
+import { EVENTO_EQUIPHER_ATTIVO } from '@/lib/config'
 import { NextResponse } from 'next/server'
 import { avvisoSicurezza } from '@/lib/avviso-sicurezza'
 import { origineValida } from '@/lib/rate-limit'
 import { COOKIE_STAFF, DURATA_COOKIE, azzera, bloccato, ipDi, pinCorretto, registraErrore, valoreCookie } from '@/lib/staff-auth'
 
 export async function POST(req: Request) {
+  if (!EVENTO_EQUIPHER_ATTIVO) return NextResponse.json({ error: 'Evento concluso' }, { status: 404 })
   if (!origineValida(req)) return NextResponse.json({ error: 'Origine non valida' }, { status: 403 })
   const ip = ipDi(req)
   if (bloccato(ip)) return NextResponse.json({ error: 'Troppi tentativi. Riprova tra qualche minuto.' }, { status: 429 })

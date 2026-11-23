@@ -1,3 +1,4 @@
+import { EVENTO_EQUIPHER_ATTIVO } from '@/lib/config'
 import { NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase-admin'
 import { autorizzato, normalizzaCodice } from '@/lib/staff-auth'
@@ -12,6 +13,7 @@ function maschera(email: string) {
 }
 
 export async function GET(req: Request) {
+  if (!EVENTO_EQUIPHER_ATTIVO) return NextResponse.json({ error: 'Evento concluso' }, { status: 404 })
   if (!autorizzato(req)) return nonAutorizzato()
   const { data, error } = await supabaseAdmin
     .from('newsletter_iscritti').select('email, codice_evento, codice_evento_usato_at')
@@ -24,6 +26,7 @@ export async function GET(req: Request) {
 // POST { codice }            -> timbra: { esito: 'validato' | 'negato', motivo?, codice, usato_at? }
 // POST { codice, annulla }   -> toglie il timbro (per un errore)
 export async function POST(req: Request) {
+  if (!EVENTO_EQUIPHER_ATTIVO) return NextResponse.json({ error: 'Evento concluso' }, { status: 404 })
   if (!autorizzato(req)) return nonAutorizzato()
   if (!origineValida(req)) return NextResponse.json({ error: 'Origine non valida' }, { status: 403 })
   const body = await req.json().catch(() => ({}))
