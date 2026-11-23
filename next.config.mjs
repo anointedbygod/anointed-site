@@ -19,11 +19,11 @@ const supabase = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://*.supabase.co'
 const dev = process.env.NODE_ENV !== 'production'
 const cspProva = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${dev ? " 'unsafe-eval'" : ''} https://*.iubenda.com https://challenges.cloudflare.com`,
+  `script-src 'self' 'unsafe-inline'${dev ? " 'unsafe-eval'" : ''} https://*.iubenda.com https://challenges.cloudflare.com https://www.googletagmanager.com`,
   "style-src 'self' 'unsafe-inline' https://*.iubenda.com",
-  `img-src 'self' data: blob: ${supabase} https://*.supabase.co https://*.iubenda.com`,
+  `img-src 'self' data: blob: ${supabase} https://*.supabase.co https://*.iubenda.com https://www.googletagmanager.com https://*.google-analytics.com`,
   "font-src 'self' data: https://*.iubenda.com",
-  `connect-src 'self' ${supabase} https://*.supabase.co wss://*.supabase.co https://*.iubenda.com https://challenges.cloudflare.com`,
+  `connect-src 'self' ${supabase} https://*.supabase.co wss://*.supabase.co https://*.iubenda.com https://challenges.cloudflare.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com`,
   "frame-src 'self' https://*.iubenda.com https://challenges.cloudflare.com",
   "media-src 'self' blob:",
   "worker-src 'self' blob:",

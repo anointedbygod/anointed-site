@@ -1,3 +1,4 @@
+import { GA_ID } from '@/lib/tracciamento'
 import type { Metadata } from 'next'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages } from 'next-intl/server'
@@ -55,6 +56,8 @@ export default async function LocaleLayout({
   const messages = await getMessages()
   // Iubenda cookie banner: attivo solo se NEXT_PUBLIC_IUBENDA_SITE_ID è impostato in .env.local
   const iubendaSiteId = process.env.NEXT_PUBLIC_IUBENDA_SITE_ID
+  // Google Analytics solo sul sito vero (non in locale né nelle anteprime Vercel)
+  const analyticsAttivo = process.env.VERCEL_ENV === 'production'
   // Documento Iubenda per lingua: IT dall'env, EN fisso (ID pubblico, non segreto)
   const IUBENDA_POLICY_EN = 29094859
   const iubendaLang = locale === 'it' ? 'it' : 'en'
@@ -63,6 +66,21 @@ export default async function LocaleLayout({
     <html lang={locale} suppressHydrationWarning>
 
       <body suppressHydrationWarning>
+        {analyticsAttivo && (
+          <>
+            {/* Google Consent Mode v2: tutto negato di default; Iubenda aggiorna il consenso quando l'utente sceglie */}
+            <Script id="ga-consenso" strategy="beforeInteractive">{`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              window.gtag = gtag;
+              gtag('consent', 'default', { ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'denied', wait_for_update: 500 });
+              gtag('set', 'ads_data_redaction', true);
+              gtag('js', new Date());
+              gtag('config', '${GA_ID}');
+            `}</Script>
+            <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} strategy="afterInteractive" />
+          </>
+        )}
         {iubendaSiteId && (
           <>
             <Script id="iubenda-config" strategy="beforeInteractive">{`

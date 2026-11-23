@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useCarrello } from '@/lib/carrello'
 import { createBrowserClient } from '@supabase/ssr'
 import { authFetch } from '@/lib/auth-client'
+import { tracciaInizioCheckout } from '@/lib/tracciamento'
 import { useRouter, usePathname } from 'next/navigation'
 
 interface Zona { id: string; nome: string; paesi: string[]; costo: number; soglia_gratuita: number | null }
@@ -174,6 +175,7 @@ export default function CheckoutPage() {
     e.preventDefault()
     if (articoli.length === 0 || !terminiOk) return
     setLoading(true)
+    tracciaInizioCheckout(articoli.map(a => ({ id: a.prodottoId || a.varianteId, nome: a.prodottoNome, prezzo: a.prezzo, quantita: a.quantita, variante: [a.colore, a.taglia].filter(Boolean).join(' / ') })), totaleFinale)
     try {
       const res = await authFetch('/api/checkout', {
         method: 'POST',

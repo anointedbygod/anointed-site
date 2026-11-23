@@ -2,6 +2,7 @@
 import { COMING_SOON } from '@/lib/config'
 
 import { useState, useEffect } from 'react'
+import { tracciaVistaProdotto, tracciaAggiuntaCarrello } from '@/lib/tracciamento'
 import { useParams, usePathname } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -32,6 +33,7 @@ export default function ProdottoPage() {
       const found = data.find(p => p.slug === params.slug)
       if (!found) { setLoading(false); return }
       setProdotto(found)
+      tracciaVistaProdotto({ id: found.id, nome: found.nome, prezzo: found.prezzo })
       const coloriRes = await fetch(`/api/colori?prodotto_id=${found.id}`)
       const coloriData: ColoreData[] = await coloriRes.json()
       setColori(coloriData)
@@ -83,6 +85,7 @@ export default function ProdottoPage() {
       quantita: 1,
       immagine: imgs[0] || '',
     })
+    tracciaAggiuntaCarrello({ id: prodotto!.id, nome: prodotto!.nome, prezzo, variante: [selectedColore?.nome, selectedTaglia].filter(Boolean).join(' / ') })
     setAdded(true)
     setTimeout(() => setAdded(false), 2000)
   }
