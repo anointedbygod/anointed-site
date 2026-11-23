@@ -34,8 +34,7 @@ function piede({ locale = 'en', unsubUrl }: { locale?: 'en' | 'it'; unsubUrl?: s
       <p style="${t}margin:0 0 20px;">${datiVenditore().join(' · ')}</p>
       <table align="center" cellpadding="0" cellspacing="0" style="margin:0 auto 10px;"><tr>
         <td style="background:#ffffff;border-radius:3px;padding:8px 12px;">
-          <img src="${SITE}/images/fondi/blocco-loghi-pn-gdl.png" width="320" height="34" alt="Coesione Italia 21-27 · Cofinanziato dall'Unione europea · Ministero del Lavoro e delle Politiche Sociali" style="display:inline-block;width:320px;height:34px;border:0;vertical-align:middle;">
-          <img src="${SITE}/invitalia.png" width="55" height="34" alt="Invitalia" style="display:inline-block;width:55px;height:34px;border:0;vertical-align:middle;margin-left:10px;">
+          <img src="${SITE}/images/fondi/blocco-loghi-autoimpiego-email.png" width="420" height="40" alt="Coesione Italia 21-27 · Cofinanziato dall'Unione europea · Ministero del Lavoro e delle Politiche Sociali · Invitalia · Autoimpiego Centro Nord" style="display:block;width:420px;max-width:100%;height:auto;border:0;">
         </td>
       </tr></table>
       <p style="${t}margin:0 0 20px;"><a href="${SITE}/${it ? 'it' : 'en'}/progetto-cofinanziato" style="${t}text-decoration:underline;">${it ? 'Progetto cofinanziato dall\'Unione europea' : 'Project co-funded by the European Union'}</a></p>

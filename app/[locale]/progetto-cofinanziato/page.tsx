@@ -20,17 +20,21 @@ export default async function ProgettoCofinanziato({ params }: { params: Promise
       <div style={{ maxWidth: 820, margin: '0 auto', padding: '2rem 1.25rem 5rem' }}>
         <div style={{ display: 'flex', justifyContent: 'center', margin: '0 0 2.5rem' }}><BloccoLoghiUE altezza={44} /></div>
         <h1 style={{ fontSize: 30, fontWeight: 700, color: '#3a2e2b', margin: '0 0 1.5rem', lineHeight: 1.25 }}>{t.titoloPagina}</h1>
-        {(PROGETTO_UE.titolo || PROGETTO_UE.cup) && (
-          <div style={{ border: '1px solid #e5e5e5', borderRadius: 4, padding: '1rem 1.25rem', margin: '0 0 1.75rem', fontSize: 15, color: '#3a2e2b', lineHeight: 1.8 }}>
-            {PROGETTO_UE.titolo && <div><strong>{t.titoloProgetto}:</strong> {PROGETTO_UE.titolo}</div>}
-            {PROGETTO_UE.cup && <div><strong>{t.cup}:</strong> {PROGETTO_UE.cup}</div>}
-          </div>
-        )}
-        <p style={p}>{t.intro}</p>
-        <p style={p}>{t.sostegno}</p>
-        <h2 style={h}>{t.finalitaT}</h2><p style={p}>{t.finalita}</p>
-        <h2 style={h}>{t.attivitaT}</h2><p style={p}>{t.attivita}</p>
+        <div style={{ border: '1px solid #e5e5e5', borderRadius: 4, padding: '1rem 1.25rem', margin: '0 0 2rem', fontSize: 15, color: '#3a2e2b', lineHeight: 1.8 }}>
+          <div><strong>{t.programmaL}:</strong> {t.programma}</div>
+          <div><strong>{t.misuraL}:</strong> {PROGETTO_UE.misura}</div>
+          <div><strong>{t.codiceL}:</strong> {PROGETTO_UE.codice}</div>
+          <div><strong>{t.cupL}:</strong> {PROGETTO_UE.cup}</div>
+          <div style={{ marginTop: '.5rem', fontWeight: 600 }}>{t.cofinanziato}</div>
+        </div>
+        <h2 style={h}>{t.descrizioneT}</h2>
+        {t.descrizione.map((x, i) => <p key={i} style={p}>{x}</p>)}
+        <h2 style={h}>{t.finalitaT}</h2>
+        {t.finalita.map((x, i) => <p key={i} style={p}>{x}</p>)}
+        <h2 style={h}>{t.attivitaT}</h2>
+        <ul style={{ ...p, paddingLeft: '1.25rem', listStyle: 'disc' }}>{t.attivita.map((x, i) => <li key={i} style={{ marginBottom: '.35rem' }}>{x}</li>)}</ul>
         <h2 style={h}>{t.risultatiT}</h2><p style={p}>{t.risultati}</p>
+        <h2 style={h}>{t.sostegnoT}</h2><p style={p}>{t.sostegno}</p>
       </div>
     </main>
   )
