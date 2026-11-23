@@ -1,4 +1,5 @@
 'use client'
+import Turnstile, { captchaAttivo } from '@/components/Turnstile'
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { useRouter, usePathname } from 'next/navigation'
@@ -15,6 +16,8 @@ export default function AccountMenu({ textColor }: { textColor: string }) {
   const [authLoading, setAuthLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+  const [captcha, setCaptcha] = useState<string | null>(null)
+  const [captchaReset, setCaptchaReset] = useState(0)
   const ref = useRef<HTMLDivElement>(null)
   const router = useRouter()
   const pathname = usePathname()
@@ -47,13 +50,16 @@ export default function AccountMenu({ textColor }: { textColor: string }) {
     setError('')
     setSuccess('')
 
+    if (captchaAttivo && !captcha) { setError(locale === 'it' ? 'Completa la verifica di sicurezza.' : 'Please complete the security check.'); setAuthLoading(false); return }
+    const captchaToken = captcha ?? undefined
+    setCaptchaReset(n => n + 1)
     if (mode === 'login') {
-      const { error } = await supabase.auth.signInWithPassword({ email, password })
+      const { error } = await supabase.auth.signInWithPassword({ email, password, options: { captchaToken } })
       if (error) { fetch('/api/auth/fallito', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email }) }).catch(() => {}); setError(locale === 'it' ? 'Credenziali non valide.' : 'Invalid credentials.'); setAuthLoading(false); return }
       setOpen(false)
       setEmail(''); setPassword('')
     } else {
-      const { error } = await supabase.auth.signUp({ email, password, options: { data: { full_name: nome } } })
+      const { error } = await supabase.auth.signUp({ email, password, options: { data: { full_name: nome }, captchaToken } })
       if (error) { setError(error.message); setAuthLoading(false); return }
       setSuccess(locale === 'it' ? 'Controlla la tua email per confermare.' : 'Check your email to confirm.')
     }
@@ -154,6 +160,7 @@ export default function AccountMenu({ textColor }: { textColor: string }) {
               <input type="password" required value={password} onChange={e => setPassword(e.target.value)} placeholder="Password"
                 style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', padding: '0.6rem 0.8rem', border: '1px solid rgba(58,46,43,0.15)', borderRadius: '2px', outline: 'none', background: 'white' }} />
 
+              <Turnstile onToken={setCaptcha} resetKey={captchaReset} lingua={locale} />
               {error && <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', color: '#c97a6b', margin: 0 }}>{error}</p>}
               {success && <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', color: '#4a7a5a', margin: 0 }}>{success}</p>}
 

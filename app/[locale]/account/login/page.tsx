@@ -4,6 +4,7 @@ import { useRouter, usePathname } from 'next/navigation'
 import Image from 'next/image'
 import { createBrowserClient } from '@supabase/ssr'
 import Link from 'next/link'
+import Turnstile, { captchaAttivo } from '@/components/Turnstile'
 
 export default function AccountLogin() {
   const [mode, setMode] = useState<'login' | 'register'>('login')
@@ -14,6 +15,8 @@ export default function AccountLogin() {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const [showPw, setShowPw] = useState(false)
+  const [captcha, setCaptcha] = useState<string | null>(null)
+  const [captchaReset, setCaptchaReset] = useState(0)
   const router = useRouter()
   const pathname = usePathname()
   const locale = pathname.startsWith('/it') ? 'it' : 'en'
@@ -43,12 +46,15 @@ export default function AccountLogin() {
     setError('')
     setSuccess('')
 
+    if (captchaAttivo && !captcha) { setError(locale === 'it' ? 'Completa la verifica di sicurezza.' : 'Please complete the security check.'); setLoading(false); return }
+    const captchaToken = captcha ?? undefined
+    setCaptchaReset(n => n + 1)
     if (mode === 'login') {
-      const { error } = await supabase.auth.signInWithPassword({ email, password })
+      const { error } = await supabase.auth.signInWithPassword({ email, password, options: { captchaToken } })
       if (error) { fetch('/api/auth/fallito', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email }) }).catch(() => {}); setError(locale === 'it' ? 'Credenziali non valide.' : 'Invalid credentials.'); setLoading(false); return }
       window.location.href = `/${locale}/account`
     } else {
-      const { error } = await supabase.auth.signUp({ email, password, options: { data: { full_name: nome } } })
+      const { error } = await supabase.auth.signUp({ email, password, options: { data: { full_name: nome }, captchaToken } })
       if (error) { setError(error.message); setLoading(false); return }
       setSuccess(t.successRegister)
       setLoading(false)
@@ -125,6 +131,7 @@ export default function AccountLogin() {
               </div>
             </div>
 
+            <Turnstile onToken={setCaptcha} resetKey={captchaReset} lingua={locale} />
             {error && <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#c97a6b', margin: 0 }}>{error}</p>}
             {success && <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#4a7a5a', margin: 0 }}>{success}</p>}
 
@@ -139,7 +146,9 @@ export default function AccountLogin() {
             <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', color: '#c1a99a', textAlign: 'center', marginTop: '1.25rem', margin: '1.25rem 0 0' }}>
               <button onClick={async () => {
                 if (!email) { setError(locale === 'it' ? 'Inserisci la tua email prima.' : 'Enter your email first.'); return }
-                await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${window.location.origin}/${locale}/account/nuova-password` })
+                if (captchaAttivo && !captcha) { setError(locale === 'it' ? 'Completa la verifica di sicurezza.' : 'Please complete the security check.'); return }
+                await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${window.location.origin}/${locale}/account/nuova-password`, captchaToken: captcha ?? undefined })
+                setCaptchaReset(n => n + 1)
                 // Messaggio identico che l'account esista o no: non si rivela chi è registrato
                 setError('')
                 setSuccess(locale === 'it' ? 'Se l\'email è registrata, riceverai un link per scegliere una nuova password (vale 1 ora).' : 'If this email is registered, you will receive a link to choose a new password (valid for 1 hour).')
