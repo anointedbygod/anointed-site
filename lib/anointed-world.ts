@@ -59,7 +59,7 @@ export const VOCI_WORLD: VoceWorld[] = [
     link: 'https://nonsolokina.com/',
     logo: { src: '/images/world/nonsolokina-logo.png', alt: 'Nonsolokina' },
     it: {
-      date: 'Novembre 2026',
+      date: '', // nessuna data indicata nel testo di Pamela: non la mostriamo
       location: 'Nonsolokina',
       title: 'Pamela Palagi: quando l’arte incontra l’identità femminile',
       teaser: 'L’artista Pamela Palagi ha dato forma a The ANOINTED Woman, un’illustrazione originale realizzata per il brand.',
@@ -78,7 +78,7 @@ export const VOCI_WORLD: VoceWorld[] = [
       gallery: pamela(true),
     },
     en: {
-      date: 'November 2026',
+      date: '',
       location: 'Nonsolokina',
       title: 'Pamela Palagi: where art meets female identity',
       teaser: 'Artist Pamela Palagi gave shape to The ANOINTED Woman, an original illustration created for the brand.',

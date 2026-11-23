@@ -13,6 +13,7 @@ export default function WorldCard({ v, locale, priority = false }: { v: VoceWorl
         {img && <Image src={img} alt={t.imageAlt || t.gallery?.[0]?.alt || t.title} fill sizes="(max-width: 767px) 90vw, (max-width: 1100px) 45vw, 340px" style={{ objectFit: 'cover', objectPosition: v.coverPosition || 'center 25%' }} priority={priority} />}
       </div>
       <div className="wc-body">
+        {t.date && <p className="wc-date">{t.date}</p>}
         <h3 className="wc-title">{t.title}</h3>
         <p className="wc-teaser">{t.teaser}</p>
         <span className="wc-cta">{ETICHETTE_UI[locale].leggi} →</span>
@@ -31,6 +32,7 @@ export const WORLD_CARD_CSS = `
 .wc-tipo { position: absolute; top: 14px; left: 14px; font-family: Inter, sans-serif; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #3a2e2b; background: rgba(241,234,228,0.92); padding: .38rem .75rem; border-radius: 100px; }
 .wc-body { padding: 1.4rem 1.4rem 1.5rem; display: flex; flex-direction: column; gap: .6rem; flex: 1; }
 .wc-meta { font-family: Inter, sans-serif; font-size: 10.5px; letter-spacing: .08em; color: #8a7a70; margin: 0; }
+.wc-date { font-family: Inter, sans-serif; font-size: 12px; color: #8a7a70; margin: 0; }
 .wc-title { font-family: Inter, sans-serif; font-size: 1.12rem; font-weight: 300; line-height: 1.35; color: #3a2e2b; margin: 0; }
 .wc-teaser { font-family: Inter, sans-serif; font-size: 13px; line-height: 1.7; color: #5d4d42; margin: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .wc-cta { margin-top: auto; padding-top: .4rem; font-family: Inter, sans-serif; font-size: 10.5px; letter-spacing: .14em; font-weight: 500; color: #3a2e2b; text-transform: uppercase; }

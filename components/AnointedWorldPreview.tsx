@@ -198,6 +198,7 @@ function EventCard({ ev, delay }: { ev: EventPreview; delay: number }) {
         transform: visible ? (hover ? 'translateY(-4px)' : 'translateY(0)') : 'translateY(24px)',
         transition: `opacity 0.7s ease ${delay}s, transform 0.5s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s ease, border-color 0.4s ease, background 0.4s ease`,
       }}>
+      {ev.date && <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#8a7a70', margin: '0 0 -0.6rem' }}>{ev.date}</p>}
       <h3 style={{ fontFamily: 'Inter, sans-serif', fontSize: '1.15rem', fontWeight: 300, color: '#3a2e2b', margin: 0 }}>{ev.title}</h3>
       <div style={{ height: '1px', width: hover ? '48px' : '24px', background: 'linear-gradient(90deg, #c1a99a, transparent)', transition: 'width 0.4s ease' }} />
       <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '13.5px', lineHeight: 1.8, color: '#5d4d42', margin: 0 }}>{ev.teaser}</p>

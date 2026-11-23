@@ -153,6 +153,7 @@ function InEvidenza({ v, locale }: { v: VoceWorld; locale: 'it' | 'en' }) {
         {img && <Image src={img} alt={t.imageAlt || t.gallery?.[0]?.alt || t.title} fill sizes="(max-width: 767px) 92vw, 520px" style={{ objectFit: 'cover', objectPosition: v.coverPosition || 'center 25%' }} priority />}
       </div>
       <div className="aw-ev-body">
+        {t.date && <p className="wc-date" style={{ marginBottom: '.75rem' }}>{t.date}</p>}
         <h3 style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(1.4rem, 2.4vw, 2rem)', fontWeight: 300, lineHeight: 1.25, color: '#3a2e2b', margin: '0 0 1.1rem' }}>{t.title}</h3>
         <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', lineHeight: 1.85, color: '#5d4d42', margin: '0 0 1.75rem' }}>{t.teaser}</p>
         <span className="aw-btn">{ETICHETTE_UI[locale].leggi} →</span>

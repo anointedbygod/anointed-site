@@ -47,6 +47,7 @@ export default async function ArticoloWorld({ params }: Params) {
       <section className="ar-head">
         <div className="ar-head-text">
           <Link href={`/${l}/anointed-world`} className="ar-back">← {ui.torna}</Link>
+          {t.date && <p className="ar-date">{t.date}</p>}
           <h1>{t.title}</h1>
           <p className="ar-teaser">{t.teaser}</p>
         </div>
@@ -98,6 +99,7 @@ export default async function ArticoloWorld({ params }: Params) {
 const ART_CSS = `
 .ar-head { max-width: 1040px; margin: 0 auto; padding: 120px 1.5rem 1rem; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: clamp(2rem, 5vw, 4.5rem); align-items: center; }
 .ar-head-text h1 { font-family: Inter, sans-serif; font-size: clamp(1.8rem, 3.6vw, 2.8rem); font-weight: 300; line-height: 1.2; color: #3a2e2b; margin: 0 0 1.25rem; }
+.ar-date { font-family: Inter, sans-serif; font-size: 13px; color: #8a7a70; margin: 0 0 .75rem; }
 .ar-teaser { font-family: Inter, sans-serif; font-size: 15.5px; line-height: 1.8; color: #5d4d42; margin: 0; }
 .ar-meta { font-family: Inter, sans-serif; font-size: 11px; letter-spacing: .1em; color: #8a7a70; margin: 0 0 1.25rem; }
 .ar-pill { display: inline-block; font-weight: 500; color: #3a2e2b; background: rgba(193,169,154,0.28); border: 1px solid rgba(193,169,154,0.4); padding: .35rem .8rem; border-radius: 100px; margin-right: .75rem; }
