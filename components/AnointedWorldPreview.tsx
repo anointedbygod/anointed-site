@@ -3,12 +3,14 @@ import Link from 'next/link'
 import { useRef, useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import Globe from './Globe'
+import { ultimeVoci, ETICHETTE_TIPO } from '@/lib/anointed-world'
 
 interface EventPreview {
   date: string
   location: string
   title: string
   teaser: string
+  tipo?: string
 }
 
 const TR = {
@@ -16,10 +18,6 @@ const TR = {
     title: 'Anointed World',
     subtitle: 'Where the brand comes to life.',
     more: 'More…',
-    events: [
-      { date: '10 October 2026', location: 'Rome, Italy', title: 'Connection Business', teaser: 'Sofia Meneghetti took the stage in Rome to share the story behind ANOINTED.' },
-      { date: '21 November 2026', location: 'Tuscany, Italy', title: 'EquipHer Italia — Casa Ruffino', teaser: 'A day for women, leadership and purpose — where the first idea of Anointed was born.' },
-    ] as EventPreview[],
     nlTitle: 'Join the women who walk with purpose.',
     nlSub: 'New arrivals, stories and exclusive access.',
     nlPlaceholder: 'your@email.com',
@@ -30,10 +28,6 @@ const TR = {
     title: 'Anointed World',
     subtitle: 'Dove il brand prende vita.',
     more: 'Scopri di più…',
-    events: [
-      { date: '10 ottobre 2026', location: 'Roma, Italia', title: 'Connection Business', teaser: 'Sofia Meneghetti è salita sul palco a Roma per raccontare la storia di ANOINTED.' },
-      { date: '21 novembre 2026', location: 'Toscana, Italia', title: 'EquipHer Italia — Casa Ruffino', teaser: "Una giornata dedicata a donne, leadership e scopo — dove è nata la prima idea di Anointed." },
-    ] as EventPreview[],
     nlTitle: 'Unisciti alle donne che camminano con scopo.',
     nlSub: 'Nuovi arrivi, storie e accesso esclusivo.',
     nlPlaceholder: 'La tua email',
@@ -96,7 +90,11 @@ export default function AnointedWorldPreview() {
   const pathname = usePathname()
   const locale = (pathname.startsWith('/it') ? 'it' : 'en') as 'en'|'it'
   const t = TR[locale]
-  const events = t.events
+  // Sempre gli ultimi 3 contenuti di Anointed World (prima gli eventi in arrivo), dallo stesso elenco della pagina
+  const [voci, setVoci] = useState(() => ultimeVoci(3))
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- ricalcola con la data del browser (la home e' generata al deploy)
+  useEffect(() => { setVoci(ultimeVoci(3)) }, [])
+  const events: EventPreview[] = voci.map(v => ({ date: v[locale].date, location: v[locale].location, title: v[locale].title, teaser: v[locale].teaser, tipo: ETICHETTE_TIPO[locale][v.tipo] }))
 
   useEffect(() => {
     const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setSectionVisible(true) }, { threshold: 0.1 })
@@ -140,7 +138,7 @@ export default function AnointedWorldPreview() {
 
         <div className="aw-grid" style={{
           position: 'relative', display: 'grid', gridTemplateColumns: `repeat(${events.length}, 1fr)`,
-          gap: '2rem', maxWidth: '820px', margin: '0 auto',
+          gap: '2rem', maxWidth: events.length > 2 ? '1120px' : '820px', margin: '0 auto',
         }}>
           {events.map((ev, i) => <EventCard key={i} ev={ev} delay={i * 0.12} />)}
         </div>
@@ -207,6 +205,7 @@ function EventCard({ ev, delay }: { ev: EventPreview; delay: number }) {
           {ev.date}
         </span>
         <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', color: '#5d4d42' }}>{ev.location}</span>
+        {ev.tipo && <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '9.5px', letterSpacing: '0.16em', textTransform: 'uppercase', color: '#8a7a70', flexBasis: '100%' }}>{ev.tipo}</span>}
       </div>
       <h3 style={{ fontFamily: 'Inter, sans-serif', fontSize: '1.15rem', fontWeight: 300, color: '#3a2e2b', margin: 0 }}>{ev.title}</h3>
       <div style={{ height: '1px', width: hover ? '48px' : '24px', background: 'linear-gradient(90deg, #c1a99a, transparent)', transition: 'width 0.4s ease' }} />

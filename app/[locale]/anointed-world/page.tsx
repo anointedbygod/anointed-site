@@ -6,6 +6,7 @@ import Image from 'next/image'
 import PhotoCarousel, { type Foto } from '@/components/PhotoCarousel'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { dividiVoci, ETICHETTE_TIPO, type VoceWorld } from '@/lib/anointed-world'
 
 function useVisible(threshold = 0.1) {
   const [visible, setVisible] = useState(false)
@@ -29,6 +30,14 @@ interface EventItem {
   caption?: string
   gallery?: Foto[]
   link?: string
+  linkLabel?: string
+  logo?: { src: string; alt: string }
+  tipo?: string
+}
+
+// Unisce i testi nella lingua giusta con i campi comuni (foto, link, logo, tipo)
+function voceToEvent(v: VoceWorld, locale: 'it' | 'en'): EventItem {
+  return { ...v[locale], image: v.image, link: v.link, logo: v.logo, tipo: ETICHETTE_TIPO[locale][v.tipo] }
 }
 
 const CONTENT = {
@@ -37,94 +46,14 @@ const CONTENT = {
     heroBody: 'Anointed is more than what we wear. It is a growing world of experiences, conversations, collaborations and meaningful encounters. From events and speaking engagements to selected partnerships and special projects, Anointed World brings the vision of the brand into real spaces — connecting women, ideas and opportunities.',
     upcoming: 'Upcoming',
     learnMore: 'Learn more',
-    events: [
-      {
-        date: '21 November 2026',
-        location: 'Tuscany, Italy',
-        title: 'Anointed at EquipHer Italia — Casa Ruffino',
-        body: [
-          "On November 21st, Anointed will be present at EquipHer Italia at Casa Ruffino, for a day dedicated to women, leadership, entrepreneurship, faith and personal growth.",
-          "This event has a special meaning for the brand. The first idea behind Anointed was born during an EquipHer experience in Las Vegas in April 2025 — a moment that sparked a vision for a fashion brand with deeper meaning, created to remind women of their value, identity and purpose.",
-          "A year later, Sofia Meneghetti, Founder of Anointed, returns to the EquipHer world with the brand by her side, bringing that original vision into something real and tangible.",
-          "At Casa Ruffino, guests will have the opportunity to meet Sofia, connect in person and discover Anointed more closely — its story, its message and the world that is taking shape around the brand.",
-          "For Anointed, this is more than simply being present at an event. It is a meaningful return to the kind of environment that helped inspire its beginning: a space where women connect, share ideas, grow and encourage one another to step into something greater.",
-        ],
-        closing: 'Come say hello, meet Sofia and step into the world of Anointed.',
-        link: 'https://equipherconference.com/italy/',
-        gallery: [
-          { src: '/images/about/casa-ruffino-1.jpg', alt: 'A room at Casa Ruffino with two paper lamps and a window overlooking the garden and cypress trees' },
-          { src: '/images/about/casa-ruffino-2.jpg', alt: 'A guest relaxing on a lounger by the pool at Casa Ruffino, with vineyards in the background' },
-          { src: '/images/about/casa-ruffino-3.jpg', alt: 'The pool and Italian garden at Casa Ruffino, surrounded by vineyards' },
-          { src: '/images/about/casa-ruffino-4.jpg', alt: 'Evening dinner in the courtyard of Casa Ruffino, lit by candles and string lights' },
-        ],
-      },
-    ] as EventItem[],
-    past: "Past events",
-    pastEvents: [
-      {
-        date: "10 October 2026",
-        location: "Rome, Italy",
-        title: "ANOINTED at Connection Business",
-        image: '/images/about/connection-business.jpg',
-        imageAlt: 'Sofia Meneghetti speaking on stage at Connection Business in Rome',
-        caption: 'Connection Business, Rome · 10 October 2026',
-        body: [
-          "On October 10th, Sofia Meneghetti, Founder of ANOINTED, took the stage at Connection Business in Rome, an event that brought together entrepreneurs, professionals, and individuals who believe in the power of meaningful connections.",
-          "During her talk, Sofia shared her entrepreneurial journey and the story behind the creation of ANOINTED, highlighting how meaningful encounters, a clear vision, and the courage to take action can turn an idea into reality.",
-          "Drawing from her personal experience, she spoke about the importance of believing in a vision, even when the path ahead is not yet clear, and surrounding yourself with people who inspire, challenge, and encourage you to grow.",
-          "Her message was also an invitation to the younger generation: to believe in their potential, pursue their dreams, and have the courage to take the first step, even before having all the answers.",
-          "This philosophy is deeply connected to the vision behind ANOINTED, a brand created not only to express identity through fashion, but also to inspire people to recognize their worth, embrace their purpose, and believe in something greater.",
-          "For ANOINTED, Connection Business represented more than an opportunity to share its story. It was a moment to connect, inspire, and remind others that every meaningful journey begins with the courage to believe in what is possible.",
-        ],
-      },
-    ] as EventItem[],
+    past: 'Events & collaborations',
   },
   it: {
     heroTitle: ['Dove il brand', 'prende vita.'],
     heroBody: 'Anointed è più di ciò che indossiamo. È un mondo in crescita fatto di esperienze, conversazioni, collaborazioni e incontri significativi. Da eventi e interventi pubblici a partnership selezionate e progetti speciali, Anointed World porta la visione del brand in spazi reali — connettendo donne, idee e opportunità.',
     upcoming: 'In programma',
     learnMore: 'Scopri di più',
-    events: [
-      {
-        date: '21 novembre 2026',
-        location: 'Toscana, Italia',
-        title: 'Anointed a EquipHer Italia — Casa Ruffino',
-        body: [
-          "Il 21 novembre, Anointed sarà presente a EquipHer Italia, a Casa Ruffino, per una giornata dedicata a donne, leadership, imprenditorialità, fede e crescita personale.",
-          "Questo evento ha un significato speciale per il brand. La prima idea di Anointed è nata durante un'esperienza EquipHer a Las Vegas nell'aprile 2025 — un momento che ha acceso la visione di un brand di moda con un significato più profondo, pensato per ricordare alle donne il loro valore, la loro identità e il loro scopo.",
-          "Un anno dopo, Sofia Meneghetti, Founder di Anointed, torna nel mondo EquipHer con il brand al suo fianco, portando quella visione originaria in qualcosa di reale e tangibile.",
-          "A Casa Ruffino, gli ospiti avranno l'opportunità di incontrare Sofia, connettersi di persona e scoprire Anointed più da vicino — la sua storia, il suo messaggio e il mondo che sta prendendo forma attorno al brand.",
-          "Per Anointed, questo è più della semplice presenza a un evento. È un ritorno significativo nel tipo di ambiente che ha contribuito a ispirarne l'inizio: uno spazio in cui le donne si connettono, condividono idee, crescono e si incoraggiano a vicenda a fare un passo verso qualcosa di più grande.",
-        ],
-        closing: 'Vieni a salutarci, incontra Sofia ed entra nel mondo di Anointed.',
-        link: 'https://equipherconference.com/italy/',
-        gallery: [
-          { src: '/images/about/casa-ruffino-1.jpg', alt: 'Una stanza di Casa Ruffino con due lampade di carta e una finestra sul giardino e sui cipressi' },
-          { src: '/images/about/casa-ruffino-2.jpg', alt: 'Un\'ospite su una sdraio a bordo piscina a Casa Ruffino, con le vigne sullo sfondo' },
-          { src: '/images/about/casa-ruffino-3.jpg', alt: 'La piscina e il giardino all\'italiana di Casa Ruffino, circondati dalle vigne' },
-          { src: '/images/about/casa-ruffino-4.jpg', alt: 'Cena serale nella corte di Casa Ruffino, illuminata da candele e luci' },
-        ],
-      },
-    ] as EventItem[],
-    past: "Eventi passati",
-    pastEvents: [
-      {
-        date: "10 ottobre 2026",
-        location: "Roma, Italia",
-        title: "ANOINTED al Connection Business",
-        image: '/images/about/connection-business.jpg',
-        imageAlt: 'Sofia Meneghetti sul palco di Connection Business a Roma',
-        caption: 'Connection Business, Roma · 10 ottobre 2026',
-        body: [
-          "Il 10 ottobre Sofia Meneghetti, Founder di ANOINTED, è salita sul palco di Connection Business a Roma, un evento che ha riunito imprenditori, professionisti e persone che credono nel potere delle connessioni autentiche.",
-          "Durante il suo intervento, Sofia ha condiviso il proprio percorso imprenditoriale e la storia dietro la nascita di ANOINTED, sottolineando come incontri significativi, una visione chiara e il coraggio di agire possano trasformare un'idea in realtà.",
-          "Attingendo alla propria esperienza personale, ha parlato dell'importanza di credere in una visione anche quando la strada davanti non è ancora chiara, e di circondarsi di persone che ispirano, sfidano e incoraggiano a crescere.",
-          "Il suo messaggio è stato anche un invito alle nuove generazioni: credere nel proprio potenziale, inseguire i propri sogni e avere il coraggio di fare il primo passo, anche prima di avere tutte le risposte.",
-          "Questa filosofia è profondamente legata alla visione di ANOINTED, un brand nato non solo per esprimere l'identità attraverso la moda, ma anche per ispirare le persone a riconoscere il proprio valore, abbracciare il proprio scopo e credere in qualcosa di più grande.",
-          "Per ANOINTED, Connection Business è stato più di un'occasione per raccontare la propria storia. È stato un momento per connettersi, ispirare e ricordare agli altri che ogni percorso significativo inizia con il coraggio di credere in ciò che è possibile.",
-        ],
-      },
-    ] as EventItem[],
+    past: 'Eventi e collaborazioni',
   },
 } as const
 
@@ -132,6 +61,9 @@ export default function AnointedWorldPage() {
   const pathname = usePathname()
   const locale = (pathname?.startsWith('/it') ? 'it' : 'en') as 'en' | 'it'
   const t = CONTENT[locale]
+  const [voci, setVoci] = useState(() => dividiVoci())
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- ricalcola con la data del browser (la pagina e' generata al deploy)
+  useEffect(() => { setVoci(dividiVoci()) }, [])
   const heroPhotoRef = useRef<HTMLDivElement>(null)
   const heroSectionRef = useRef<HTMLElement>(null)
 
@@ -209,23 +141,25 @@ export default function AnointedWorldPage() {
           filter: 'blur(40px)', pointerEvents: 'none',
         }} />
         <div style={{ position: 'relative', maxWidth: '820px', margin: '0 auto' }}>
+          {voci.inProgramma.length > 0 && (<>
+            <h2 style={{
+              fontFamily: 'Inter, sans-serif', fontSize: 'clamp(1.4rem, 2vw, 2rem)', fontWeight: 300,
+              color: '#3a2e2b', textAlign: 'center', margin: '0 0 3.5rem',
+            }}>
+              {t.upcoming}
+            </h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem', marginBottom: '5rem' }}>
+              {voci.inProgramma.map(v => <EventCard key={v.slug} ev={voceToEvent(v, locale)} learnMore={t.learnMore} />)}
+            </div>
+          </>)}
           <h2 style={{
             fontFamily: 'Inter, sans-serif', fontSize: 'clamp(1.4rem, 2vw, 2rem)', fontWeight: 300,
             color: '#3a2e2b', textAlign: 'center', margin: '0 0 3.5rem',
           }}>
-            {t.upcoming}
-          </h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
-            {t.events.map((ev, i) => <EventCard key={i} ev={ev} learnMore={t.learnMore} />)}
-          </div>
-          <h2 style={{
-            fontFamily: 'Inter, sans-serif', fontSize: 'clamp(1.4rem, 2vw, 2rem)', fontWeight: 300,
-            color: '#3a2e2b', textAlign: 'center', margin: '5rem 0 3.5rem',
-          }}>
             {t.past}
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
-            {t.pastEvents.map((ev, i) => <EventCard key={i} ev={ev} learnMore={t.learnMore} />)}
+            {voci.passate.map(v => <EventCard key={v.slug} ev={voceToEvent(v, locale)} learnMore={t.learnMore} />)}
           </div>
         </div>
       </section>
@@ -296,6 +230,7 @@ function EventCard({ ev, learnMore }: { ev: EventItem; learnMore: string }) {
         <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.1em', color: '#5d4d42' }}>
           {ev.location}
         </span>
+        {ev.tipo && <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '9.5px', letterSpacing: '0.16em', textTransform: 'uppercase', color: '#8a7a70' }}>· {ev.tipo}</span>}
       </div>
 
       <h3 style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(1.35rem, 2.2vw, 1.75rem)', fontWeight: 300, color: '#3a2e2b', margin: '0 0 1.5rem', lineHeight: 1.25 }}>
@@ -318,6 +253,8 @@ function EventCard({ ev, learnMore }: { ev: EventItem; learnMore: string }) {
           {ev.closing}
         </p>}
         {ev.link && (
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.8rem' }}>
+          {ev.logo && <Image src={ev.logo.src} alt={ev.logo.alt} width={40} height={40} style={{ width: 40, height: 40, borderRadius: '50%' }} />}
           <a href={ev.link} target="_blank" rel="noopener noreferrer" style={{
             fontFamily: 'Inter, sans-serif', fontSize: '10.5px', letterSpacing: '0.14em', fontWeight: 500,
             color: '#f1eae4', background: '#3a2e2b',
@@ -327,8 +264,9 @@ function EventCard({ ev, learnMore }: { ev: EventItem; learnMore: string }) {
           }}
           onMouseEnter={e => { e.currentTarget.style.background = '#5d4d42'; e.currentTarget.style.transform = 'translateX(2px)' }}
           onMouseLeave={e => { e.currentTarget.style.background = '#3a2e2b'; e.currentTarget.style.transform = 'translateX(0)' }}>
-            {learnMore} →
+            {ev.linkLabel || learnMore} →
           </a>
+          </span>
         )}
       </div>}
         </div>
