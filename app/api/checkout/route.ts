@@ -133,8 +133,9 @@ export async function POST(req: Request) {
       line_items: lineItems,
       mode: 'payment',
       customer_email: cliente.email,
-      success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/ordini/successo?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/checkout`,
+      locale: lingua === 'it' ? 'it' : 'en', // pagina di pagamento Stripe nella lingua del cliente
+      success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/${lingua === 'it' ? 'it' : 'en'}/ordini/successo?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/${lingua === 'it' ? 'it' : 'en'}/checkout`,
       metadata,
     }
 
