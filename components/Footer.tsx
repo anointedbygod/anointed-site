@@ -5,6 +5,8 @@ import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import { datiVenditore } from '@/lib/azienda'
+import BloccoLoghiUE from '@/components/BloccoLoghiUE'
+import { TESTI_PROGETTO_UE } from '@/lib/progetto-ue'
 
 const TR = {
   en: { collections: 'Collections', info: 'Info', tagline: 'Chosen. Set apart. Appointed.', copy: '© 2026 Anointed. All rights reserved.', funded: 'PROJECT FUNDED BY', links: { story: 'About Us', supply: 'Our Supply Chain', world: 'Anointed World', privacy: 'Privacy Policy', terms: 'Terms of Sale', returns: 'Returns', contact: 'Contact' }, cookies: 'Cookie preferences' },
@@ -93,14 +95,12 @@ export default function Footer() {
           </p>
         </div>
 
-        {/* Invitalia */}
-        <div style={{ borderTop: '1px solid rgba(241,234,228,0.06)', padding: '1.25rem 0 1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
-          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '9px', letterSpacing: '0.14em', color: 'rgba(241,234,228,0.2)', margin: 0 }}>
-            {t.funded}
-          </p>
-          <div style={{ background: 'white', borderRadius: '3px', padding: "6px 14px", display: 'flex', alignItems: 'center' }}>
-            <Image src="/invitalia.png" alt="Invitalia" width={100} height={28} style={{ height: "28px", width: "auto", objectFit: "contain" }} />
-          </div>
+        {/* Finanziamento UE: blocco loghi ufficiale + link alla descrizione del progetto (obbligo Reg. UE 2021/1060) */}
+        <div style={{ borderTop: '1px solid rgba(241,234,228,0.06)', padding: '1.5rem 0 1.75rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.9rem' }}>
+          <BloccoLoghiUE altezza={44} />
+          <Link href={`/${locale}/progetto-cofinanziato`} style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.08em', color: 'rgba(241,234,228,0.55)', textDecoration: 'underline' }}>
+            {TESTI_PROGETTO_UE[locale].link}
+          </Link>
         </div>
       </div>
 

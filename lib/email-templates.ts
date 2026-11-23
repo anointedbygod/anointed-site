@@ -32,10 +32,13 @@ function piede({ locale = 'en', unsubUrl }: { locale?: 'en' | 'it'; unsubUrl?: s
       ${unsubUrl ? `<p style="${t}margin:0 0 16px;">${it ? 'Ricevi questa email perché ti sei iscritta alla newsletter di ANOINTED.' : 'You receive this email because you subscribed to ANOINTED.'} <a href="${unsubUrl}" style="color:#a8998f;text-decoration:underline;">${it ? "Annulla l'iscrizione" : 'Unsubscribe'}</a></p>` : ''}
       <p style="${t}margin:0 0 12px;"><a href="${SITE}/${it ? 'it' : 'en'}/privacy" style="${t}text-decoration:underline;">Privacy Policy</a> &nbsp;·&nbsp; <a href="${SITE}/${it ? 'it' : 'en'}/condizioni" style="${t}text-decoration:underline;">${it ? 'Termini e condizioni' : 'Terms of Sale'}</a> &nbsp;·&nbsp; <a href="${SITE}/${it ? 'it' : 'en'}/resi" style="${t}text-decoration:underline;">${it ? 'Resi e rimborsi' : 'Returns &amp; Refunds'}</a></p>
       <p style="${t}margin:0 0 20px;">${datiVenditore().join(' · ')}</p>
-      <p style="${t}margin:0 0 8px;">${it ? 'Progetto finanziato da' : 'Project funded by'}</p>
-      <table align="center" cellpadding="0" cellspacing="0" style="margin:0 auto 20px;"><tr>
-        <td style="background:#ffffff;border-radius:3px;padding:6px 14px;"><img src="${SITE}/invitalia.png" width="55" height="34" alt="Invitalia" style="display:block;width:55px;height:34px;border:0;"></td>
+      <table align="center" cellpadding="0" cellspacing="0" style="margin:0 auto 10px;"><tr>
+        <td style="background:#ffffff;border-radius:3px;padding:8px 12px;">
+          <img src="${SITE}/images/fondi/blocco-loghi-pn-gdl.png" width="320" height="34" alt="Coesione Italia 21-27 · Cofinanziato dall'Unione europea · Ministero del Lavoro e delle Politiche Sociali" style="display:inline-block;width:320px;height:34px;border:0;vertical-align:middle;">
+          <img src="${SITE}/invitalia.png" width="55" height="34" alt="Invitalia" style="display:inline-block;width:55px;height:34px;border:0;vertical-align:middle;margin-left:10px;">
+        </td>
       </tr></table>
+      <p style="${t}margin:0 0 20px;"><a href="${SITE}/${it ? 'it' : 'en'}/progetto-cofinanziato" style="${t}text-decoration:underline;">${it ? 'Progetto cofinanziato dall\'Unione europea' : 'Project co-funded by the European Union'}</a></p>
       <p style="${t}margin:0;">${it ? '© 2026 Anointed. Tutti i diritti riservati.' : '© 2026 Anointed. All rights reserved.'}</p>
     </td>
   </tr>`
