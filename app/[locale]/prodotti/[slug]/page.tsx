@@ -12,7 +12,7 @@ import WishlistButton from '@/components/WishlistButton'
 interface Variante { id: string; taglia: string; colore: string; stock: number; colore_id?: string }
 interface ImgColore { url: string; ordine: number }
 interface ColoreData { id: string; nome: string; prezzo_aggiuntivo: number; immagini_colore: ImgColore[]; varianti: Variante[] }
-interface Prodotto { id: string; nome: string; prezzo: number; descrizione: string; composizione?: string | null; cura?: string | null; paese_origine?: string | null; produttore?: string | null; immagini: string[]; slug: string; categoria: string; varianti: Variante[]; prezzo_per_colore: boolean }
+interface Prodotto { id: string; nome: string; prezzo: number; descrizione: string; composizione?: string | null; cura?: string | null; paese_origine?: string | null; produttore?: string | null; immagini: string[]; slug: string; categoria: string; sezioni?: { nome: string } | null; varianti: Variante[]; prezzo_per_colore: boolean }
 
 export default function ProdottoPage() {
   const params = useParams()
@@ -95,7 +95,7 @@ export default function ProdottoPage() {
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem 1.25rem 6rem' }}>
 
         <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.14em', color: '#c1a99a', marginBottom: '1.5rem', cursor: 'pointer' }} onClick={() => history.back()}>
-          ← {prodotto.categoria?.toUpperCase() || 'SHOP'}
+          ← {(prodotto.sezioni?.nome || prodotto.categoria)?.toUpperCase() || 'SHOP'}
         </p>
 
         <div className="prod-layout" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', alignItems: 'start' }}>
@@ -127,7 +127,7 @@ export default function ProdottoPage() {
 
           {/* RIGHT */}
           <div className="prod-info" style={{ position: 'sticky', top: '80px' }}>
-            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.2em', color: '#c1a99a', margin: '0 0 0.75rem' }}>{prodotto.categoria?.toUpperCase()}</p>
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.2em', color: '#c1a99a', margin: '0 0 0.75rem' }}>{(prodotto.sezioni?.nome || prodotto.categoria)?.toUpperCase()}</p>
             <h1 style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(1.4rem, 2.5vw, 2.2rem)', fontWeight: 300, color: '#3a2e2b', margin: '0 0 0.75rem', letterSpacing: '0.03em' }}>{prodotto.nome}</h1>
             <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '22px', fontWeight: 400, color: '#3a2e2b', margin: '0 0 1.5rem', transition: 'all 0.3s ease' }}>€ {prezzo.toFixed(2)}</p>
 
