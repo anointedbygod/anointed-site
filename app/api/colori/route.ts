@@ -1,10 +1,15 @@
 import { supabaseAdmin } from '@/lib/supabase-admin'
 import { NextResponse } from 'next/server'
+import { COMING_SOON } from '@/lib/config'
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
   const prodotto_id = searchParams.get('prodotto_id')
-  if (!prodotto_id) return NextResponse.json([], { status: 200 })
+  if (!prodotto_id || COMING_SOON) return NextResponse.json([], { status: 200 })
+
+  // Solo prodotti pubblicati: un prodotto con "attivo" spento resta invisibile anche qui
+  const { data: prodotto } = await supabaseAdmin.from('prodotti').select('id').eq('id', prodotto_id).eq('attivo', true).maybeSingle()
+  if (!prodotto) return NextResponse.json([], { status: 200 })
 
   const { data, error } = await supabaseAdmin
     .from('colori_prodotto')
