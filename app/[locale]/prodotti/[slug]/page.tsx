@@ -12,7 +12,7 @@ import WishlistButton from '@/components/WishlistButton'
 interface Variante { id: string; taglia: string; colore: string; stock: number; colore_id?: string }
 interface ImgColore { url: string; ordine: number }
 interface ColoreData { id: string; nome: string; prezzo_aggiuntivo: number; immagini_colore: ImgColore[]; varianti: Variante[] }
-interface Prodotto { id: string; nome: string; prezzo: number; descrizione: string; composizione?: string | null; cura?: string | null; paese_origine?: string | null; produttore?: string | null; immagini: string[]; slug: string; categoria: string; sezioni?: { nome: string } | null; varianti: Variante[]; prezzo_per_colore: boolean }
+interface Prodotto { id: string; nome: string; prezzo: number; descrizione: string; composizione?: string | null; cura?: string | null; paese_origine?: string | null; produttore?: string | null; immagini: string[]; slug: string; categoria: string; tabella_taglie?: string | null; sezioni?: { nome: string } | null; varianti: Variante[]; prezzo_per_colore: boolean }
 
 export default function ProdottoPage() {
   const params = useParams()
@@ -27,6 +27,7 @@ export default function ProdottoPage() {
   const [selectedTaglia, setSelectedTaglia] = useState('')
   const [activeImg, setActiveImg] = useState(0)
   const [added, setAdded] = useState(false)
+  const [guidaAperta, setGuidaAperta] = useState(false)
 
   useEffect(() => {
     fetch('/api/prodotti').then(r => r.json()).then(async (data: Prodotto[]) => {
@@ -154,7 +155,9 @@ export default function ProdottoPage() {
               <div style={{ marginBottom: '1.5rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
                   <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.16em', color: '#3a2e2b', margin: 0, fontWeight: 500 }}>{sizeLabel}</p>
-                  <button style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.12em', color: '#c1a99a', padding: 0 }}>{sizeGuide}</button>
+                  {prodotto.tabella_taglie && (
+                    <button type="button" onClick={() => setGuidaAperta(true)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Inter, sans-serif', fontSize: '10px', letterSpacing: '0.12em', color: '#8a7a70', padding: 0, textDecoration: 'underline', textUnderlineOffset: '3px' }}>{sizeGuide}</button>
+                  )}
                 </div>
                 <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                   {taglieDisponibili.map(variante => {
@@ -207,6 +210,19 @@ export default function ProdottoPage() {
           .prod-info { position: static !important; }
         }
       `}</style>
+      {guidaAperta && prodotto.tabella_taglie && (
+        <div role="dialog" aria-modal="true" aria-label={sizeGuide} onClick={() => setGuidaAperta(false)}
+          style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(30,22,20,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1.25rem' }}>
+          <div onClick={e => e.stopPropagation()} style={{ background: '#f1eae4', borderRadius: '8px', maxWidth: '760px', width: '100%', maxHeight: '90vh', overflow: 'auto', padding: '1.5rem', position: 'relative' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+              <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', letterSpacing: '0.16em', fontWeight: 500, color: '#3a2e2b', margin: 0 }}>{sizeGuide.toUpperCase()}</p>
+              <button type="button" onClick={() => setGuidaAperta(false)} aria-label={locale === 'it' ? 'Chiudi' : 'Close'} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '22px', lineHeight: 1, color: '#3a2e2b', padding: '0 0.25rem' }}>×</button>
+            </div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={prodotto.tabella_taglie} alt={`${sizeGuide} — ${prodotto.nome}`} style={{ width: '100%', height: 'auto', display: 'block', borderRadius: '4px', background: '#fff' }} />
+          </div>
+        </div>
+      )}
     </main>
   )
 }
